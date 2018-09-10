@@ -1,6 +1,6 @@
 <?php
 /**
- * @date 9/9/18
+ * @update 9/10/18
  * @author Michael McCulloch
  */
 class TextDB implements DataObjectInterface {
@@ -10,7 +10,9 @@ class TextDB implements DataObjectInterface {
    * Create a TextDB object.
    */
   public static function create($_options) {
-    if(file_exists($_options['path']) && isset($_options['keys'])) {
+    // It may be necessary to handle the cases when a path, keys,
+    // and a model are not passed to the create method.
+    if(file_exists($_options['path']) && isset($_options['keys']) && isset($_options['model'])) {
       $textDb = new TextDB();
       $fileContents = file_get_contents($_options['path']);
       $data = explode("\n", $fileContents);
@@ -28,7 +30,13 @@ class TextDB implements DataObjectInterface {
 	);
       }
 
-      $textDb->records = $records;
+      $models = array();
+      foreach($records as $record) {
+        array_push($models, $_options['model']::load($record));
+      }
+      
+      $textDb->records = $models;
+
       return $textDb;
     }
   }
@@ -44,14 +52,16 @@ class TextDB implements DataObjectInterface {
    * Return the record matching the given id.
    */
   public function fetchById($_id) {
-    $key = array_search($_id, array_column($this->records, 'id'));
-    if($key) {
-      return $this->records[$key];
+    foreach($this->records as $record) {
+      if ($record->getId() == $_id) {
+        return $record;
+      }
     }
-    return false; 
+
+    return false;
   }
 
-  public function save($_array) {
+  public function save($_object) {
   }
 }
 ?>
