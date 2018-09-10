@@ -25,7 +25,8 @@ $dataSource = WpDataSource::create(
 $data = TextDB::create(
   array(
     'path' => $dataSource->getPath(),
-    'keys' =>   array( 'id', 'title', 'img_url', 'datetime', 'active')
+    'keys' =>   array( 'id', 'title', 'imgUrl', 'dateTime', 'active'),
+    'model' => 'WpModel' 
   )
 );
 
@@ -34,6 +35,7 @@ $data = TextDB::create(
 
 // This is an example of how to get a record with a given id.
 var_dump($data->fetchById(36329));
+var_dump($data->fetchById(36329)->getTitle());
 
 // This is an example of how to get all the records.
 var_dump($data->fetchAll());
