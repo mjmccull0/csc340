@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  * @date 9/9/18
  * @author Michael McCulloch

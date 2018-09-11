@@ -22,7 +22,7 @@ class WpDataSource implements DataSource {
     foreach($_array as $record) {
       if (!in_array(implode("|", $record), $records)) {
 	$this->save($record);
-      } 
+      }
     }
   }
 
@@ -30,7 +30,7 @@ class WpDataSource implements DataSource {
    * Create a data source with the given options.
    */
   public static function create($_options = array()) {
-    $source = new WpDataSource(); 
+    $source = new WpDataSource();
 
     foreach($_options as $option => $value) {
       $source->$option = $value;
@@ -55,7 +55,7 @@ class WpDataSource implements DataSource {
 
     foreach ($data as $post) {
       if(!empty($post['_embedded']['wp:featuredmedia'][0]['source_url'])) {
-         // For each of the entries in the source data with an image 
+         // For each of the entries in the source data with an image
 	 // create an entry with the content id, a cleaned version of the
 	 // title, the date-time, and set active flag.
          array_push($entries, array(
