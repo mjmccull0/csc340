@@ -21,9 +21,11 @@ $dataSource = WpDataSource::create(
     'url' => 'https://newsandfeatures.uncg.edu/wp-json/wp/v2/posts?_embed'
   )
 );
-
+$dataSource->import();
 // Creates a queriable data object.
 $wpData = TextDB::create($dataSource);
+
+var_dump($wpData);
 
 // The following will soon be removed.
 // Note: var_dump($blah) will dump the value of $blah.
@@ -45,6 +47,6 @@ $instagramDataSource = InstagramDataSource::create(
 
 
 $instagramData = TextDB::create($instagramDataSource);
-//var_dump($instagramData->fetchAll());
+var_dump($instagramData->fetchAll());
 
 ?>
