@@ -1,21 +1,31 @@
 <?php
 /**
- * @update 9/10/18
+ * @update 9/12/18
  * @author Michael McCulloch
  */
-class WpModel extends Model {
-  private $imgUrl;
+class WpModel {
+  private $active;
   private $dateTime;
+  private $id;
+  private $imgUrl;
+  private $title;
 
   public static function load($_params = array()) {
     $model = new WpModel();
 
     foreach($_params as $key => $value) {
-      $methodName = 'set' . ucfirst($key);
-      $model->$methodName($value);
+      $model->$key = $value;
     }
 
     return $model;
+  }
+
+  public function getActive() {
+    return $this->active;
+  }
+
+  public function getId() {
+    return $this->id;
   }
 
   public function getImgUrl() {
@@ -26,12 +36,29 @@ class WpModel extends Model {
     return $this->dateTime;
   }
 
-  public function setImgUrl($_imgUrl) {
-    $this->imgUrl = $_imgUrl;
+  public function getTitle() {
+    return $this->title;
+  }
+
+  public function setActive($_flag) {
+    $this->active = $_flag;
+  }
+
+  public function setId($_id) {
+    $this->id = $_id;
   }
 
   public function setDateTime($_dateTime) {
     $this->dateTime = $_dateTime;
   }
+
+  public function setImgUrl($_imgUrl) {
+    $this->imgUrl = $_imgUrl;
+  }
+
+  public function setTitle($_title) {
+    $this->title = $_title;
+  }
+
 }
 ?>

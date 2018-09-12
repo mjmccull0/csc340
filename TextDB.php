@@ -1,6 +1,6 @@
 <?php
 /**
- * @update 9/10/18
+ * @update 9/12/18
  * @author Michael McCulloch
  */
 class TextDB implements DataObjectInterface {
@@ -9,32 +9,29 @@ class TextDB implements DataObjectInterface {
   /**
    * Create a TextDB object.
    */
-  public static function create($_options) {
+  public static function create($_source) {
     // It may be necessary to handle the cases when a path, keys,
     // and a model are not passed to the create method.
-    if(file_exists($_options['path']) && isset($_options['keys']) && isset($_options['model'])) {
+    if ( file_exists( $_source->getPath() )) {
       $textDb = new TextDB();
-      $fileContents = file_get_contents($_options['path']);
-      $data = explode("\n", $fileContents);
 
-      // Removes an empty array value resulting from using 
-      // explode.
-      array_pop($data);
+      $fileContents = file($_source->getPath(), FILE_IGNORE_NEW_LINES);
 
-      $records = array();
-      foreach($data as $record) {
-        array_push($records,
-          array_combine($_options['keys'],
-            explode('|', $record)
+      // Ignore the first line of the file, it contains
+      // the field names.
+      unset($fileContents[0]);
+
+      $models = array();
+
+      foreach($fileContents as $record) {
+        array_push($models, $_source->getModel()::load(
+            array_combine(
+	      Util::fields($_source->getModel()), explode('|', $record)
+	    )
 	  )
 	);
       }
 
-      $models = array();
-      foreach($records as $record) {
-        array_push($models, $_options['model']::load($record));
-      }
-      
       $textDb->records = $models;
 
       return $textDb;
@@ -62,6 +59,7 @@ class TextDB implements DataObjectInterface {
   }
 
   public function save($_object) {
+    // Not yet implemented.
   }
 }
 ?>

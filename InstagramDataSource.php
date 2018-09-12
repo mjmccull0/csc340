@@ -1,10 +1,10 @@
 <?php
 /**
- * @date 9/9/18
+ * @date 9/12/18
  * @author Michael McCulloch
  */
 
-class WpDataSource implements DataSource {
+class InstagramDataSource implements DataSource {
   private $model;
   private $path;
   private $url;
@@ -14,6 +14,7 @@ class WpDataSource implements DataSource {
    */
   public function add($_array) {
     if (!file_exists($this->path)) {
+
       file_put_contents($this->path, implode("|", Util::fields($this->model)) . "\n", TRUE);
     }
 
@@ -51,28 +52,30 @@ class WpDataSource implements DataSource {
    * Get the content from the WP Rest API.
    */
   public function import() {
+    $html = file_get_contents("https://www.instagram.com/uncg", TRUE);
+
+    $document = new DOMDocument();
+    // Ensure UTF-8 is respected by using 'mb_convert_encoding'
+    $document->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
     $sourceContent = file_get_contents($this->url, TRUE);
     $data = json_decode($sourceContent, TRUE);
 
     $entries = array();
 
-    foreach ($data as $post) {
-      if(!empty($post['_embedded']['wp:featuredmedia'][0]['source_url'])) {
-         // For each of the entries in the source data with an image
-	 // create an entry with the content id, a cleaned version of the
-	 // title, the date-time, and set active flag.
-         array_push($entries, array(
-	       // This is the active flag.
-	       1,
-               $post['date'],
-               $post['id'],
-               $post['_embedded']['wp:featuredmedia'][0]['source_url'],
-	       // This is to handle an issue with wordpress titles using &#8217;
-	       // instead of an apostrophe.
-               str_replace("&#8217;", "'", $post['title']['rendered'])
-             )
-         );
-      }
+    preg_match_all("'window._sharedData = ({.*})'", $document->textContent, $matches);
+    $jsonObject = json_decode($matches[1][0]);
+
+    foreach($jsonObject->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $img) {
+      array_push($entries, array(
+	  // This is the active flag.
+	  1,
+	  $img->node->edge_media_to_caption->edges[0]->node->text,
+          $img->node->id,
+	  $img->node->display_url,
+          $img->node->thumbnail_src
+        )
+      );
     }
 
     $this->add($entries);

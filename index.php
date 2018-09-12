@@ -1,6 +1,6 @@
 <?php
 /**
- * @date 9/9/18
+ * @date 9/12/18
  * @author Michael McCulloch
  */
 
@@ -17,27 +17,34 @@ spl_autoload_register(
 $dataSource = WpDataSource::create(
   array(
     'path' => 'posts.txt',
+    'model' => 'WpModel',
     'url' => 'https://newsandfeatures.uncg.edu/wp-json/wp/v2/posts?_embed'
   )
 );
 
 // Creates a queriable data object.
-$data = TextDB::create(
-  array(
-    'path' => $dataSource->getPath(),
-    'keys' =>   array( 'id', 'title', 'imgUrl', 'dateTime', 'active'),
-    'model' => 'WpModel' 
-  )
-);
+$wpData = TextDB::create($dataSource);
 
 // The following will soon be removed.
 // Note: var_dump($blah) will dump the value of $blah.
 
 // This is an example of how to get a record with a given id.
-var_dump($data->fetchById(36329));
-var_dump($data->fetchById(36329)->getTitle());
+// var_dump($wpData->fetchById(36329));
+// var_dump($wpData->fetchById(36329)->getTitle());
 
 // This is an example of how to get all the records.
-var_dump($data->fetchAll());
+var_dump($wpData->fetchAll());
+
+$instagramDataSource = InstagramDataSource::create(
+  array(
+    'path' => 'instagram.txt',
+    'model' => 'InstagramModel',
+    'url' => 'https://www.instagram.com/uncg/'
+  )
+);
+
+
+$instagramData = TextDB::create($instagramDataSource);
+//var_dump($instagramData->fetchAll());
 
 ?>
