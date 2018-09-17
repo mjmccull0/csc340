@@ -1,7 +1,7 @@
 <?php
 /**
  * A base model for content.
- * @update 9/13/18
+ * @update 9/17/18
  * @author Michael McCulloch
  */
 class BaseModel {
@@ -11,8 +11,11 @@ class BaseModel {
   public static function load($_params = array()) {
     $model = new static();
 
+    // Use the model's setter methods to build an
+    // instance of a model.
     foreach($_params as $key => $value) {
-      $model->$key = $value;
+      $setMethod = 'set' . ucfirst($key);
+      $model->{$setMethod}($value);
     }
 
     return $model;
