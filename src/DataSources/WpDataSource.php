@@ -1,10 +1,16 @@
 <?php
+namespace DataSources;
+
+use DataSources\DataSource as DataSource;
 /**
- * @date 9/9/18
+ * @date 9/20/18
  * @author Michael McCulloch
  */
 
 class WpDataSource extends DataSource {
+
+  protected const FIELDS = array("active", "dateTime", "id", "imgUrl", "title"); 
+
   /**
    * Get the content from the WP Rest API.
    */
@@ -21,7 +27,7 @@ class WpDataSource extends DataSource {
 	 // title, the date-time, and set active flag.
          array_push($entries, array(
 	       // This is the active flag.
-	       1,
+	       self::ACTIVE,
                $post['date'],
                $post['id'],
                $post['_embedded']['wp:featuredmedia'][0]['source_url'],
@@ -32,7 +38,7 @@ class WpDataSource extends DataSource {
          );
       }
     }
-
+    
     $this->add($entries);
 
   }
