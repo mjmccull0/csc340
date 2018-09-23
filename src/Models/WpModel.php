@@ -1,7 +1,8 @@
 <?php
+namespace Models;
 /**
  * A model for content imported using the Wordpress rest api.
- * @update 9/13/18
+ * @update 9/18/18
  * @author Michael McCulloch
  */
 class WpModel extends BaseModel {

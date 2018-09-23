@@ -1,8 +1,9 @@
 <?php
+namespace Models;
 /**
  * YoutubeModel provides a way to interact with YouTube
  * videos which have been imported by a YoutubeDataSource.
- * @update 9/13/18
+ * @update 9/18/18
  * @author Michael McCulloch
  */
 class YoutubeModel extends BaseModel {

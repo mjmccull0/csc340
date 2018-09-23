@@ -1,0 +1,4 @@
+model|name|path|url
+Models\WpModel|posts|/home/gnuisance/Public/mjmccull-csc340-repo/csc340/resources/posts.txt|https://newsandfeatures.uncg.edu/wp-json/wp/v2/posts?_embed
+Models\InstagramModel|instagram|/home/gnuisance/Public/mjmccull-csc340-repo/csc340/resources/instagram.txt|https://www.instagram.com/uncg/
+Models\YoutubeModel|youtube|/home/gnuisance/Public/mjmccull-csc340-repo/csc340/resources/youtube.txt|https://www.youtube.com/feeds/videos.xml?channel_id=UCZMafMiPPwm96bp843d5TZQ

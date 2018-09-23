@@ -1,7 +1,8 @@
 <?php
+namespace Models;
 /**
  * A base model for content.
- * @update 9/17/18
+ * @update 9/18/18
  * @author Michael McCulloch
  */
 class BaseModel {
