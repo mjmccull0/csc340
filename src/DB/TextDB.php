@@ -14,7 +14,7 @@ class TextDB {
    * Connecting provides access to DataSource.
    */
   public static function connect() {
-    $textDB = new self();  
+    $textDB = new self();
     if ( file_exists( DATA_SOURCES ) ) {
       $fileContents = file(DATA_SOURCES, FILE_IGNORE_NEW_LINES);
       $fields = explode("|", array_shift($fileContents));
@@ -100,7 +100,7 @@ class TextDB {
     $properties = array_shift($fileContents);
 
     $models = array();
-    
+
     foreach($fileContents as $record) {
       array_push($models, $_source->getModel()::load(array_combine(explode("|", $properties), explode('|', $record))));
     }

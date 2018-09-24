@@ -1,7 +1,7 @@
 <?php
 namespace Models;
 /**
- * SourceModel manages DataSources. 
+ * SourceModel manages DataSources.
  * @update 9/23/18
  * @author Michael McCulloch
  */

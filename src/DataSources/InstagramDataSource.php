@@ -17,7 +17,7 @@ class InstagramDataSource extends DataSource {
    * Scrape the profile page of the a given url.
    */
   public function import() {
-    
+
     $html = file_get_contents($this->getUrl(), TRUE);
 
     $document = new DOMDocument();
@@ -29,7 +29,7 @@ class InstagramDataSource extends DataSource {
     preg_match_all("'window._sharedData = ({.*})'", $document->textContent, $matches);
 
     $jsonObject = json_decode($matches[1][0]);
-    
+
     // Iterate through all the instagram user's shared data and take
     // what we need.
     foreach($jsonObject->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $img) {
