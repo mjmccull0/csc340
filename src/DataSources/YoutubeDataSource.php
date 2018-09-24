@@ -9,7 +9,7 @@ use DataSources\DataSource as DataSource;
  */
 class YoutubeDataSource extends DataSource {
 
-  protected const FIELDS = array("active", "id", "title"); 
+  protected const FIELDS = array("active", "id", "title");
 
   /**
    * Import a YouTube channel xml feed and add it to a YoutubeDataSource.

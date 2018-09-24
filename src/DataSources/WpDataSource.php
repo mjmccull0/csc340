@@ -9,7 +9,7 @@ use DataSources\DataSource as DataSource;
 
 class WpDataSource extends DataSource {
 
-  protected const FIELDS = array("active", "dateTime", "id", "imgUrl", "title"); 
+  protected const FIELDS = array("active", "dateTime", "id", "imgUrl", "title");
 
   /**
    * Get the content from the WP Rest API.
@@ -38,7 +38,7 @@ class WpDataSource extends DataSource {
          );
       }
     }
-    
+
     $this->add($entries);
 
   }
