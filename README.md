@@ -45,3 +45,12 @@ php -S localhost:8000 -t public/
 
 The built-in PHP web-server should now be serving the project at http://localhost:8000.
 
+### IMPORTANT NOTES
+
+Until there is a way to use controllers from the web-browser using the PHP built-in web-server will be of little help.  Instead to test controllers or views execute your controllers or views from the command-line:
+
+```
+php path_to_your_code.php
+```
+
+or write something to allow accessing controllers from a web-browser.
