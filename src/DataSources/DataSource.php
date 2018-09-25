@@ -9,7 +9,7 @@ abstract class DataSource {
   protected const ACTIVE = 1;
   private const FILE_EXTENSION = '.txt';
   private const SOURCES_FILE = DATA_DIR . "sources.txt";
-  private const SOURCES_FILE_FIELDS = array("model", "name", "path", "url"); 
+  private const SOURCES_FILE_FIELDS = array("model", "name", "path", "url");
 
   protected $model;
   protected $name;
@@ -68,7 +68,7 @@ abstract class DataSource {
         file_put_contents(self::SOURCES_FILE, (string) $source . "\n", FILE_APPEND);
       }
 
-  } 
+  }
 
   /**
    * Create a data source with the given options.
@@ -79,7 +79,7 @@ abstract class DataSource {
     if (!file_exists(self::SOURCES_FILE)) {
       self::createSourceFile();
     }
-    
+
     // Add source to the DataSources file.
     self::addToSourceFile($_params);
 
@@ -98,7 +98,7 @@ abstract class DataSource {
     return $dataSource;
   }
 
-  
+
   /**
    * Create a file to store the properties of every DataSource.
    */

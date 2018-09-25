@@ -2,18 +2,13 @@
 namespace Models;
 /**
  * A model for Instagram content.
- * @update 9/18/18
+ * @update 9/25/18
  * @author Michael McCulloch
  */
 class InstagramModel extends BaseModel {
-  private $caption;
   private $imgUrl;
   private $thumbnailUrl;
-
-
-  public function getCaption() {
-    return $this->caption;
-  }
+  private $title;
 
 
   public function getImgUrl() {
@@ -25,8 +20,8 @@ class InstagramModel extends BaseModel {
   }
 
 
-  public function setCaption($_caption) {
-    $this->caption = $_caption;
+  public function getTitle() {
+    return $this->title;
   }
 
 
@@ -38,6 +33,12 @@ class InstagramModel extends BaseModel {
   public function setThumbnailUrl($_thumbnailUrl) {
     $this->thumbnailUrl = $_thumbnailUrl;
   }
+
+
+  public function setTitle($_title) {
+    $this->title = $_title;
+  }
+
 
 }
 ?>
