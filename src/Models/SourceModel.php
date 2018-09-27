@@ -2,19 +2,15 @@
 namespace Models;
 /**
  * SourceModel manages DataSources.
- * @update 9/23/18
+ * @update 9/27/18
  * @author Michael McCulloch
  */
 class SourceModel {
-  private $model;
   private $name;
   private $path;
   private $url;
 
 
-  public function __toString() {
-    return implode("|", array( $this->model, $this->name, $this->path, $this->url ) );
-  }
 
   public static function load($_params = array()) {
     $model = new static();
@@ -30,11 +26,6 @@ class SourceModel {
   }
 
 
-  public function getModel() {
-    return $this->model;
-  }
-
-
   public function getName() {
     return $this->name;
   }
@@ -47,11 +38,6 @@ class SourceModel {
 
   public function getUrl() {
     return $this->url;
-  }
-
-
-  public function setModel($_model) {
-    $this->model = $_model;
   }
 
 
