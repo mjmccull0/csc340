@@ -33,7 +33,7 @@ Both $db->get(name) and $db->fetchActive(name) return an array of models whose p
 
 ### Prerequisites
 
-At a minimum PHP 7.  PHP has a built-in web-server which can be used for the development purposes of this class project.  It is possible to use a development environment such as a LAMP stack for development; but instructions for configuring and administrating a LAMP environment cannot be given here.
+At a minimum PHP 7.1.0, if your version of PHP is less than 7.1.0 then the code as written now will not work.  PHP has a built-in web-server which can be used for the development purposes of this class project.  It is possible to use a development environment such as a LAMP stack for development; but instructions for configuring and administrating a LAMP environment cannot be given here.
 
 ### Development with PHP built-in Web-server
 
