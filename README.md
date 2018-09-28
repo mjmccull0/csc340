@@ -54,3 +54,16 @@ php path_to_your_code.php
 ```
 
 or write something to allow accessing controllers from a web-browser.
+
+
+### Updating Your Branch With Updated Master Code
+
+In your local copy of your branch you can run these commands, where local_branch_name is your local branch name, to get any changes which have made it into the master repo and push them to your branch.  This means you will be developing with a copy of the code which is update-to-date.
+
+```
+git checkout master
+git pull
+git checkout local_branch_name
+git rebase master
+git push
+```
