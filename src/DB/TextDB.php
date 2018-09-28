@@ -3,7 +3,7 @@ namespace DB;
 use Models\SourceModel as SourceModel;
 
 /**
- * @update 9/25/18
+ * @update 9/28/18
  * @author Michael McCulloch
  */
 class TextDB {
@@ -12,32 +12,58 @@ class TextDB {
 
 
   /**
+   * A magic method that is called when the "new" keyword is
+   * used with this class name.
+   * @see http://php.net/manual/en/language.oop5.magic.php
+   * @see http://php.net/manual/en/language.oop5.decon.php#object.construct
+   */
+  private function __construct() {
+    if (file_exists($db = DB_FILE)) {
+      $data = unserialize(file_get_contents($db));
+      $this->sources = $data['sources'];
+      $this->records = $data['records'];
+    }
+
+    if (file_exists($dataSources = DATA_SOURCES)) {
+      $this->sources = unserialize(file_get_contents($dataSources));
+    }
+  }
+
+
+  /**
+   * A magic method that is called after there are not more
+   * references to this object.
+   * @see http://php.net/manual/en/language.oop5.decon.php#object.destruct
+   */
+  public function __destruct() {
+      // Save changes to data served by TextDB.
+      file_put_contents(DB_FILE, serialize(
+          array(
+            'records' => $this->records,
+            'sources' => $this->sources
+          )
+        )
+      );
+  }
+
+
+  /**
    * Connecting provides access to DataSource.
    */
   public static function connect() {
     $textDB = new self();
 
-    if (file_exists($db = DB_FILE)) {
-      $data = unserialize(file_get_contents($db));
-      $textDB->sources = $data['sources'];
-      $textDB->records = $data['records'];
-      return $textDB;
-    }
-
-    if (file_exists($dataSources = DATA_SOURCES)) {
-      $textDB->sources = unserialize(file_get_contents($dataSources));
-    }
-
     return $textDB;
 
   }
+
 
   /**
    * Get the records from DataSource files.
    */
   public function get($_name = '') {
 
-    // Return the all the sources.
+    // Return all the sources of data.
     if (empty($_name)) {
       return $this->sources;
     }
@@ -53,14 +79,6 @@ class TextDB {
         $this->records[$_name] = unserialize(file_get_contents($this->sources[$_name]->getPath()));
       }
 
-      // Save changes to data served by TextDB.
-      file_put_contents(DB_FILE, serialize(
-          array(
-            'records' => $this->records,
-            'sources' => $this->sources
-          )
-        )
-      );
 
       return $this->records[$_name];
     }
@@ -97,36 +115,5 @@ class TextDB {
     return false;
   }
 
-  /**
-   * Load the records for a given DataSource.
-   */
-  /*
-  public static function load($_source) {
-    $fileContents = file($_source->getPath(), FILE_IGNORE_NEW_LINES);
-    $properties = array_shift($fileContents);
-
-    $models = array();
-
-    foreach($fileContents as $record) {
-        array_push(
-          $models, $_source->getModel()::load(
-            array_combine(
-              explode("|", $properties), explode('|', $record)
-            )
-          )
-       );
-    }
-
-    return $models;
-
-  }
-   */
-
-  /**
-   * Save changes to a DataSource record.
-   */
-  public function update($_object) {
-    // Not yet implemented.
-  }
 }
 ?>
