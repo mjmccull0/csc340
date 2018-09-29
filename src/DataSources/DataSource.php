@@ -50,7 +50,7 @@ abstract class DataSource {
   /**
    * Add new sources to the DataSources file.
    */
-  public function addToSourceFile($_params) {
+  public function addToSourceFile($_source) {
     
     $sources = array();
     // Get the current known sources.
@@ -58,39 +58,37 @@ abstract class DataSource {
       $sources = unserialize(file_get_contents(DATA_SOURCES));
     }
 
-    $source = SourceModel::load($_params);
-
-    if (array_key_exists($source->getName(), $sources)) {
+    if (array_key_exists($_source->getName(), $sources)) {
       // Handle the name collision.
     } else {
-      $sources[$source->getName()] =  $source;
+      $sources[$_source->getName()] =  $_source;
     }
 
     file_put_contents(DATA_SOURCES, serialize($sources));
 
   }
 
+
   /**
    * Create a data source with the given options.
    */
-  public static function create($_params = array()) {
+  public static function create(array $_params) {
 
     // Create an instance of the DataSource which called the create method.
     $dataSource = new static();
+    $dataSource->name = $_params['name'];
     $dataSource->url = $_params['url'];
     $dataSource->path = DATA_DIR . $_params['name'];
 
+    $_params['path'] = $dataSource->path;
 
     // Collect data from a DataSource if there is none.
     if (!file_exists($dataSource->getPath())) {
       $dataSource->import();
     }
 
-    $_params['path'] = $dataSource->path;
-
     // Add source to the DataSources file.
-    self::addToSourceFile($_params);
-
+    self::addToSourceFile($dataSource);
 
     return $dataSource;
   }
