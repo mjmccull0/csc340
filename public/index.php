@@ -12,6 +12,9 @@ include(ROOT_DIR . "bootstrap.php");
 use DB\TextDB as TextDB;
 
 $db = TextDB::connect();
+use Util\Route as Route;
+
+Route::get();
 
 $db->get('posts');
 $db->get('instagram');
