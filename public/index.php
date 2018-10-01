@@ -16,11 +16,11 @@ use Util\Route as Route;
 
 Route::get();
 
-$db->get('posts');
-$db->get('instagram');
-$db->get('youtube');
+//$db->get('posts');
+//$db->get('instagram');
+//$db->get('youtube');
 
-var_dump('<pre>');
-var_dump($db);
+//var_dump('<pre>');
+//var_dump($db);
 
 ?>

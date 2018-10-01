@@ -4,12 +4,12 @@ namespace Util;
 /**
 * @author Jacob Oleson
 * @author Michael McCulloch
-*
+* Route url to appropriate controller and action.
 */
 
 class Route {
 
-  //Handle URL and send it to appropriate controller
+  // Handle URL and send it to specified controller.
   public static function get() {
 
     $url = trim($_SERVER["REQUEST_URI"], "/");
@@ -17,18 +17,21 @@ class Route {
 
     // Try to reach a controller for testing purposes.
     $controllerName = ucfirst(array_shift($params));
-    if(empty($controllerName)) {
+
+    // Default to IndexController if a controller is not specified.
+    if (empty($controllerName)) {
       $controllerName = "Index";
     }
 
     $controllerPath = "\\Controllers\\" . $controllerName . "Controller";
     $controllerAction = array_shift($params);
 
-    if(empty($controllerAction)) {
+    // Default to indexActoin if an action is not specified.
+    if (empty($controllerAction)) {
       $controllerAction = "index";
     }
 
-    //Concatenate the controller action with the Action suffix
+    // Concatenate the controller action with the Action suffix.
     $controllerAction = $controllerAction . "Action";
 
     /**
