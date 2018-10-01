@@ -1,12 +1,10 @@
 <?php
-
 namespace Util;
 /**
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route url to appropriate controller and action.
 */
-
 class Route {
 
   // Handle URL and send it to specified controller.
