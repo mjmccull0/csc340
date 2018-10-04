@@ -14,7 +14,7 @@ class Route {
 
     $url = trim($_SERVER["REQUEST_URI"], "/");
     $params = explode("/", $url);
-    
+
     // Try to reach a Controller for testing purposes.
     $controllerName = ucfirst(array_shift($params));
 

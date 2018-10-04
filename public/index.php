@@ -14,7 +14,7 @@ use DB\TextDB as TextDB;
 $db = TextDB::connect();
 use Util\Route as Route;
 
-Route::route();
+Route::get();
 
 //$db->get('posts');
 //$db->get('instagram');
@@ -22,6 +22,5 @@ Route::route();
 
 //var_dump('<pre>');
 //var_dump($db);
-
 
 ?>
