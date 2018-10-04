@@ -14,7 +14,7 @@ use DB\TextDB as TextDB;
 $db = TextDB::connect();
 use Util\Route as Route;
 
-Route::get();
+Route::route();
 
 //$db->get('posts');
 //$db->get('instagram');

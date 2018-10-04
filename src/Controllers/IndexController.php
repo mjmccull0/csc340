@@ -16,6 +16,7 @@ class IndexController {
 
   public function indexAction() {
     echo "IndexController::indexAction";
+
   }
 
   public function editAction() {
