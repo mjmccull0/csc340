@@ -51,7 +51,7 @@ abstract class DataSource {
    * Add new sources to the DataSources file.
    */
   public static function addToSourceFile($_source) {
-    
+
     $sources = array();
     // Get the current known sources.
     if (file_exists(DATA_SOURCES)) {

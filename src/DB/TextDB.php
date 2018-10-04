@@ -1,7 +1,6 @@
 <?php
 namespace DB;
 use Models\SourceModel as SourceModel;
-
 /**
  * @update 9/28/18
  * @author Michael McCulloch
@@ -150,7 +149,7 @@ class TextDB {
         }
       }
     }
-      
+
   }
 
 }
