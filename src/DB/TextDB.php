@@ -1,9 +1,9 @@
 <?php
 namespace DB;
-use Models\SourceModel as SourceModel;
 /**
- * @update 9/28/18
+ * @update 10/04/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 class TextDB {
   private $records;

@@ -1,9 +1,9 @@
 <?php
 namespace DataSources;
-use Models\SourceModel as SourceModel;
 /**
- * @update 9/27/18
+ * @update 10/04/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 abstract class DataSource {
