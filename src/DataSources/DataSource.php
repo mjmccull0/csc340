@@ -1,9 +1,9 @@
 <?php
 namespace DataSources;
-use Models\SourceModel as SourceModel;
 /**
- * @update 9/27/18
+ * @update 10/04/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 abstract class DataSource {
@@ -51,7 +51,7 @@ abstract class DataSource {
    * Add new sources to the DataSources file.
    */
   public static function addToSourceFile($_source) {
-    
+
     $sources = array();
     // Get the current known sources.
     if (file_exists(DATA_SOURCES)) {

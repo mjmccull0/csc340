@@ -12,13 +12,15 @@ include(ROOT_DIR . "bootstrap.php");
 use DB\TextDB as TextDB;
 
 $db = TextDB::connect();
+use Util\Route as Route;
 
-$db->get('posts');
-$db->get('instagram');
-$db->get('youtube');
+Route::route();
 
-var_dump('<pre>');
-var_dump($db);
+//$db->get('posts');
+//$db->get('instagram');
+//$db->get('youtube');
 
+//var_dump('<pre>');
+//var_dump($db);
 
 ?>
