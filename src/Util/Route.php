@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 10/04/18
+* Update 10/11/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -13,6 +13,11 @@ class Route {
   public static function route() {
 
     $url = trim($_SERVER["REQUEST_URI"], "/");
+
+    // Ignore any query string in the url.
+    $url = explode('?', $url);
+    $url = reset($url);
+
     $params = explode("/", $url);
 
     // Try to reach a Controller for testing purposes.
@@ -29,7 +34,7 @@ class Route {
     if (class_exists($controllerPath)) {
 
       //Continue on with getting Action.
-      $controllerAction = array_shift($params);
+      $controllerAction = array_shift($params) . "Action";
 
       //Default to indexAction if no specified action.
       if (empty($controllerAction)) {
