@@ -1,7 +1,7 @@
 <?php
 namespace DB;
 /**
- * @update 10/04/18
+ * @update 10/12/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -17,6 +17,7 @@ class TextDB {
    * @see http://php.net/manual/en/language.oop5.decon.php#object.construct
    */
   private function __construct() {
+
     // If there is saved data, load it.
     if (file_exists($db = DB_FILE)) {
       $data = unserialize(file_get_contents($db));
@@ -58,17 +59,19 @@ class TextDB {
 
   }
 
+  /**
+   * Make TextDB aware of new dataSources.
+   */
+  public function addSource($_dataSource) {
+    $this->sources[$_dataSource->getName()] = $_dataSource;
+    $this->records[$_dataSource->getName()] = unserialize(file_get_contents($_dataSource->getPath()));
+  }
+
 
   /**
    * Get the records from DataSource files.
    */
-  public function get($_name = '') {
-
-    // Return all the sources of data.
-    if (empty($_name)) {
-      return $this->sources;
-    }
-
+  public function get($_name) {
     // If the records for a source have already been loaded
     // return the records.
     if (isset($this->records[$_name])) {
@@ -76,12 +79,20 @@ class TextDB {
     } else {
 
       // Try to find the requested source.
-      if(array_key_exists($_name, $this->sources)) {
+      if (array_key_exists($_name, $this->sources)) {
         $this->records[$_name] = unserialize(file_get_contents($this->sources[$_name]->getPath()));
       }
 
       return $this->records[$_name];
     }
+  }
+
+
+  /**
+   * Returns all the sources of data.
+   */
+  public function getSources() {
+    return $this->sources;
   }
 
 
@@ -150,6 +161,12 @@ class TextDB {
       }
     }
 
+  }
+
+  public function updateSource($_source) {
+    if (isset($this->sources[$_source->getName()])) {
+      $this->sources[$_source->getName()] = $_source; 
+    }
   }
 
 }
