@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 10/11/18
+* Update 10/15/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -72,6 +72,13 @@ class Route {
   public static function error() {
 
       echo "\nCOULD NOT FIND FILE >:(";
+  }
+
+  /**
+   * Send to user's browser to the provided relative url.
+   */
+  public static function redirect($_relativeUrl) {
+    header("Location: " . $_relativeUrl);
   }
 }
 ?>

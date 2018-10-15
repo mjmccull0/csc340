@@ -1,28 +1,28 @@
 <?php
 namespace Controllers;
-use Views\View as View;
-use DB\TextDB as TextDB;
+use Controllers\BaseController as BaseController;
+use Util\Route as Route;
 
 /**
- * @update 10/12/18
+ * @update 10/15/18
  * @author Michael McCulloch
  */
 
-class SourceController {
-  private $db;
+class SourceController extends BaseController {
   private $sources;
 
   public function __construct() {
-    // Get access to the data.
-    $this->db = TextDB::connect();
+    parent::__construct();
 
     // Get the sources of data.
     $this->sources = $this->db->getSources();
 
-    // Create a new view and give it data.
-    $this->view = new View();
   }
 
+
+  /**
+   * This action is for adding new data sources.
+   */
   public function addAction() {
     if (!empty($_POST)) {
       $dataSourceType = $_POST['type'];
@@ -30,7 +30,6 @@ class SourceController {
       $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
 
       // Need to prevent adding of dataSource name collisions.
-
       $dataSource = $dataSourceFqn::create(
         array(
           'name' => $_POST['name'],
@@ -40,7 +39,7 @@ class SourceController {
 
       $this->db->addSource($dataSource);
 
-      return $this->redirect(SOURCE_INDEX_URL);
+      return Route::redirect(SOURCE_INDEX_URL);
     }
 
     $this->view->setTemplate(SOURCE_ADD_TEMPLATE);
@@ -48,12 +47,20 @@ class SourceController {
 
   }
 
+
+  /**
+   * This action lists the data sources.
+   */
   public function indexAction() {
     $this->view->setData($this->sources);
     $this->view->setTemplate(SOURCE_INDEX);
     $this->view->render();
   }
 
+
+  /**
+   * This action allows for editing a data source.
+   */
   public function editAction() {
     if (!empty($name = $_GET["name"])) {
       $this->view->setData($this->sources[$name]);
@@ -65,6 +72,9 @@ class SourceController {
 
   }
 
+  /**
+   * This action handles the changes to a data source.
+   */
   public function updateAction() {
     // Check to see if any changes were made to the source.
     // This needs to be refactored, we can't trust any user input.
@@ -76,16 +86,9 @@ class SourceController {
     $this->db->updateSource($this->sources[$_POST['name']]);
 
     // Send the user to the index action.
-     header("Location: " . SOURCE_INDEX_URL);
+    Route::redirect(SOURCE_INDEX_URL);
 
   }
 
-
-  /**
-   * Send to user's browser to the provided relative url.
-   */
-  public function redirect($_relativeUrl) {
-    header("Location: " . $_relativeUrl);
-  }
 }
 ?>
