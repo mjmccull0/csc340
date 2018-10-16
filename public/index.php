@@ -12,4 +12,14 @@ use Util\Route as Route;
 
 Route::route();
 
+<<<<<<< HEAD
+=======
+$db->get('posts');
+$db->get('instagram');
+$db->get('youtube');
+
+var_dump('<pre>');
+var_dump($db);
+
+>>>>>>> Just updating bracnh to pull from master
 ?>
