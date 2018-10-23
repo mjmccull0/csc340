@@ -21,5 +21,6 @@ private $name = 'posts';
     //$this->view->render();
     $this->view->display($this->sources);
   }
+
 }
 ?>
