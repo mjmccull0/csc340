@@ -22,20 +22,7 @@ class BaseController {
 
   }
 
-  public function createViewAction($_string) {
-
-    var_dump($this->getDataAction($_string));
-
-  }
-
-  /**
-  * Get's appropriate data based on the type of data requested
-  * Could be instagram, posts, or youtube.
-  */
-  protected function getDataAction($_string) {
-
-    return $this->db->get($_string);
-
+  public function indexAction() {
   }
 
 

@@ -11,11 +11,10 @@ use DataSources\InstagramDataSource as InstagramDataSource;
  */
 
 class InstagramController extends BaseController {
-private $name = "instagram";
+private $name = 'instagram';
 
   public function __construct() {
     parent::__construct();
-    parent::createViewAction($this->name);
   }
 
 }

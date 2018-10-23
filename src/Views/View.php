@@ -1,8 +1,9 @@
 <?php
 namespace Views;
 /**
- * @update 10/14/18
+ * @update 10/22/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class View {
@@ -69,6 +70,10 @@ EOT;
 
   public function setTemplate($_templatePath) {
     $this->template = $_templatePath;
+  }
+
+  public function display($_data) {
+    var_dump($_data);
   }
 }
 ?>
