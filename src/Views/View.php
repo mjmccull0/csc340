@@ -72,8 +72,5 @@ EOT;
     $this->template = $_templatePath;
   }
 
-  public function display($_data) {
-    var_dump($_data);
-  }
 }
 ?>
