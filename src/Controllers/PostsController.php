@@ -4,8 +4,9 @@ use Controllers\BaseController as BaseController;
 use Util\Route as Route;
 
 /**
- * @update 10/22/18
+ * @update 10/24/18
  * @author Jacob Oleson
+ * @author Michael McCulloch
  */
 
 class PostsController extends BaseController {

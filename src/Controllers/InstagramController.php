@@ -1,11 +1,12 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
+use Util\Route as Route;
 
 /**
  * Update 10/24/2018
  * @author Jacob Oleson
- * @author Jacob Oleson
+ *
  */
 
 class InstagramController extends BaseController {
