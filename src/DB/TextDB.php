@@ -1,7 +1,7 @@
 <?php
 namespace DB;
 /**
- * @update 10/12/18
+ * @update 10/15/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -122,8 +122,6 @@ class TextDB {
     } else {
       // Source with requested name and id does not exist.
     }
-
-    return false;
   }
 
 
