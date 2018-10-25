@@ -25,21 +25,27 @@ class SourceController extends BaseController {
    */
   public function addAction() {
     if (!empty($_POST)) {
-      $dataSourceType = $_POST['type'];
 
-      $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
+      // Add the source if the name is unique.
+      if (!isset($this->sources[$_POST['name']])) {
+        $dataSourceType = $_POST['type'];
 
-      // Need to prevent adding of dataSource name collisions.
-      $dataSource = $dataSourceFqn::create(
-        array(
-          'name' => $_POST['name'],
-          'url' => $_POST['url']
-        )
-      );
+        $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
 
-      $this->db->addSource($dataSource);
+        // Need to prevent adding of dataSource name collisions.
+        $dataSource = $dataSourceFqn::create(
+          array(
+            'name' => $_POST['name'],
+            'url' => $_POST['url']
+          )
+        );
 
-      return Route::redirect(SOURCE_INDEX_URL);
+        $this->db->addSource($dataSource);
+
+        return Route::redirect(SOURCE_INDEX_URL);
+      } else {
+        // The is already a source with the given name.
+      }
     }
 
     $this->view->setTemplate(SOURCE_ADD_TEMPLATE);
@@ -77,7 +83,6 @@ class SourceController extends BaseController {
    */
   public function updateAction() {
     // Check to see if any changes were made to the source.
-    // This needs to be refactored, we can't trust any user input.
     if ($this->sources[$_POST['name']]->getUrl() != $_POST['url']) {
       $this->sources[$_POST['name']]->setUrl($_POST['url']);
     }
