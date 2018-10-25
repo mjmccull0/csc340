@@ -57,4 +57,6 @@ define('INSTAGRAM_EDIT_FORM_ACTION', "/instagram/update");
 
 define('ID', "id");
 define('NAME', "name");
+
+define('YOUTUBE_SHOW_URL', 'https://www.youtube.com/embed/0Cxt8DvyG2Q?autoplay=1&mute=1&autohide=0&loop=1&fs=1&rel=0&hd=0&wmode=window&enablejsapi=1&playlist=');
 ?>
