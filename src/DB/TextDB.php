@@ -1,70 +1,36 @@
 <?php
 namespace DB;
+
+use Interfaces\Connector as Connector;
+
 /**
- * @update 10/15/18
+ * @update 10/27/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
-class TextDB {
-  private $records;
-  private $sources = array();
+class TextDB implements Connector {
+  private static $records;
+  private static $sources = array();
 
 
-  /**
-   * A magic method that is called when the "new" keyword is
-   * used with this class name.
-   * @see http://php.net/manual/en/language.oop5.magic.php
-   * @see http://php.net/manual/en/language.oop5.decon.php#object.construct
-   */
-  private function __construct() {
-
-    // If there is saved data, load it.
-    if (file_exists($db = DB_FILE)) {
-      $data = unserialize(file_get_contents($db));
-      // Load the data sources.
-      $this->sources = $data['sources'];
-      // Load the data sources' records.
-      $this->records = $data['records'];
-    } elseif (file_exists($dataSources = DATA_SOURCES)) {
-      $this->sources = unserialize(file_get_contents($dataSources));
-    }
-  }
-
-
-  /**
-   * A magic method that is called after there are not more
-   * references to this object.
-   * @see http://php.net/manual/en/language.oop5.decon.php#object.destruct
-   */
-  public function __destruct() {
-      // Save changes to data served by TextDB.
-      file_put_contents(DB_FILE, serialize(
-          array(
-            'records' => $this->records,
-            'sources' => $this->sources
-          )
-        )
-      );
-  }
-
-
-  /**
-   * Connecting provides access to DataSource.
-   */
-  public static function connect() {
-
-    $textDB = new self();
-
-    return $textDB;
-
-  }
 
   /**
    * Make TextDB aware of new dataSources.
    */
-  public function addSource($_dataSource) {
-    $this->sources[$_dataSource->getName()] = $_dataSource;
-    $this->records[$_dataSource->getName()] = unserialize(file_get_contents($_dataSource->getPath()));
+  private static function addSource($_dataSource) {
+    self::$sources[$_dataSource->getName()] = $_dataSource;
+    self::$records[$_dataSource->getName()] = unserialize(file_get_contents($_dataSource->getPath()));
+  }
+
+  public static function createSource(array $_post) {
+
+    $dataSourceType = $_post['type'];
+    unset($_post['type']);
+
+    $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
+
+    // Need to prevent adding of dataSource name collisions.
+    $dataSource = $dataSourceFqn::create($_post);
   }
 
 
@@ -89,10 +55,24 @@ class TextDB {
 
 
   /**
+   * Returns a record given an id.
+   */
+  public function getById(int $_id) {
+    // TODO
+  }
+
+
+  public static function getSourceByName(string $_name) {
+    return self::getSources()[$_name];
+  }
+
+  /**
    * Returns all the sources of data.
    */
-  public function getSources() {
-    return $this->sources;
+  public static function getSources() {
+    if (file_exists($dataSources = DATA_SOURCES)) {
+      return unserialize(file_get_contents($dataSources));
+    }
   }
 
 
@@ -122,6 +102,9 @@ class TextDB {
     } else {
       // Source with requested name and id does not exist.
     }
+  }
+
+  public static function import() {
   }
 
 
@@ -161,9 +144,35 @@ class TextDB {
 
   }
 
-  public function updateSource($_source) {
-    if (isset($this->sources[$_source->getName()])) {
-      $this->sources[$_source->getName()] = $_source; 
+  /**
+   * Update the source.
+   */
+  private static function save($_source) {
+    if (file_exists($dataSources = DATA_SOURCES)) {
+      $sources = unserialize(file_get_contents($dataSources));
+      $sources[$_source->getName()] = $_source;
+      file_put_contents(DATA_SOURCES, serialize($sources));
+    }
+  }
+
+  /**
+   * Process the form submission and update the source.
+   */
+  public static function updateSource(array $_post) {
+    $source = self::getSourceByName($_post['name']);
+
+    if (isset($source)) {
+      // Changing the name of a source is unsupported.
+      unset($_post['name']);
+
+      // Set all the properties of the source to the values
+      // sumbitted to the form.
+      foreach ($_post as $key => $value) {
+        $method = 'set' . ucfirst($key);
+        $source->$method($value);
+      }
+
+      self::save($source);
     }
   }
 
