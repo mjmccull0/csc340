@@ -5,7 +5,7 @@ namespace Models;
  * @update 9/18/18
  * @author Michael McCulloch
  */
-class WpModel extends BaseModel {
+class PostsModel extends BaseModel {
   private $dateTime;
   private $imgUrl;
   private $title;

@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <!-- 
-View for Source Controller index action.
-@update 10/14/18
+Layout for fullscreen content pages.
+@update 10/30/18
 @author Michael McCulloch
 -->
 <html>
@@ -11,13 +12,6 @@ View for Source Controller index action.
   <?php echo $this->headScripts ?>
 </head>
 <body>
-  <div class="content">
-    <div class="sidebar">
-      <?php include(NAV); ?>
-    </div>
-    <div class="content-wrapper">
-      <?php echo $this->content ?>
-    </div>
-  </div>
+  <?php echo $this->content ?>
 </body>
 </html>

@@ -6,13 +6,14 @@ use Models\InstagramModel as InstagramModel;
 use DOMDocument;
 
 /**
- * @date 9/27/18
+ * @date 10/29/18
  * @author Michael McCulloch
  */
 
 class InstagramDataSource extends DataSource {
 
-  private const FIELDS = array("active", "id", "imgUrl", "thumbnailUrl", "title");
+  private const FIELDS = array("type", "cid", "imgUrl", "thumbnailUrl", "title");
+  protected const TYPE = "Instagram";
 
   /**
    * Scrape the profile page of the a given url.
@@ -35,17 +36,14 @@ class InstagramDataSource extends DataSource {
     // what we need.
     foreach($jsonObject->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $img) {
       array_push($entries,
-        InstagramModel::load(
-          array_combine(
-            self::FIELDS,
-            array(
-              // This is the active flag.
-              self::ACTIVE,
-              $img->node->id,
-              $img->node->display_url,
-              $img->node->thumbnail_src,
-              $img->node->edge_media_to_caption->edges[0]->node->text,
-            )
+        array_combine(
+          self::FIELDS,
+          array(
+            self::TYPE,
+            $img->node->id,
+            $img->node->display_url,
+            $img->node->thumbnail_src,
+            $img->node->edge_media_to_caption->edges[0]->node->text,
           )
         )
       );

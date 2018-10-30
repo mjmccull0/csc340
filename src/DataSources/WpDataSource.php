@@ -2,15 +2,15 @@
 namespace DataSources;
 
 use DataSources\DataSource as DataSource;
-use Models\WpModel as WpModel;
 /**
- * @update 9/27/18
+ * @update 9/29/18
  * @author Michael McCulloch
  */
 
 class WpDataSource extends DataSource {
 
-  protected const FIELDS = array("active", "dateTime", "id", "imgUrl", "title");
+  protected const FIELDS = array("type", "dateTime", "cid", "imgUrl", "title");
+  protected const TYPE = "Posts";
 
   /**
    * Get the content from the WP Rest API.
@@ -27,19 +27,17 @@ class WpDataSource extends DataSource {
         // create an entry with the content id, a cleaned version of the
         // title, the date-time, and set active flag.
         array_push($entries,
-          WpModel::load(
-            array_combine(
-              self::FIELDS,
-              array(
-                // This is the active flag.
-                self::ACTIVE,
-                $post['date'],
-                $post['id'],
-                $post['_embedded']['wp:featuredmedia'][0]['source_url'],
-                // This is to handle an issue with wordpress titles using &#8217;
-                // instead of an apostrophe.
-                str_replace("&#8217;", "'", $post['title']['rendered'])
-              )
+          array_combine(
+            self::FIELDS,
+            array(
+              // This is the active flag.
+              self::TYPE,
+              $post['date'],
+              $post['id'],
+              $post['_embedded']['wp:featuredmedia'][0]['source_url'],
+              // This is to handle an issue with wordpress titles using &#8217;
+              // instead of an apostrophe.
+              str_replace("&#8217;", "'", $post['title']['rendered'])
             )
           )
         );

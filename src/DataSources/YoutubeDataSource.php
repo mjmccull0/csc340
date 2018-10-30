@@ -5,12 +5,13 @@ use DataSources\DataSource as DataSource;
 use Models\YoutubeModel as YoutubeModel;
 /**
  * Contains YouTube specific methods for a DataSource.
- * @update 9/27/18
+ * @update 10/29/18
  * @author Michael McCulloch
  */
 class YoutubeDataSource extends DataSource {
 
-  private const FIELDS = array("active", "id", "title");
+  private const FIELDS = array("type", "cid", "title");
+  private const TYPE = "Youtube";
 
   /**
    * Import a YouTube channel xml feed and add it to a YoutubeDataSource.
@@ -24,16 +25,13 @@ class YoutubeDataSource extends DataSource {
 
     foreach ($content->entry as $entry) {
       array_push($entries,
-        YoutubeModel::load(
-          array_combine(
-            self::FIELDS,
-            array(
-              // This is the active flag.
-              self::ACTIVE,
-              // Remove the yt:video: from the id.
-              str_replace("yt:video:", "", $entry->id),
-              (string) $entry->title
-            )
+        array_combine(
+          self::FIELDS,
+          array(
+            self::TYPE,
+            // Remove the yt:video: from the id.
+            str_replace("yt:video:", "", $entry->id),
+            (string) $entry->title
           )
         )
       );

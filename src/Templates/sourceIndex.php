@@ -1,14 +1,20 @@
 <!-- 
 View for Source Controller index action.
-@update 10/12/18
+@update 10/30/18
 @author Michael McCulloch
 -->
-<ul>
+<ul class="list-view">
   <?php foreach ($this->data as $source) { ?>
-  <li>
-    <span><?php echo $source->getName(); ?></span>
-    <a href="<?php echo SOURCE_EDIT_URL . '?' . NAME . '=' . $source->getName() ?>">
-      <?php echo SOURCE_EDIT_LINK_TEXT ?></a>
+  <li class="list-view-item">
+    <div>
+      <span class="title"><?php echo $source['name']; ?></span>
+    </div>
+    <a href="<?php echo SOURCE_EDIT_URL . '?' . NAME . '=' . $source['name'] ?>">
+      <?php echo EDIT ?></a>
+    <a href="<?php echo "/" . $source['type'] . '?' . NAME . '=' . $source['name'] ?>">
+      <?php echo VIEW ?></a>
+    <a href="<?php echo '/' . $source['type'] . '/' . SHOW . '?' . NAME . '=' . $source['name']; ?>">
+      <?php echo SHOW ?></a>
   </li>
   <?php } ?>
 </ul>

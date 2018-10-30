@@ -1,0 +1,89 @@
+input[type=text] {
+  width: 100%;
+}
+
+form {
+  max-width: 100%;
+  padding: 1em;
+}
+
+form .button {
+  float: right;
+}
+
+textarea {
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.content {
+  margin: 2em;
+  display: flex;
+}
+
+.content .sidebar a {
+  display: block;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+.list-view {}
+
+.list-view-item {
+  display: flex;
+  margin: 1em;
+}
+
+.list-view-item img {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.list-view-item div {
+  flex: 1;
+  padding: 1em 0 0 1em;
+}
+
+.list-view-item .title {
+  font-size: x-large;
+}
+
+.list-view-item a {
+  margin: auto 0.5rem;
+}
+
+.edit-container {
+  display: flex;
+}
+
+.edit-container img {
+  max-width: 80%;
+}
+
+.edit-form {
+  width: 100%;
+}
+
+.edit-container .img-container {
+  text-align: center;
+}
+
+.fullscreen {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #000000;
+}

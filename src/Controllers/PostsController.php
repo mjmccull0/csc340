@@ -1,16 +1,17 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
+use Models\SourceModel as SourceModel;
 use Util\Route as Route;
 
 /**
- * @update 10/24/18
+ * @update 10/29/18
  * @author Jacob Oleson
  * @author Michael McCulloch
  */
 
 class PostsController extends BaseController {
-private $name = 'posts';
+private $type = 'Posts';
 
   public function __construct() {
     parent::__construct();
@@ -18,8 +19,13 @@ private $name = 'posts';
 
   //Displays the current Titles as well as an edit link for each entry
   public function indexAction() {
+    if (!empty($_GET["name"])) {
+      $data = SourceModel::getRecordsByName($_GET["name"]);
+    } else {
+      $data = SourceModel::getRecordsByType($this->type);
+    }
 
-    $this->view->setData($this->db->get($this->name));
+    $this->view->setData($data);
     $this->view->setTemplate(POSTS_INDEX);
     $this->view->render();
   }
@@ -28,7 +34,7 @@ private $name = 'posts';
   public function editAction() {
 
     if (!empty($id = $_GET["id"])) {
-      $this->view->setData($record = $this->db->fetchById($this->name,$id));
+      $this->view->setData(SourceModel::getById($id));
       $this->view->setTemplate(POSTS_EDIT);
       $this->view->render();
     }
@@ -36,11 +42,12 @@ private $name = 'posts';
 
   //Need a way to reflect changes made by Administrator
   public function updateAction() {
+    SourceModel::updateRecord($_POST);
 
+    Route::redirect(POSTS_INDEX_URL);
   }
 
-  public function show() {
-
+  public function showAction() {
   }
 }
 ?>

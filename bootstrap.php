@@ -10,21 +10,24 @@ use DataSources\YoutubeDataSource as YoutubeDataSource;
 
 WpDataSource::create(
   array(
-    'name' => 'posts',
+    'type' => 'Posts',
+    'name' => 'UNCG Posts',
     'url' => 'https://newsandfeatures.uncg.edu/wp-json/wp/v2/posts?_embed'
   )
 );
 
 InstagramDataSource::create(
   array(
-    'name' => 'instagram',
+    'type' => 'Instagram',
+    'name' => 'UNCG Instagram',
     'url' => 'https://www.instagram.com/uncg/'
   )
 );
 
 YoutubeDataSource::create(
   array(
-    'name' => 'youtube',
+    'type' => 'Youtube',
+    'name' => 'UNCG YouTube Channel',
     'url' => 'https://www.youtube.com/feeds/videos.xml?channel_id=UCZMafMiPPwm96bp843d5TZQ'
   )
 );

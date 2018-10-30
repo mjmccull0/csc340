@@ -1,13 +1,12 @@
 <?php
 namespace DataSources;
 /**
- * @update 10/04/18
+ * @update 10/29/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 
 abstract class DataSource {
-  protected const ACTIVE = 1;
 
   protected $name;
   protected $path;
@@ -17,17 +16,17 @@ abstract class DataSource {
    * Add new imported data from DataSources.  This method is used by
    * classes extending the DataSource class.
    */
-  public function add($_array) {
+  public function add(array $_array) {
     if (file_exists($this->path)) {
       $records = unserialize(file_get_contents($this->path));
 
       foreach($_array as $item) {
-        if (array_key_exists($item->getId(), $records)) {
+        if (array_key_exists($item['cid'], $records)) {
           // Skip this item, it is already in our records.
           continue;
         } else {
           // Add the new item to our records.
-          $records[$item->getId()] = $item;
+          $records[$item['cid']] = $item;
         }
       }
 
@@ -36,7 +35,7 @@ abstract class DataSource {
       $ids = array();
 
       foreach($_array as $item) {
-        array_push( $ids, $item->getId() );
+        array_push( $ids, $item['cid'] );
       }
 
       $records = array_combine($ids, $_array);
@@ -61,7 +60,7 @@ abstract class DataSource {
     if (array_key_exists($_source->getName(), $sources)) {
       // Handle the name collision.
     } else {
-      $sources[$_source->getName()] =  $_source;
+      $sources[$_source->getName()] =  $_source->toArray();
     }
 
     file_put_contents(DATA_SOURCES, serialize($sources));
@@ -78,6 +77,7 @@ abstract class DataSource {
     $dataSource = new static();
     $dataSource->name = $_params['name'];
     $dataSource->url = $_params['url'];
+    $dataSource->type = $_params['type'];
     $dataSource->path = DATA_DIR . $_params['name'];
 
     $_params['path'] = $dataSource->path;
@@ -91,6 +91,20 @@ abstract class DataSource {
     self::addToSourceFile($dataSource);
 
     return $dataSource;
+  }
+
+  private function toArray() {
+    $array = (array) $this;
+
+    foreach($array as $k => $x) {
+      if ($k[0] == chr(0)) {
+        $array[substr($k, 3)] = $array[$k];
+        unset($array[$k]);
+      }
+    }
+
+    return $array;
+
   }
 
 
@@ -111,6 +125,10 @@ abstract class DataSource {
   }
 
 
+  public function getType() {
+    return $this->type;
+  }
+
   public function getUrl() {
     return $this->url;
   }
@@ -125,6 +143,9 @@ abstract class DataSource {
     $this->path = $_path;
   }
 
+  public function setType($_type) {
+    $this->type = $_type;
+  }
 
   public function setUrl($_url) {
     $this->url = $_url;

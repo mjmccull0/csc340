@@ -1,13 +1,19 @@
 <?php
 namespace Interfaces;
 /**
- * @update 10/27/18
+ * @update 10/29/18
  * @author Michael McCulloch
  */
 
 Interface Connector {
 
-  public function getById(int $_id);
+  public static function createSource(array $_post);
+
+  public static function getById(int $_id);
+
+  public static function getRecordsByName(string $_name);
+
+  public static function getSourceByName(string $_name);
 
   /**
    * Returns all the sources of data.
@@ -20,8 +26,6 @@ Interface Connector {
    * added.
    */
   public static function import();
-
-  public static function createSource(array $_post);
 
   public static function updateSource(array $_post);
 
