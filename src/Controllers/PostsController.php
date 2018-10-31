@@ -48,6 +48,12 @@ private $type = 'Posts';
   }
 
   public function showAction() {
+    // Need to add a way to only get active posts, somewhere in the model.
+    $data = SourceModel::getRecordsByType($this->type);
+    $this->view->setData($data);
+    $this->view->setTemplate(POSTS_SHOW);
+    $this->view->setLayout(SHOW_LAYOUT);
+    $this->view->render();
   }
 }
 ?>

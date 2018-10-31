@@ -44,6 +44,8 @@ define('POSTS_EDIT_HEADER', "Edit Post: ");
 define('POSTS_EDIT_LINK_TEXT', "edit");
 define('POSTS_EDIT_FORM_ACTION', "/posts/update");
 
+define('POSTS_SHOW', TEMPLATE_DIR . "PostsShow.php");
+
 define('YOUTUBE', 'YouTube');
 define('YOUTUBE_INDEX', TEMPLATE_DIR . "youtubeIndex.php");
 define('YOUTUBE_INDEX_URL', '/youtube');
