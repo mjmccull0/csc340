@@ -139,10 +139,15 @@ video {
   height: inherit;
 }
 
+.slide .title {
+  opacity: 0;
+  font-size: 2em;
+}
 .slide.active .title {
+  opacity: 1;
   background: rgba(0,0,0,0.4);
   color: #FFFFFF;
-  padding: 1em;
+  padding: 1.5rem;
   margin: auto;
   position: fixed;
   bottom: 0;
