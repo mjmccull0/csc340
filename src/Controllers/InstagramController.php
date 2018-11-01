@@ -18,15 +18,12 @@ class InstagramController extends BaseController {
 
   //Displays the current titles with photos (A work in progress )as well as an edit link
   public function indexAction() {
-
-    if (!empty($_GET["name"])) {
-      $data = $this->model::getRecordsByName($_GET["name"]);
-    } else {
-      $data = $this->model::getRecordsByType($this->type);
+    $params = $_GET;
+    if (!isset($params['type'])) {
+      $params['type'] = $this->type;
     }
 
-    
-    $this->view->setData($data);
+    $this->view->setData($this->model::getAll($params));
     $this->view->setTemplate(INSTAGRAM_INDEX);
     $this->view->render();
   }
@@ -50,8 +47,11 @@ class InstagramController extends BaseController {
   }
 
   public function showAction() {
-    $data = $this->model::getRecordsByType($this->type);
-    $this->view->setData($data);
+    $params = $_GET;
+    if (!isset($params['type'])) {
+      $params['type'] = $this->type;
+    }
+    $this->view->setData($this->model::get($params));
     $this->view->setTemplate(INSTAGRAM_SHOW);
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->render();

@@ -7,6 +7,42 @@ use Translators\DataStore as DataStore;
  */
 
 class SourceModel {
+  public function get(array $_params) {
+    $records = array();
+
+    if (isset($_params['type'])) {
+      return self::getActive(self::getRecordsByType($_params['type']));
+    }
+
+    if (isset($_params['name'])) {
+      return self::getActive(self::getRecordsByName($_params['name']));
+    }
+
+  }
+
+  private static function getActive(array $_records) {
+    $records = array();
+
+    foreach ($_records as $record) {
+      if ($record->getActive()) {
+        array_push($records, $record);
+      }
+    }
+
+    return $records;
+  }
+
+  public static function getAll(array $_params) {
+    if (isset($_params['type'])) {
+      return self::getRecordsByType($_params['type']);
+    }
+
+    if (isset($_params['name'])) {
+      return self::getRecordsByName($_params['name']);
+    }
+  }
+
+
   public static function getById(string $_id) {
     $record = DataStore::getById($_id);
     $model = 'Models\\' . $record['type'] . 'Model';

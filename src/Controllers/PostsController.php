@@ -17,13 +17,12 @@ class PostsController extends BaseController {
 
   //Displays the current Titles as well as an edit link for each entry
   public function indexAction() {
-    if (!empty($_GET["name"])) {
-      $data = $this->model::getRecordsByName($_GET["name"]);
-    } else {
-      $data = $this->model::getRecordsByType($this->type);
+    $params = $_GET;
+    if (!isset($params['type'])) {
+      $params['type'] = $this->type;
     }
 
-    $this->view->setData($data);
+    $this->view->setData($this->model::getAll($params));
     $this->view->setTemplate(POSTS_INDEX);
     $this->view->render();
   }
@@ -46,9 +45,7 @@ class PostsController extends BaseController {
   }
 
   public function showAction() {
-    // Need to add a way to only get active posts, somewhere in the model.
-    $data = $this->model::getRecordsByType($this->type);
-    $this->view->setData($data);
+    $this->view->setData($this->model::get($_GET));
     $this->view->setTemplate(POSTS_SHOW);
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->render();

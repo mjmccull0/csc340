@@ -20,13 +20,12 @@ private $type = "Youtube";
 
   //Displays the current Titles as well as an edit link for each entry
   public function indexAction() {
-    if (!empty($_GET["name"])) {
-      $data = $this->model::getRecordsByName($_GET["name"]);
-    } else {
-      $data = $this->model::getRecordsByType($this->type);
+    $params = $_GET;
+    if (!isset($params['type'])) {
+      $params['type'] = $this->type;
     }
 
-    $this->view->setData($data);
+    $this->view->setData($this->model::getAll($params));
     $this->view->setTemplate(YOUTUBE_INDEX);
     $this->view->render();
   }
@@ -46,13 +45,15 @@ private $type = "Youtube";
   }
 
   public function showAction() {
-    if (!empty($_GET["name"])) {
-      $records = $this->model::getRecordsByName($_GET["name"]);
-    } else {
-      $records = $this->model::getRecordsByName($this->name);
+    $params = $_GET;
+    if (!isset($params['type'])) {
+      $params['type'] = $this->type;
     }
 
+    $records = $this->model::get($params);
+
     $cids = array();
+
     foreach ($records as $record) {
       array_push($cids, $record->getCid());
     }
