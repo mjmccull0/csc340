@@ -1,13 +1,25 @@
+ul, menu, dir {
+    display: block;
+    list-style-type: disc;
+    margin-block-start: 0em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 0em;
+}
+.header-menu {
+  text-align: right;
+}
+
 input[type=text] {
   width: 100%;
 }
 
 form {
   max-width: 100%;
-  padding: 1em;
 }
 
-form .button {
+form input[type=submit] {
   float: right;
 }
 
@@ -21,19 +33,25 @@ textarea {
   display: flex;
 }
 
+.content .sidebar {
+  padding: 1rem;
+}
 .content .sidebar a {
-  display: block;
+    display: block;
 }
 
 .content-wrapper {
   width: 100%;
+  margin: auto 2em;
 }
 
-.list-view {}
+.list-view {
+  margin: 0;
+}
 
 .list-view-item {
   display: flex;
-  margin: 1em;
+  margin: 1em 0;
 }
 
 .list-view-item img {
@@ -43,7 +61,10 @@ textarea {
 
 .list-view-item div {
   flex: 1;
-  padding: 1em 0 0 1em;
+  padding-left: 1em;
+}
+
+.list-view-item div .title {
 }
 
 .list-view-item .title {
@@ -141,14 +162,30 @@ video {
 
 .slide .title {
   opacity: 0;
-  font-size: 2em;
+  font-size: 3em;
 }
 .slide.active .title {
+  font-family: fantasy;
+  font-weight: 900;
   opacity: 1;
   background: rgba(0,0,0,0.4);
-  color: #FFFFFF;
   padding: 1.5rem;
   margin: auto;
   position: fixed;
   bottom: 0;
+  -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
+@media (max-width: 900px) {
+  .edit-container {
+    flex-direction: column;
+  }
+
+  .edit-form {
+    width: 80%;
+    margin: auto;
+  }
+
 }

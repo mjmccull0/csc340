@@ -51,8 +51,12 @@ private $type = 'Instagram';
     Route::redirect(INSTAGRAM_INDEX_URL);
   }
 
-  public function show() {
-
+  public function showAction() {
+    $data = SourceModel::getRecordsByType($this->type);
+    $this->view->setData($data);
+    $this->view->setTemplate(INSTAGRAM_SHOW);
+    $this->view->setLayout(SHOW_LAYOUT);
+    $this->view->render();
   }
 }
 

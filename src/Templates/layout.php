@@ -1,10 +1,12 @@
+<!DOCTYPE html>
 <!-- 
 View for Source Controller index action.
 @update 10/14/18
 @author Michael McCulloch
 -->
-<html>
+<html lang="<?php echo LANG; ?>">
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>"/>
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/main.css">
   <?php echo $this->headStyles ?>

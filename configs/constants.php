@@ -45,6 +45,7 @@ define('POSTS_EDIT_LINK_TEXT', "edit");
 define('POSTS_EDIT_FORM_ACTION', "/posts/update");
 
 define('POSTS_SHOW', TEMPLATE_DIR . "PostsShow.php");
+define('INSTAGRAM_SHOW', TEMPLATE_DIR . "InstagramShow.php");
 
 define('YOUTUBE', 'YouTube');
 define('YOUTUBE_INDEX', TEMPLATE_DIR . "youtubeIndex.php");
@@ -65,6 +66,7 @@ define('INSTAGRAM_EDIT_HEADER', "Edit Instagram: ");
 define('INSTAGRAM_EDIT_LINK_TEXT', "edit");
 define('INSTAGRAM_EDIT_FORM_ACTION', "/instagram/update");
 
+define('ADD', 'Add');
 define('NAV', TEMPLATE_DIR . 'nav.php');
 define('ID', "id");
 define('NAME', "name");
@@ -73,5 +75,7 @@ define('VIEW', 'view');
 define('SHOW', 'show');
 define('SOURCES', 'Sources');
 
+define('LANG', 'en');
+define('CHARSET', 'utf-8');
 define('YOUTUBE_SHOW_URL', 'https://www.youtube.com/embed/0Cxt8DvyG2Q?autoplay=1&mute=1&autohide=0&loop=1&fs=1&rel=0&hd=0&wmode=window&enablejsapi=1&playlist=');
 ?>

@@ -4,6 +4,7 @@ View for Source Controller index action.
 @author Michael McCulloch
 @author Jacob Oleson
 -->
+
 <ul class="list-view">
   <?php foreach ($this->data as $data) { ?>
   <li class="list-view-item">
