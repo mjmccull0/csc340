@@ -4,31 +4,6 @@ This project is a website using PHP, object-oriented programming, and MVC archit
 
 ## Getting Started
 
-To access data that has been collected from DataSources use TextDB.  To use TextDB, add this to the top of a php file just under the namespace declaration, if there is one.
-
-```
-use DB\TextDB as TextDB;
-```
-
-To initialize TextDB, do something like:
-
-```
-$db = TextDB::connect();
-```
-
-There are three DataSources setup in bootstrap.php.  There names are posts, instagram, and youtube.  To access active records for the DataSource with the name posts, for example,
-
-```
-$db->get('posts');
-```
-
-To access all posts, both active and inactive posts:
-
-```
-$db->fetchActive('posts');
-```
-
-Both $db->get(name) and $db->fetchActive(name) return an array of models whose properties can be accessed with getters and modified with setters.
 
 
 ### Prerequisites
@@ -46,14 +21,6 @@ php -S localhost:8000 -t public/
 The built-in PHP web-server should now be serving the project at http://localhost:8000.
 
 ### IMPORTANT NOTES
-
-Until there is a way to use controllers from the web-browser using the PHP built-in web-server will be of little help.  Instead to test controllers or views execute your controllers or views from the command-line:
-
-```
-php path_to_your_code.php
-```
-
-or write something to allow accessing controllers from a web-browser.
 
 
 ### Updating Your Branch With Updated Master Code
