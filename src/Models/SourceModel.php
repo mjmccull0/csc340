@@ -2,7 +2,7 @@
 namespace Models;
 use Translators\DataStore as DataStore;
 /**
- * @update 10/29/18
+ * @update 11/01/18
  * @author Michael McCulloch
  */
 
@@ -76,7 +76,7 @@ class SourceModel {
   public function delete() {
   }
 
-  public function update(array $_post) {
+  public function updateSource(array $_post) {
     DataStore::updateSource($_post);
   }
 

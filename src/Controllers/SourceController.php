@@ -1,11 +1,9 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
-use Models\SourceModel as SourceModel;
-use Util\Route as Route;
 
 /**
- * @update 10/27/18
+ * @update 11/01/18
  * @author Michael McCulloch
  */
 
@@ -22,8 +20,8 @@ class SourceController extends BaseController {
    */
   public function addAction() {
     if (!empty($_POST)) {
-      SourceModel::create($_POST);
-      return Route::redirect(SOURCE_INDEX_URL);
+      $this->model::create($_POST);
+      return $this->route::redirect(SOURCE_INDEX_URL);
     }
 
     $this->view->setTemplate(SOURCE_ADD_TEMPLATE);
@@ -36,7 +34,7 @@ class SourceController extends BaseController {
    * This action lists the data sources.
    */
   public function indexAction() {
-    $this->view->setData(SourceModel::getSources());
+    $this->view->setData($this->model::getSources());
     $this->view->setTemplate(SOURCE_INDEX);
     $this->view->render();
   }
@@ -47,7 +45,7 @@ class SourceController extends BaseController {
    */
   public function editAction() {
     if (!empty($_GET["name"])) {
-      $this->view->setData(SourceModel::getByName($_GET["name"]));
+      $this->view->setData($this->model::getByName($_GET["name"]));
       $this->view->setTemplate(SOURCE_EDIT);
       $this->view->render();
     }
@@ -60,10 +58,10 @@ class SourceController extends BaseController {
    * This action handles the changes to a data source.
    */
   public function updateAction() {
-    SourceModel::update($_POST);
+    $this->model::updateSource($_POST);
 
     // Send the user to the index action.
-    Route::redirect(SOURCE_INDEX_URL);
+    $this->route::redirect(SOURCE_INDEX_URL);
 
   }
 

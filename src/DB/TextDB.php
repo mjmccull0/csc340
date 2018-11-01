@@ -4,7 +4,7 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 10/30/18
+ * @update 11/01/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -85,7 +85,7 @@ class TextDB implements Connector {
 
 
   public static function import() {
-    $count = 0;;
+    $count = 0;
     foreach (self::getSources() as $source) {
       $items = unserialize(file_get_contents($source['path']));
 
@@ -110,8 +110,9 @@ class TextDB implements Connector {
    * Save a source.
    */
   private static function saveSource($_source) {
+
     $sources = self::getSources();
-    $sources[$_source->getName()] = $_source;
+    $sources[$_source['name']] = $_source;
     file_put_contents(DATA_SOURCES, serialize($sources));
   }
 
@@ -129,10 +130,8 @@ class TextDB implements Connector {
       // sumbitted to the form.
       foreach ($_post as $key => $value) {
 
-        $method = 'set' . ucfirst($key);
-
-        if (method_exists($source, $method)) {
-          $source->$method($value);
+        if (isset($_post[$key])) {
+          $source[$key] = $value;
         }
       }
 
