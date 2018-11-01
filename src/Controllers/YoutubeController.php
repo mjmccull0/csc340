@@ -1,11 +1,10 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
-use Models\SourceModel as SourceModel;
-use Util\Route as Route;
 
 /**
- * update 10/30/18
+ * update 11/01/18
+ *
  * @author Jacob Oleson
  * @author Michael McCulloch
  *
@@ -22,9 +21,9 @@ private $type = "Youtube";
   //Displays the current Titles as well as an edit link for each entry
   public function indexAction() {
     if (!empty($_GET["name"])) {
-      $data = SourceModel::getRecordsByName($_GET["name"]);
+      $data = $this->model::getRecordsByName($_GET["name"]);
     } else {
-      $data = SourceModel::getRecordsByType($this->type);
+      $data = $this->model::getRecordsByType($this->type);
     }
 
     $this->view->setData($data);
@@ -34,23 +33,23 @@ private $type = "Youtube";
 
   public function editAction() {
     if (!empty($id = $_GET["id"])) {
-      $this->view->setData(SourceModel::getById($id));
+      $this->view->setData($this->model::getById($id));
       $this->view->setTemplate(YOUTUBE_EDIT);
       $this->view->render();
     }
   }
 
   public function updateAction() {
-    SourceModel::updateRecord($_POST);
+    $this->model::updateRecord($_POST);
 
-    Route::redirect(YOUTUBE_INDEX_URL);
+    $this->route::redirect(YOUTUBE_INDEX_URL);
   }
 
   public function showAction() {
     if (!empty($_GET["name"])) {
-      $records = SourceModel::getRecordsByName($_GET["name"]);
+      $records = $this->model::getRecordsByName($_GET["name"]);
     } else {
-      $records = SourceModel::getRecordsByName($this->name);
+      $records = $this->model::getRecordsByName($this->name);
     }
 
     $cids = array();

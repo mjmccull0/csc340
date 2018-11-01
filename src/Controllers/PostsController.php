@@ -1,17 +1,15 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
-use Models\SourceModel as SourceModel;
-use Util\Route as Route;
 
 /**
- * @update 10/29/18
+ * @update 11/01/18
  * @author Jacob Oleson
  * @author Michael McCulloch
  */
 
 class PostsController extends BaseController {
-private $type = 'Posts';
+  private $type = 'Posts';
 
   public function __construct() {
     parent::__construct();
@@ -20,9 +18,9 @@ private $type = 'Posts';
   //Displays the current Titles as well as an edit link for each entry
   public function indexAction() {
     if (!empty($_GET["name"])) {
-      $data = SourceModel::getRecordsByName($_GET["name"]);
+      $data = $this->model::getRecordsByName($_GET["name"]);
     } else {
-      $data = SourceModel::getRecordsByType($this->type);
+      $data = $this->model::getRecordsByType($this->type);
     }
 
     $this->view->setData($data);
@@ -34,7 +32,7 @@ private $type = 'Posts';
   public function editAction() {
 
     if (!empty($id = $_GET["id"])) {
-      $this->view->setData(SourceModel::getById($id));
+      $this->view->setData($this->model::getById($id));
       $this->view->setTemplate(POSTS_EDIT);
       $this->view->render();
     }
@@ -42,14 +40,14 @@ private $type = 'Posts';
 
   //Need a way to reflect changes made by Administrator
   public function updateAction() {
-    SourceModel::updateRecord($_POST);
+    $this->model::updateRecord($_POST);
 
-    Route::redirect(POSTS_INDEX_URL);
+    $this->route::redirect(POSTS_INDEX_URL);
   }
 
   public function showAction() {
     // Need to add a way to only get active posts, somewhere in the model.
-    $data = SourceModel::getRecordsByType($this->type);
+    $data = $this->model::getRecordsByType($this->type);
     $this->view->setData($data);
     $this->view->setTemplate(POSTS_SHOW);
     $this->view->setLayout(SHOW_LAYOUT);

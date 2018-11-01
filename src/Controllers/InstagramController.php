@@ -1,18 +1,16 @@
 <?php
 namespace Controllers;
 use Controllers\BaseController as BaseController;
-use Models\SourceModel as SourceModel;
-use Util\Route as Route;
 
 /**
- * Update 10/29/2018
+ * Update 11/01/2018
  * @author Jacob Oleson
  * @author Michael McCulloch
  *
  */
 
 class InstagramController extends BaseController {
-private $type = 'Instagram';
+  private $type = 'Instagram';
 
   public function __construct() {
     parent::__construct();
@@ -22,9 +20,9 @@ private $type = 'Instagram';
   public function indexAction() {
 
     if (!empty($_GET["name"])) {
-      $data = SourceModel::getRecordsByName($_GET["name"]);
+      $data = $this->model::getRecordsByName($_GET["name"]);
     } else {
-      $data = SourceModel::getRecordsByType($this->type);
+      $data = $this->model::getRecordsByType($this->type);
     }
 
     
@@ -38,7 +36,7 @@ private $type = 'Instagram';
   public function editAction() {
 
     if (!empty($_GET["id"])) {
-      $this->view->setData(SourceModel::getById($_GET['id']));
+      $this->view->setData($this->model::getById($_GET['id']));
       $this->view->setTemplate(INSTAGRAM_EDIT);
       $this->view->render();
     }
@@ -46,13 +44,13 @@ private $type = 'Instagram';
 
   //Need a way to reflect the updates made by Administrator
   public function updateAction() {
-    SourceModel::updateRecord($_POST);
+    $this->model::updateRecord($_POST);
 
-    Route::redirect(INSTAGRAM_INDEX_URL);
+    $this->route::redirect(INSTAGRAM_INDEX_URL);
   }
 
   public function showAction() {
-    $data = SourceModel::getRecordsByType($this->type);
+    $data = $this->model::getRecordsByType($this->type);
     $this->view->setData($data);
     $this->view->setTemplate(INSTAGRAM_SHOW);
     $this->view->setLayout(SHOW_LAYOUT);

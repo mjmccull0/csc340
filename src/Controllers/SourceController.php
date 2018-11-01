@@ -8,7 +8,6 @@ use Controllers\BaseController as BaseController;
  */
 
 class SourceController extends BaseController {
-  private $sources;
 
   public function __construct() {
     parent::__construct();
