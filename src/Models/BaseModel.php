@@ -2,11 +2,12 @@
 namespace Models;
 /**
  * A base model for content.
- * @update 9/18/18
+ * @update 10/29/18
  * @author Michael McCulloch
  */
 class BaseModel {
   private $active;
+  private $cid;
   private $id;
 
   public static function load($_params = array()) {
@@ -16,7 +17,9 @@ class BaseModel {
     // instance of a model.
     foreach($_params as $key => $value) {
       $setMethod = 'set' . ucfirst($key);
-      $model->{$setMethod}($value);
+      if (method_exists($model, $setMethod)) {
+        $model->{$setMethod}($value);
+      }
     }
 
     return $model;
@@ -25,6 +28,10 @@ class BaseModel {
 
   public function getActive() {
     return $this->active;
+  }
+
+  public function getCid() {
+    return $this->cid;
   }
 
 
@@ -38,9 +45,15 @@ class BaseModel {
   }
 
 
+  public function setCid($_cid) {
+    $this->cid = $_cid;
+  }
+
+
   public function setId($_id) {
     $this->id = $_id;
   }
+
 
 
 }

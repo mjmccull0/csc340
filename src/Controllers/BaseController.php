@@ -1,25 +1,30 @@
 <?php
 namespace Controllers;
-
 use Views\View as View;
-use DB\TextDB as TextDB;
+
 /**
- * @update 10/14/18
+ * @update 11/01/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class BaseController {
-  protected $db;
   protected $view;
+  protected $model;
 
   protected function __construct() {
-    // Get access to the data.
-    $this->db = TextDB::connect();
+    $this->model = '\Models\SourceModel';
+
+    $this->route = '\Util\Route';
 
     // Create a new view and give it data.
     $this->view = new View();
 
   }
+
+  public function indexAction() {
+  }
+
 
 }
 ?>

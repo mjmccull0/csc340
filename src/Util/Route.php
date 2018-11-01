@@ -60,7 +60,7 @@ class Route {
 
 
   //Helper function
-  public static function getController($_controllerPath, $_controllerAction) {
+  private static function getController($_controllerPath, $_controllerAction) {
 
     $controller = new $_controllerPath;
 
@@ -69,7 +69,7 @@ class Route {
 
 
   //Helper function
-  public static function error() {
+  private static function error() {
 
       echo "\nCOULD NOT FIND FILE >:(";
   }

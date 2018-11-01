@@ -1,171 +1,159 @@
 <?php
 namespace DB;
+
+use Interfaces\Connector as Connector;
+
 /**
- * @update 10/15/18
+ * @update 11/01/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
-class TextDB {
-  private $records;
-  private $sources = array();
+class TextDB implements Connector {
 
+  public static function createSource(array $_post) {
 
-  /**
-   * A magic method that is called when the "new" keyword is
-   * used with this class name.
-   * @see http://php.net/manual/en/language.oop5.magic.php
-   * @see http://php.net/manual/en/language.oop5.decon.php#object.construct
-   */
-  private function __construct() {
+    $dataSourceType = $_post['type'];
 
-    // If there is saved data, load it.
-    if (file_exists($db = DB_FILE)) {
-      $data = unserialize(file_get_contents($db));
-      // Load the data sources.
-      $this->sources = $data['sources'];
-      // Load the data sources' records.
-      $this->records = $data['records'];
-    } elseif (file_exists($dataSources = DATA_SOURCES)) {
-      $this->sources = unserialize(file_get_contents($dataSources));
-    }
+    $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
+
+    // Need to prevent adding of dataSource name collisions.
+    $dataSource = $dataSourceFqn::create($_post);
   }
 
 
   /**
-   * A magic method that is called after there are not more
-   * references to this object.
-   * @see http://php.net/manual/en/language.oop5.decon.php#object.destruct
+   * Returns a record given an id.
    */
-  public function __destruct() {
-      // Save changes to data served by TextDB.
-      file_put_contents(DB_FILE, serialize(
-          array(
-            'records' => $this->records,
-            'sources' => $this->sources
-          )
-        )
-      );
+  public static function getById(int $_id) {
+    $records = unserialize(file_get_contents(DB_FILE));
+    return $records[$_id];
   }
 
 
-  /**
-   * Connecting provides access to DataSource.
-   */
-  public static function connect() {
-
-    $textDB = new self();
-
-    return $textDB;
-
-  }
-
-  /**
-   * Make TextDB aware of new dataSources.
-   */
-  public function addSource($_dataSource) {
-    $this->sources[$_dataSource->getName()] = $_dataSource;
-    $this->records[$_dataSource->getName()] = unserialize(file_get_contents($_dataSource->getPath()));
-  }
-
-
-  /**
-   * Get the records from DataSource files.
-   */
-  public function get($_name) {
-    // If the records for a source have already been loaded
-    // return the records.
-    if (isset($this->records[$_name])) {
-      return $this->records[$_name];
+  public static function getRecords() {
+    if (file_exists(DB_FILE)) {
+      return unserialize(file_get_contents(DB_FILE));
     } else {
-
-      // Try to find the requested source.
-      if (array_key_exists($_name, $this->sources)) {
-        $this->records[$_name] = unserialize(file_get_contents($this->sources[$_name]->getPath()));
-      }
-
-      return $this->records[$_name];
+      self::import();
+      return self::getRecords();
     }
+  }
+
+
+  public static function getRecordsByName(string $_name) {
+    $source = self::getSources()[$_name];
+    $sourceRecords = array();
+    $records = self::getRecords();
+
+    foreach ($records as $key => $record) {
+      if ($record['name'] == $_name) {
+        $record['id'] = $key;
+        array_push($sourceRecords, $record);
+      }
+    }
+      
+    return $sourceRecords;
+  }
+
+  public static function getRecordsByType(string $_type) {
+
+    $records = array();
+
+    foreach (self::getRecords() as $id => $record) {
+      if ($record['type'] == $_type) {
+        $record['id'] = $id;
+        array_push($records, $record);
+      }
+    }
+
+    return $records;
+  }
+
+  public static function getSourceByName(string $_name) {
+    return self::getSources()[$_name];
   }
 
 
   /**
    * Returns all the sources of data.
    */
-  public function getSources() {
-    return $this->sources;
+  public static function getSources() {
+    if (file_exists(DATA_SOURCES)) {
+      return unserialize(file_get_contents(DATA_SOURCES));
+    }
   }
 
 
-  /**
-   * Return an array with all the active records.
-   */
-  public function fetchActive($_name) {
-    $active = array();
+  public static function import() {
+    $count = 0;
+    foreach (self::getSources() as $source) {
+      $items = unserialize(file_get_contents($source['path']));
 
-    foreach ($this->get($_name) as $record) {
-      if ($record->getActive()) {
-        array_push($active, $record);
+      foreach ($items as $item) {
+        $item['active'] = true;
+        $item['id'] = ++$count;
+        $item['name'] = $source['name'];
+        $records[$count] = $item;
       }
     }
 
-    return $active;
+    self::saveRecords($records);
   }
 
 
-  /**
-   * Given the name of a DataSource and the id of a record
-   * return the record.
-   */
-  public function fetchById($_name, $_id) {
-    if (isset($this->records[$_name][$_id])) {
-      return $this->records[$_name][$_id];
-    } else {
-      // Source with requested name and id does not exist.
-    }
+
+  private static function saveRecords(array $_records) {
+    file_put_contents(DB_FILE, serialize($_records));
   }
 
+  /**
+   * Save a source.
+   */
+  private static function saveSource($_source) {
+
+    $sources = self::getSources();
+    $sources[$_source['name']] = $_source;
+    file_put_contents(DATA_SOURCES, serialize($sources));
+  }
 
   /**
-   * Updates data sources and adds new records while preserving
-   * any changes made to the data sources since they have been
-   * added.
+   * Process the form submission and update the source.
    */
-  public function update($_dataSourceName = '') {
-    $sources = array();
+  public static function updateSource(array $_post) {
+    $source = self::getSourceByName($_post['name']);
 
-    if (empty($_dataSourceName)) {
-      $sources = $this->sources;
-    } elseif (array_key_exists($_dataSourceName, $this->sources[$_dataSourceName])) {
-      $sources = $this->sources[$_dataSourceName];
-    } else {
-      // An update was requested for a non-existent data source.
-    }
+    if (isset($source)) {
+      // Changing the name of a source is unsupported.
+      unset($_post['name']);
 
-    foreach ($sources as $source) {
-      // Source import saves gets the current records for a source and saves them to a file.
-      $source->import();
-      // Get the contents of a file containing the current records.
-      $sourceData = unserialize(file_get_contents($source->getPath()));
+      // Set all the properties of the source to the values
+      // sumbitted to the form.
+      foreach ($_post as $key => $value) {
 
-      // Look at each record and determine if it is new.
-      foreach ($sourceData as $key => $record) {
-        // Skip any records that we know about.
-        if (array_key_exists($key, $this->records[$source->getName()])) {
-          continue;
-        } else {
-          // Add new records.
-          $this->records[$source->getName()][$key] = $record;
+        if (isset($_post[$key])) {
+          $source[$key] = $value;
         }
       }
-    }
 
-  }
-
-  public function updateSource($_source) {
-    if (isset($this->sources[$_source->getName()])) {
-      $this->sources[$_source->getName()] = $_source; 
+      self::saveSource($source);
     }
   }
 
+  public static function updateRecord(array $_post) {
+    if (!isset($_post['active'])) {
+      $_post['active'] = false;
+    }
+
+    $record = self::getById($_post['id']);
+
+    foreach ($_post as $key => $value) {
+      $record[$key] = $value;
+    }
+
+    $records = self::getRecords();
+    $records[$record['id']] = $record;
+
+    self::saveRecords($records);
+  }
 }
 ?>
