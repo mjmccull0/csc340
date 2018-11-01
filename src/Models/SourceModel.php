@@ -54,6 +54,22 @@ class SourceModel {
   }
 
   public static function create(array $_post) {
+    // Construct a url for the new data source.
+    if (isset($_post['channel_id'])) {
+      $_post['url'] = YOUTUBE_CHANNEL_URL . '?channel_id=' . $_post['channel_id'];
+      unset($_post['channel_id']);
+    }
+
+    if (isset($_post['wp-site-url'])) {
+      $_post['url'] = $_post['wp-site-url'] . WP_JSON_URL;
+      unset($_post['wp-site-url']);
+    }
+
+    if (isset($_post['instagram-account'])) {
+      $_post['url'] = INSTAGRAM_URL . '/' . $_post['instagram-account'] . '/';
+      unset($_post['instagram-account']);
+    }
+
     DataStore::createSource($_post);
   }
 
