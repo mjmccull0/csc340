@@ -2,52 +2,52 @@
 namespace Models;
 use Translators\DataStore as DataStore;
 /**
- * @update 11/01/18
+ * @update 11/02/18
  * @author Michael McCulloch
  */
 
 class SourceModel {
+
+  private $name;
+  private $url;
+
+  /**
+   * Get active records.
+   */
   public function get(array $_params) {
-    $records = array();
-
-    if (isset($_params['type'])) {
-      return self::getActive(self::getRecordsByType($_params['type']));
-    }
-
-    if (isset($_params['name'])) {
-      return self::getActive(self::getRecordsByName($_params['name']));
-    }
-
+    return self::objectify(DataStore::get($_params));
   }
 
-  private static function getActive(array $_records) {
-    $records = array();
+  /**
+   * Get both active and inactive records.
+   */
+  public static function getAll(array $_params) {
+    return self::objectify(DataStore::getAll($_params));
+  }
+
+  /**
+   * Get a record by id.
+   */
+  public static function getById(string $_id) {
+    return self::load(DataStore::getById($_id));
+  }
+
+  /**
+   * Get the content ids from an array of data objects.
+   */
+  public function getCids(array $_records) {
+    $cids = array();
 
     foreach ($_records as $record) {
-      if ($record->getActive()) {
-        array_push($records, $record);
-      }
+      array_push($cids, $record->getCid());
     }
 
-    return $records;
+    return $cids;
   }
 
-  public static function getAll(array $_params) {
-    if (isset($_params['type'])) {
-      return self::getRecordsByType($_params['type']);
-    }
-
-    if (isset($_params['name'])) {
-      return self::getRecordsByName($_params['name']);
-    }
-  }
-
-
-  public static function getById(string $_id) {
-    $record = DataStore::getById($_id);
-    $model = 'Models\\' . $record['type'] . 'Model';
-
-    return $model::load($record);
+  private static function load(array $_record) {
+    $model = 'Models\\' . $_record['type'] . 'Model';
+    return $model::load($_record);
   }
 
   public static function getSources() {
@@ -55,38 +55,21 @@ class SourceModel {
   }
 
   public static function getByName(string $_name) {
-    return DataStore::getSourceByName($_name);
-  }
+    $source = new self();
 
-  public static function getRecords() {
-    return DataStore::getRecords();
-  }
-
-  public static function getRecordsByName(string $_name) {
-    $records = DataStore::getRecordsByName($_name);
-    $models = array();
-
-    $model = 'Models\\' . $records[0]['type'] . 'Model';
-
-    foreach ($records as $record) {
-      array_push($models, $model::load($record));
+    foreach (DataStore::getSourceByName($_name) as $key => $value) {
+      $source->$key = $value;
     }
 
-    return $models;
+    return $source;
   }
 
-  public static function getRecordsByType(string $_type) {
-    $records = DataStore::getRecordsByType($_type);
+  public function getName() {
+    return $this->name;
+  }
 
-    $models = array();
-
-    $model = 'Models\\' . $records[0]['type'] . 'Model';
-
-    foreach ($records as $record) {
-      array_push($models, $model::load($record));
-    }
-
-    return $models;
+  public function getUrl() {
+    return $this->url;
   }
 
   public static function create(array $_post) {
@@ -110,6 +93,16 @@ class SourceModel {
   }
 
   public function delete() {
+  }
+
+  private static function objectify(array $_records) {
+    $records = array();
+
+    foreach ($_records as $record) {
+      array_push($records, self::load($record));
+    }
+
+    return $records;
   }
 
   public function updateSource(array $_post) {

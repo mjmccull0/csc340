@@ -3,7 +3,7 @@ namespace Controllers;
 use Controllers\BaseController as BaseController;
 
 /**
- * update 11/01/18
+ * update 11/02/18
  *
  * @author Jacob Oleson
  * @author Michael McCulloch
@@ -52,13 +52,7 @@ private $type = "Youtube";
 
     $records = $this->model::get($params);
 
-    $cids = array();
-
-    foreach ($records as $record) {
-      array_push($cids, $record->getCid());
-    }
-
-    $this->view->setData(implode(',', $cids));
+    $this->view->setData($this->model::getCids($records));
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->setTemplate(YOUTUBE_SHOW);
     $this->view->render();

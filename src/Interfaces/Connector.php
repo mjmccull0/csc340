@@ -1,19 +1,32 @@
 <?php
 namespace Interfaces;
 /**
- * @update 10/29/18
+ * @update 11/02/18
  * @author Michael McCulloch
  */
 
 Interface Connector {
 
+  /**
+   * Create a source of data.
+   */
   public static function createSource(array $_post);
 
+  /**
+   * Get active records given parameters.
+   */
+  public static function get(array $_params);
+
+  /**
+   * Get both active and inactive records given parameters.
+   */
+  public static function getAll(array $_params);
+
+  /**
+   * Get a record given an id.
+   */
   public static function getById(int $_id);
 
-  public static function getRecordsByName(string $_name);
-
-  public static function getSourceByName(string $_name);
 
   /**
    * Returns all the sources of data.
