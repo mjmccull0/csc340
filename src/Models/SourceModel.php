@@ -11,6 +11,26 @@ class SourceModel {
   private $name;
   private $url;
 
+  public static function create(array $_post) {
+    // Construct a url for the new data source.
+    if (isset($_post['channel_id'])) {
+      $_post['url'] = YOUTUBE_CHANNEL_URL . '?channel_id=' . $_post['channel_id'];
+      unset($_post['channel_id']);
+    }
+
+    if (isset($_post['wp-site-url'])) {
+      $_post['url'] = $_post['wp-site-url'] . WP_JSON_URL;
+      unset($_post['wp-site-url']);
+    }
+
+    if (isset($_post['instagram-account'])) {
+      $_post['url'] = INSTAGRAM_URL . '/' . $_post['instagram-account'] . '/';
+      unset($_post['instagram-account']);
+    }
+
+    DataStore::createSource($_post);
+  }
+
   /**
    * Get active records.
    */
@@ -45,11 +65,6 @@ class SourceModel {
     return $cids;
   }
 
-  private static function load(array $_record) {
-    $model = 'Models\\' . $_record['type'] . 'Model';
-    return $model::load($_record);
-  }
-
   public static function getSources() {
     return DataStore::getSources();
   }
@@ -72,25 +87,6 @@ class SourceModel {
     return $this->url;
   }
 
-  public static function create(array $_post) {
-    // Construct a url for the new data source.
-    if (isset($_post['channel_id'])) {
-      $_post['url'] = YOUTUBE_CHANNEL_URL . '?channel_id=' . $_post['channel_id'];
-      unset($_post['channel_id']);
-    }
-
-    if (isset($_post['wp-site-url'])) {
-      $_post['url'] = $_post['wp-site-url'] . WP_JSON_URL;
-      unset($_post['wp-site-url']);
-    }
-
-    if (isset($_post['instagram-account'])) {
-      $_post['url'] = INSTAGRAM_URL . '/' . $_post['instagram-account'] . '/';
-      unset($_post['instagram-account']);
-    }
-
-    DataStore::createSource($_post);
-  }
 
   public function delete() {
   }
@@ -103,6 +99,11 @@ class SourceModel {
     }
 
     return $records;
+  }
+
+  private static function load(array $_record) {
+    $model = 'Models\\' . $_record['type'] . 'Model';
+    return $model::load($_record);
   }
 
   public function updateSource(array $_post) {
