@@ -4,7 +4,7 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/01/18
+ * @update 11/02/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -20,6 +20,40 @@ class TextDB implements Connector {
     $dataSource = $dataSourceFqn::create($_post);
   }
 
+  public static function get(array $_params) {
+    $records = array();
+
+    if (isset($_params['type'])) {
+      return self::getActive(self::getRecordsByType($_params['type']));
+    }
+
+    if (isset($_params['name'])) {
+      return self::getActive(self::getRecordsByName($_params['name']));
+    }
+  }
+
+  private static function getActive(array $_records) {
+    $records = array();
+
+    foreach ($_records as $record) {
+      if ($record['active']) {
+        array_push($records, $record);
+      }
+    }
+
+    return $records;
+  }
+
+  public static function getAll(array $_params) {
+    if (isset($_params['type'])) {
+      return self::getRecordsByType($_params['type']);
+    }
+
+    if (isset($_params['name'])) {
+      return self::getRecordsByName($_params['name']);
+    }
+  }
+
 
   /**
    * Returns a record given an id.
@@ -30,7 +64,7 @@ class TextDB implements Connector {
   }
 
 
-  public static function getRecords() {
+  private static function getRecords() {
     if (file_exists(DB_FILE)) {
       return unserialize(file_get_contents(DB_FILE));
     } else {

@@ -2,11 +2,20 @@
 namespace Translators;
 use DB\TextDB as StorageManager;
 /**
- * @update 10/29/18
+ * @update 11/02/18
  * @author Michael McCulloch
  */
 
 class DataStore {
+
+  public static function get(array $_params) {
+    return StorageManager::get($_params);
+  }
+
+  public static function getAll(array $_params) {
+    return StorageManager::getAll($_params);
+  }
+
   public static function getById(int $_id) {
     return StorageManager::getById($_id); 
   } 
