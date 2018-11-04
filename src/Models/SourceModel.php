@@ -2,13 +2,14 @@
 namespace Models;
 use Translators\DataStore as DataStore;
 /**
- * @update 11/02/18
+ * @update 11/03/18
  * @author Michael McCulloch
  */
 
 class SourceModel {
 
   private $name;
+  private $type;
   private $url;
 
   public static function create(array $_post) {
@@ -66,7 +67,22 @@ class SourceModel {
   }
 
   public static function getSources() {
-    return DataStore::getSources();
+    $sources = array();
+
+    foreach(DataStore::getSources() as $source) {
+      array_push($sources, self::loadSource($source)); 
+    }
+    return $sources;
+  }
+
+  public static function loadSource(array $_source) {
+    $source = new self();
+
+    foreach ($_source as $key => $value) {
+      $source->$key = $value;
+    }
+
+    return $source;
   }
 
   public static function getByName(string $_name) {
@@ -77,6 +93,10 @@ class SourceModel {
     }
 
     return $source;
+  }
+
+  public function getType() {
+    return $this->type;
   }
 
   public function getName() {

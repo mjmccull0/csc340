@@ -19,7 +19,7 @@ class BaseController {
 
     // Create a new view and give it data.
     $this->view = new View();
-
+    $this->view->sources = $this->model::getSources();
   }
 
   public function indexAction() {

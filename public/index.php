@@ -1,6 +1,6 @@
 <?php
 /**
- * @update 10/15/18
+ * @update 11/03/18
  * @author Michael McCulloch
  */
 
@@ -12,15 +12,4 @@ use Util\Route as Route;
 
 Route::route();
 
-/*<<<<<<< HEAD
-=======
-$db->get('posts');
-$db->get('instagram');
-$db->get('youtube');
-
-var_dump('<pre>');
-var_dump($db);
-
->>>>>>> Just updating bracnh to pull from master
-*/
 ?>
