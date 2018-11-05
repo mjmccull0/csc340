@@ -29,6 +29,10 @@ class DataStore {
     return StorageManager::getSourceByName($_name);
   }
 
+  public static function getSourceByType(string $_type) {
+    return StorageManager::getSourceByType($_type);
+  }
+
   public static function getRecords() {
     return StorageManager::getRecords();
   }

@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 10/15/18
+* Update 11/04/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -12,7 +12,7 @@ class Route {
   // Handle URL and send it to specified Controller.
   public static function route() {
 
-    $url = trim($_SERVER["REQUEST_URI"], "/");
+    $url = self::getUrl();
 
     // Ignore any query string in the url.
     $url = explode('?', $url);
@@ -34,11 +34,11 @@ class Route {
     if (class_exists($controllerPath)) {
 
       //Continue on with getting Action.
-      $controllerAction = array_shift($params) . "Action";
+      $controllerAction = array_shift($params);
 
       //Default to indexAction if no specified action.
       if (empty($controllerAction)) {
-        $controllerAction = "indexAction";
+        $controllerAction = "index";
       }
 
       //If Action in Controller exists, do it.
@@ -48,7 +48,7 @@ class Route {
 
       //In the case the Controller exists, but their Action does not.
       else {
-        Route::getController($controllerPath, "indexAction");
+        Route::getController($controllerPath, "index");
       }
     }
 
@@ -79,6 +79,10 @@ class Route {
    */
   public static function redirect($_relativeUrl) {
     header("Location: " . $_relativeUrl);
+  }
+
+  public static function getUrl() {
+    return trim($_SERVER["REQUEST_URI"], "/");
   }
 }
 ?>

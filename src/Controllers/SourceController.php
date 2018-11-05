@@ -3,7 +3,7 @@ namespace Controllers;
 use Controllers\BaseController as BaseController;
 
 /**
- * @update 11/01/18
+ * @update 11/04/18
  * @author Michael McCulloch
  */
 
@@ -17,7 +17,7 @@ class SourceController extends BaseController {
   /**
    * This action is for adding new data sources.
    */
-  public function addAction() {
+  public function add() {
     if (!empty($_POST)) {
       $this->model::create($_POST);
       return $this->route::redirect(SOURCE_INDEX_URL);
@@ -32,8 +32,14 @@ class SourceController extends BaseController {
   /**
    * This action lists the data sources.
    */
-  public function indexAction() {
-    $this->view->setData($this->model::getSources());
+  public function index() {
+    if (isset($_GET['type'])) {
+      $data = $this->model::getSourcesByType($_GET['type']);
+    } else {
+      $data = $this->model::getSources();
+    }
+
+    $this->view->setData($data);
     $this->view->setTemplate(SOURCE_INDEX);
     $this->view->render();
   }
@@ -42,25 +48,62 @@ class SourceController extends BaseController {
   /**
    * This action allows for editing a data source.
    */
-  public function editAction() {
+  public function edit() {
+    $this->view->isSource = true;
+
     if (!empty($_GET["name"])) {
-      $this->view->setData($this->model::getByName($_GET["name"]));
-      $this->view->setTemplate(SOURCE_EDIT);
-      $this->view->render();
+      $data = $this->model::getByName($_GET['name']);
+      $this->view->source = $this->model::getByName($_GET['name']);
     }
+
+    if (!empty($_GET['id'])) {
+      $data = $this->model::getById($_GET['id']);
+      $this->view->isSource = false;
+    }
+
+    $this->view->setData($data);
+    $this->view->setTemplate(SOURCE_EDIT);
+    $this->view->render();
 
     // No name was given, this needs to be handled.
 
   }
 
+  public function view() {
+
+    if (isset($_GET['name'])) {
+      $this->view->source = $this->model::getByName($_GET['name']);
+    }
+
+    $this->view->setData($this->model::getAll($_GET));
+    $this->view->setTemplate(SOURCE_VIEW);
+    $this->view->render();
+  }
+
+  public function show() {
+    if (isset($_GET['name'])) {
+      $this->view->source = $this->model::getByName($_GET['name']);
+    }
+
+    $this->view->setData($this->model::get($_GET));
+    $this->view->setTemplate(SOURCE_SHOW);
+    $this->view->setLayout(SHOW_LAYOUT);
+    $this->view->render();
+  }
+
   /**
    * This action handles the changes to a data source.
    */
-  public function updateAction() {
-    $this->model::updateSource($_POST);
+  public function update() {
+    $this->model::update($_POST);
 
-    // Send the user to the index action.
-    $this->route::redirect(SOURCE_INDEX_URL);
+    $redirectUrl = SOURCE_INDEX_URL;
+    if (isset($_GET['name'])) {
+      $redirectUrl = SOURCE_INDEX_URL . '/view?name=' . $_GET['name'];
+    }
+
+    // Redirect the user to the page they clicked on the edit link.
+    $this->route::redirect($redirectUrl);
 
   }
 

@@ -107,6 +107,18 @@ class TextDB implements Connector {
     return self::getSources()[$_name];
   }
 
+  public static function getSourceByType(string $_type) {
+    $sources = array();
+
+    foreach (self::getSources() as $source) {
+      if ($source['type'] == $_type) {
+        array_push($sources, $source);
+      }
+    }
+
+    return $sources;
+  }
+
 
   /**
    * Returns all the sources of data.
