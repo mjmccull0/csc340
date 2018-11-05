@@ -2,13 +2,14 @@
 namespace Models;
 /**
  * A base model for content.
- * @update 10/29/18
+ * @update 11/04/18
  * @author Michael McCulloch
  */
 class BaseModel {
   private $active;
   private $cid;
   private $id;
+  private $type;
 
   public static function load($_params = array()) {
     $model = new static();
@@ -39,6 +40,10 @@ class BaseModel {
     return $this->id;
   }
 
+  public function getType() {
+    return $this->type;
+  }
+
 
   public function setActive($_flag) {
     $this->active = $_flag;
@@ -52,6 +57,10 @@ class BaseModel {
 
   public function setId($_id) {
     $this->id = $_id;
+  }
+
+  public function setType($_type) {
+    $this->type = $_type;
   }
 
 

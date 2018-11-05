@@ -18,7 +18,7 @@ define('SHOW_LAYOUT', TEMPLATE_DIR . "showLayout.php");
 
 define('SOURCE_INDEX_URL', "/source");
 define('SOURCE_INDEX', TEMPLATE_DIR . "sourceIndex.php");
-define('SOURCE_EDIT', TEMPLATE_DIR . "sourceEdit.php");
+define('SOURCE_EDIT', TEMPLATE_DIR . "edit.php");
 
 define('SOURCE_ADD_TEMPLATE', TEMPLATE_DIR . "sourceAdd.php");
 define('SOURCE_ADD_URL', "/source/add");
@@ -33,7 +33,7 @@ define('SOURCE_TYPE', array(
 define('SOURCE_EDIT_URL', "/source/edit");
 define('SOURCE_EDIT_HEADER', "Edit Source: ");
 define('SOURCE_EDIT_LINK_TEXT', "edit");
-define('SOURCE_EDIT_FORM_ACTION', "/source/update");
+define('EDIT_FORM_ACTION', "/source/update");
 
 define('POSTS', 'Posts');
 define('POSTS_INDEX', TEMPLATE_DIR . "PostsIndex.php");
@@ -82,4 +82,7 @@ define('YOUTUBE_SHOW_URL', 'https://www.youtube.com/embed/0Cxt8DvyG2Q?autoplay=1
 
 define('WP_JSON_URL', '/wp-json/wp/v2/posts?_embed');
 define('INSTAGRAM_URL', 'https://www.instagram.com');
+
+define('SOURCE_VIEW', TEMPLATE_DIR . "SourceView.php");
+define('SOURCE_SHOW', TEMPLATE_DIR . "SourceShow.php");
 ?>

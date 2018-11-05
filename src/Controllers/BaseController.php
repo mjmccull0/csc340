@@ -3,7 +3,7 @@ namespace Controllers;
 use Views\View as View;
 
 /**
- * @update 11/01/18
+ * @update 11/04/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -22,7 +22,7 @@ class BaseController {
     $this->view->sources = $this->model::getSources();
   }
 
-  public function indexAction() {
+  public function index() {
   }
 
 

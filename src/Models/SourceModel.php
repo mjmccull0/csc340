@@ -72,6 +72,15 @@ class SourceModel {
     foreach(DataStore::getSources() as $source) {
       array_push($sources, self::loadSource($source)); 
     }
+
+    return $sources;
+  }
+
+  public static function getSourcesByType(string $_type) {
+    $sources = array();
+    foreach (DataStore::getSourceByType($_type) as $source) {
+      array_push($sources, self::loadSource($source));
+    }
     return $sources;
   }
 
@@ -124,6 +133,14 @@ class SourceModel {
   private static function load(array $_record) {
     $model = 'Models\\' . $_record['type'] . 'Model';
     return $model::load($_record);
+  }
+
+  public static function update(array $_post) {
+    if (isset($_post['id'])) {
+      self::updateRecord($_post);
+    } else {
+      self::updateSource($_post);
+    }
   }
 
   public function updateSource(array $_post) {

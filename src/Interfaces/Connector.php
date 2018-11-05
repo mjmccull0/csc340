@@ -1,7 +1,7 @@
 <?php
 namespace Interfaces;
 /**
- * @update 11/02/18
+ * @update 11/04/18
  * @author Michael McCulloch
  */
 
@@ -32,6 +32,10 @@ Interface Connector {
    * Returns all the sources of data.
    */
   public static function getSources();
+
+  public static function getSourceByName(string $_name);
+
+  public static function getSourceByType(string $_type);
 
   /**
    * Imports data sources and adds new records while preserving
