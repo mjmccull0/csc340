@@ -1,11 +1,11 @@
 <!-- 
 View for Source Controller add action.
-@update 10/12/18
+@update 11/05/18
 @author Michael McCulloch
 -->
 <h2><?php echo SOURCE_ADD_HEADER ?></h2>
 
-<form action="<?php echo SOURCE_ADD_FORM_ACTION ?>" method="post">
+<form action="<?php echo $this->baseUrl . ADD ?>" method="post">
   <div>
     <div>
       name:<br>

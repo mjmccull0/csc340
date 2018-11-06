@@ -20,7 +20,7 @@ class SourceController extends BaseController {
   public function add() {
     if (!empty($_POST)) {
       $this->model::create($_POST);
-      return $this->route::redirect(SOURCE_INDEX_URL);
+      return $this->route::redirect($this->view->baseUrl);
     }
 
     $this->view->setTemplate(SOURCE_ADD_TEMPLATE);
@@ -97,9 +97,10 @@ class SourceController extends BaseController {
   public function update() {
     $this->model::update($_POST);
 
-    $redirectUrl = SOURCE_INDEX_URL;
+    $redirectUrl = $this->view->url;
+
     if (isset($_GET['name'])) {
-      $redirectUrl = SOURCE_INDEX_URL . '/view?name=' . $_GET['name'];
+      $redirectUrl = $this->view->url . '/view?name=' . $_GET['name'];
     }
 
     // Redirect the user to the page they clicked on the edit link.

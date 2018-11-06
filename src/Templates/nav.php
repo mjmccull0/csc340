@@ -1,6 +1,6 @@
 <?php
 /**
- * @update 11/03/18
+ * @update 11/05/18
  * @auther Michael McCulloch
  */
 $types = array();
@@ -11,8 +11,8 @@ foreach ($this->sources as $source) {
 }
 ?>
 <nav>
-<a href="<?php echo SOURCE_INDEX_URL; ?>"><?php echo SOURCES; ?></a>
+<a href="<?php echo $this->baseUrl; ?>"><?php echo SOURCES; ?></a>
 <?php foreach ($types as $type) { ?>
-  <a href="<?php echo SOURCE_INDEX_URL . "?type=" . $type; ?>"><?php echo $type; ?></a>
+  <a href="<?php echo $this->baseUrl . "?type=" . $type; ?>"><?php echo $type; ?></a>
 <?php } ?>
 </nav>

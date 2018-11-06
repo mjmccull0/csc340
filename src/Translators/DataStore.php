@@ -8,6 +8,10 @@ use DB\TextDB as StorageManager;
 
 class DataStore {
 
+  public static function add(array $_source, array $_records) {
+    StorageManager::add($_source, $_records);
+  }
+
   public static function get(array $_params) {
     return StorageManager::get($_params);
   }
@@ -47,6 +51,10 @@ class DataStore {
 
   public static function getSources() {
     return StorageManager::getSources();
+  }
+
+  public static function sourceExists(string $_name) {
+    return StorageManager::sourceExists($_name);
   }
 
   public static function updateSource(array $_post) {
