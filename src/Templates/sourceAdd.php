@@ -15,12 +15,7 @@ View for Source Controller add action.
     <div id="dynamic-form-fields-container">
     </div>
   </div>
-  <select id="type-selector" name="type" onchange="getFields()">
-    <option label=" "></option>
-    <?php foreach (SOURCE_TYPE as $option => $value) { ?>
-      <?php echo "<option value='$value'>$option</option>" ?>
-    <?php } ?>
-  </select>
+  <?php include 'typeSelector.php'; ?>
   <br>
   <input type="submit" value="Add">
 </form>

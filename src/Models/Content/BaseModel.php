@@ -1,5 +1,5 @@
 <?php
-namespace Models;
+namespace Models\Content;
 /**
  * A base model for content.
  * @update 11/05/18

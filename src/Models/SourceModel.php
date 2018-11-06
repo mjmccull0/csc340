@@ -260,7 +260,7 @@ class SourceModel {
    * Load an instance of one of the record types.
    */
   private static function load(array $_record) {
-    $model = 'Models\\' . $_record['type'] . 'Model';
+    $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
     return $model::load($_record);
   }
 
