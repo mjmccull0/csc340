@@ -23,12 +23,6 @@ define('SOURCE_EDIT', TEMPLATE_DIR . "edit.php");
 define('SOURCE_ADD_TEMPLATE', TEMPLATE_DIR . "sourceAdd.php");
 define('SOURCE_ADD_HEADER', "Add Source");
 
-// FIXME: Remove source types.
-define('SOURCE_TYPE', array(
-  'Wordpress' => 'PostsModel',
-  'Instagram' => 'InstagramModel',
-  'YouTube' => 'YoutubeModel'
-));
 
 define('SOURCE_EDIT_HEADER', "Edit Source: ");
 

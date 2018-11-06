@@ -13,9 +13,7 @@ View for Source Controller edit action.
 
 <form action="<?php echo $formAction; ?>" method="post">
   <input type="hidden" name="name" value="<?php echo $this->data->getName(); ?>">
-  url:<br>
-  <input type="text" name="url" value="<?php echo $this->data->getUrl(); ?>">
-  <br>
+  <?php include $this->source->getType() . 'SourceEdit.php'; ?>
   <br>
   <input class="button" type="submit" value="Save">
 </form>

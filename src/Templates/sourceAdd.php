@@ -21,12 +21,12 @@ View for Source Controller add action.
 </form>
 
 <div id="dynamic-form-fields" style="display: none";>
-  <div id="YouTube">
+  <div id="Youtube">
     Channel ID:<br>
     <input type="text" name="channel_id">
     <br>
   </div>
-  <div id="Wordpress">
+  <div id="Posts">
     Site Url:<br>
     <input type="text" name="wp-site-url">
     <br>

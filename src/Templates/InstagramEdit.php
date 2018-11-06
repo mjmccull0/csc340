@@ -1,6 +1,6 @@
 <!--
-View for Source Controller edit action.
-@11/05/18
+View for Source Controller edit action for Instagram.
+@11/06/18
 @author Michael McCulloch
 @author Jacob Oleson
 -->
