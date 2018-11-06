@@ -97,10 +97,10 @@ class SourceController extends BaseController {
   public function update() {
     $this->model::update($_POST);
 
-    $redirectUrl = $this->view->url;
+    $redirectUrl = $this->view->baseUrl;
 
     if (isset($_GET['name'])) {
-      $redirectUrl = $this->view->url . '/view?name=' . $_GET['name'];
+      $redirectUrl = $this->view->baseUrl . '/view?name=' . $_GET['name'];
     }
 
     // Redirect the user to the page they clicked on the edit link.
