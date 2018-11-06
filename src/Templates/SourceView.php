@@ -1,6 +1,6 @@
 <!--
 View for Source Controller view action.
-@11/04/2018
+@11/05/2018
 @author Michael McCulloch
 @author Jacob Oleson
 -->
@@ -14,7 +14,7 @@ View for Source Controller view action.
     <div>
       <span class="title"><?php echo $data->getTitle(); ?></span>
     </div>
-    <a href="<?php echo SOURCE_INDEX_URL . '/' . EDIT . '?' . ID . '=' . $data->getId() . '&name=' . $this->source->getName(); ?>">
+    <a href="<?php echo $this->baseUrl . EDIT . '?' . ID . '=' . $data->getId() . '&name=' . $this->source->getName(); ?>">
       <?php echo EDIT ?></a>
   </li>
   <?php } ?>

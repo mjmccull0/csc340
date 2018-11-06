@@ -2,7 +2,7 @@
 namespace Models;
 /**
  * A base model for content.
- * @update 11/04/18
+ * @update 11/05/18
  * @author Michael McCulloch
  */
 class BaseModel {
@@ -62,8 +62,6 @@ class BaseModel {
   public function setType($_type) {
     $this->type = $_type;
   }
-
-
 
 }
 ?>

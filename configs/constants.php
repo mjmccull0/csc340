@@ -1,7 +1,7 @@
 <?php
 /**
  * Global constants
- * @update 10/24/18
+ * @update 11/05/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -15,58 +15,31 @@ define('TEMPLATE_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARA
 define('LAYOUT', TEMPLATE_DIR . "layout.php");
 define('SHOW_LAYOUT', TEMPLATE_DIR . "showLayout.php");
 
-
-define('SOURCE_INDEX_URL', "/source");
 define('SOURCE_INDEX', TEMPLATE_DIR . "sourceIndex.php");
 define('SOURCE_EDIT', TEMPLATE_DIR . "edit.php");
 
 define('SOURCE_ADD_TEMPLATE', TEMPLATE_DIR . "sourceAdd.php");
-define('SOURCE_ADD_URL', "/source/add");
 define('SOURCE_ADD_HEADER', "Add Source");
-define('SOURCE_ADD_FORM_ACTION', "/source/add");
+
+// FIXME: Remove source types.
 define('SOURCE_TYPE', array(
-  'Wordpress' => 'WpDataSource',
-  'Instagram' => 'InstagramDataSource',
-  'YouTube' => 'YoutubeDataSource'
+  'Wordpress' => 'PostsModel',
+  'Instagram' => 'InstagramModel',
+  'YouTube' => 'YoutubeModel'
 ));
 
-define('SOURCE_EDIT_URL', "/source/edit");
 define('SOURCE_EDIT_HEADER', "Edit Source: ");
-define('SOURCE_EDIT_LINK_TEXT', "edit");
-define('EDIT_FORM_ACTION', "/source/update");
 
 define('POSTS', 'Posts');
-define('POSTS_INDEX', TEMPLATE_DIR . "PostsIndex.php");
-define('POSTS_INDEX_URL', "/posts");
-define('POSTS_EDIT', TEMPLATE_DIR . "PostsEdit.php");
-define('POSTS_EDIT_URL', "/posts/edit");
 define('POSTS_EDIT_HEADER', "Edit Post: ");
-define('POSTS_EDIT_LINK_TEXT', "edit");
-define('POSTS_EDIT_FORM_ACTION', "/posts/update");
 
-define('POSTS_SHOW', TEMPLATE_DIR . "PostsShow.php");
-define('INSTAGRAM_SHOW', TEMPLATE_DIR . "InstagramShow.php");
-
-define('YOUTUBE', 'YouTube');
-define('YOUTUBE_INDEX', TEMPLATE_DIR . "youtubeIndex.php");
-define('YOUTUBE_INDEX_URL', '/youtube');
-define('YOUTUBE_EDIT', TEMPLATE_DIR . "youtubeEdit.php");
-define('YOUTUBE_EDIT_URL', "/youtube/edit");
+define('YOUTUBE', 'Youtube');
 define('YOUTUBE_EDIT_HEADER', "Edit YouTube: ");
-define('YOUTUBE_EDIT_LINK_TEXT', "edit");
-define('YOUTUBE_EDIT_FORM_ACTION', "/youtube/update");
-define('YOUTUBE_SHOW', TEMPLATE_DIR . 'youtubeShow.php');
 
 define('INSTAGRAM', 'Instagram');
-define('INSTAGRAM_INDEX', TEMPLATE_DIR . "InstagramIndex.php");
-define('INSTAGRAM_INDEX_URL', "/instagram");
-define('INSTAGRAM_EDIT', TEMPLATE_DIR . "InstagramEdit.php");
-define('INSTAGRAM_EDIT_URL', "/instagram/edit");
 define('INSTAGRAM_EDIT_HEADER', "Edit Instagram: ");
-define('INSTAGRAM_EDIT_LINK_TEXT', "edit");
-define('INSTAGRAM_EDIT_FORM_ACTION', "/instagram/update");
 
-define('ADD', 'Add');
+define('ADD', 'add');
 define('NAV', TEMPLATE_DIR . 'nav.php');
 define('ID', "id");
 define('NAME', "name");
@@ -74,6 +47,7 @@ define('EDIT', "edit");
 define('VIEW', 'view');
 define('SHOW', 'show');
 define('SOURCES', 'Sources');
+define('UPDATE', 'update');
 
 define('LANG', 'en');
 define('CHARSET', 'utf-8');

@@ -21,12 +21,15 @@ class Route {
     $params = explode("/", $url);
 
     // Try to reach a Controller for testing purposes.
+    /*
     $controllerName = ucfirst(array_shift($params));
 
     // Default to IndexController if a controller is not specified.
     if (empty($controllerName)) {
       $controllerName = "Index";
     }
+     */
+    $controllerName = "Source";
 
     $controllerPath = "\\Controllers\\" . $controllerName . "Controller";
 

@@ -4,20 +4,68 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/02/18
+ * @update 11/05/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 class TextDB implements Connector {
 
+  private static function addToSourceFile(array $_source) {
+
+    $sources = array();
+    // Get the current known sources.
+    if (file_exists(DATA_SOURCES)) {
+      $sources = unserialize(file_get_contents(DATA_SOURCES));
+    }
+
+    if (array_key_exists($_source['name'], $sources)) {
+      // Handle the name collision.
+    } else {
+      $_source['path'] = DATA_DIR . $_source['name'];
+      $sources[$_source['name']] =  $_source;
+    }
+
+    file_put_contents(DATA_SOURCES, serialize($sources));
+
+  }
+
+  public static function add(array $_source, array $_records) {
+    if (file_exists($_source['path'])) {
+      $records = unserialize(file_get_contents($_source['path']));
+
+      foreach($_records as $record) {
+        if (array_key_exists($record['cid'], $records)) {
+          // Skip this item, it is already in our records.
+          continue;
+        } else {
+          // Add the new item to our records.
+          $records[$record['cid']] = $record;
+        }
+      }
+
+    } else {
+      $_source['path'] = DATA_DIR . $_source['name'];
+
+      // Create an associative array with the item id as the key.
+      $cids = array();
+
+      foreach($_records as $record) {
+        array_push( $cids, $record['cid'] );
+      }
+
+      $records = array_combine($cids, $_records);
+
+    }
+    // Save the records for this source.
+    file_put_contents($_source['path'], serialize($records));
+
+    self::import();
+  }
+
   public static function createSource(array $_post) {
-
-    $dataSourceType = $_post['type'];
-
-    $dataSourceFqn = "\\DataSources\\" . $dataSourceType;
-
-    // Need to prevent adding of dataSource name collisions.
-    $dataSource = $dataSourceFqn::create($_post);
+    if (!self::sourceExists($_post['name'])) {
+      self::addToSourceFile($_post);
+    }
   }
 
   public static function get(array $_params) {
@@ -129,9 +177,15 @@ class TextDB implements Connector {
     }
   }
 
+  public static function sourceExists(string $_name) {
+    return !is_null(self::getSources()[$_name]);
+  }
+
+
 
   public static function import() {
     $count = 0;
+    $records = array();
     foreach (self::getSources() as $source) {
       $items = unserialize(file_get_contents($source['path']));
 
@@ -139,6 +193,7 @@ class TextDB implements Connector {
         $item['active'] = true;
         $item['id'] = ++$count;
         $item['name'] = $source['name'];
+        $item['type'] = $source['type'];
         $records[$count] = $item;
       }
     }

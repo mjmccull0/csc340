@@ -1,35 +1,28 @@
 <?php
 /**
  * Bootstrap default sources of data.
- * @update 9/27/18
+ * @update 11/06/18
  * @author Michael McCulloch
  */
-use DataSources\WpDataSource as WpDataSource;
-use DataSources\InstagramDataSource as InstagramDataSource;
-use DataSources\YoutubeDataSource as YoutubeDataSource;
-
-WpDataSource::create(
+use Models\SourceModel as SourceModel;
+$sources = array (
   array(
-    'type' => 'Posts',
     'name' => 'UNCG Posts',
-    'url' => 'https://newsandfeatures.uncg.edu/wp-json/wp/v2/posts?_embed'
-  )
-);
-
-InstagramDataSource::create(
+    'wp-site-url' => 'https://newsandfeatures.uncg.edu'
+  ),
   array(
-    'type' => 'Instagram',
     'name' => 'UNCG Instagram',
-    'url' => 'https://www.instagram.com/uncg/'
-  )
-);
-
-YoutubeDataSource::create(
+    'instagram-account' => 'uncg'
+  ),
   array(
-    'type' => 'Youtube',
     'name' => 'UNCG YouTube Channel',
-    'url' => 'https://www.youtube.com/feeds/videos.xml?channel_id=UCZMafMiPPwm96bp843d5TZQ'
+    'channel_id' => 'UCZMafMiPPwm96bp843d5TZQ'
   )
 );
 
+foreach ($sources as $source) {
+  if (!SourceModel::sourceExists($source['name'])) {
+    SourceModel::create($source);
+  }
+}
 ?>
