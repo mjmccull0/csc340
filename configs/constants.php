@@ -5,13 +5,15 @@
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
+define('DS', DIRECTORY_SEPARATOR);
 define('ROOT_DIR', str_replace('public', '', $_SERVER['DOCUMENT_ROOT']));
-define('DATA_DIR', ROOT_DIR . "resources" . DIRECTORY_SEPARATOR);
-define('DATA_SOURCES', ROOT_DIR . "resources" . DIRECTORY_SEPARATOR . "sources");
-define('DB_FILE', ROOT_DIR . "resources" . DIRECTORY_SEPARATOR . "db");
-define('CONFIG_DIR', ROOT_DIR . "configs" . DIRECTORY_SEPARATOR);
+define('SRC_DIR', ROOT_DIR . DS . 'src');
+define('DATA_DIR', ROOT_DIR . "resources" . DS);
+define('DATA_SOURCES', ROOT_DIR . "resources" . DS . "sources");
+define('DB_FILE', ROOT_DIR . "resources" . DS . "db");
+define('CONFIG_DIR', ROOT_DIR . "configs" . DS);
 
-define('TEMPLATE_DIR', ROOT_DIR . DIRECTORY_SEPARATOR . "src" . DIRECTORY_SEPARATOR . "Templates" . DIRECTORY_SEPARATOR);
+define('TEMPLATE_DIR', ROOT_DIR . DS . "src" . DS . "Templates" . DS);
 define('LAYOUT', TEMPLATE_DIR . "layout.php");
 define('SHOW_LAYOUT', TEMPLATE_DIR . "showLayout.php");
 
