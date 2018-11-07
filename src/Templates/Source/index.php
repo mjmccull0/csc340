@@ -14,6 +14,8 @@ View for Source Controller index action.
     </div>
     <a href="<?php echo $this->baseUrl .  EDIT . '?' . NAME . '=' . $source->getName() ?>">
       <?php echo EDIT ?></a>
+    <a href="<?php echo $this->baseUrl .  DELETE . '?' . NAME . '=' . $source->getName() ?>">
+      <?php echo DELETE ?></a>
     <a href="<?php echo $this->baseUrl  . VIEW . '?' . NAME . '=' . $source->getName() ?>">
       <?php echo VIEW ?></a>
     <a href="<?php echo $this->baseUrl  . SHOW . '?' . NAME . '=' . $source->getName(); ?>">

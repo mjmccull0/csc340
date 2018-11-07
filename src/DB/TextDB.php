@@ -4,7 +4,7 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/05/18
+ * @update 11/07/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -15,7 +15,7 @@ class TextDB implements Connector {
     $sources = array();
     // Get the current known sources.
     if (file_exists(DATA_SOURCES)) {
-      $sources = unserialize(file_get_contents(DATA_SOURCES));
+      $sources = self::readFile(DATA_SOURCES);
     }
 
     if (array_key_exists($_source['name'], $sources)) {
@@ -25,13 +25,13 @@ class TextDB implements Connector {
       $sources[$_source['name']] =  $_source;
     }
 
-    file_put_contents(DATA_SOURCES, serialize($sources));
+    self::writeFile(DATA_SOURCES, $sources);
 
   }
 
   public static function add(array $_source, array $_records) {
     if (file_exists($_source['path'])) {
-      $records = unserialize(file_get_contents($_source['path']));
+      $records = self::readFile($_source['path']);
 
       foreach($_records as $record) {
         if (array_key_exists($record['cid'], $records)) {
@@ -56,8 +56,9 @@ class TextDB implements Connector {
       $records = array_combine($cids, $_records);
 
     }
+
     // Save the records for this source.
-    file_put_contents($_source['path'], serialize($records));
+    self::writeFile($_source['path'], $records);
 
     self::import();
   }
@@ -68,6 +69,35 @@ class TextDB implements Connector {
     }
   }
 
+  /**
+   * Delete a data source and remove its records.
+   */
+  public static function delete(string $_sourceName) {
+    $sources = self::readFile(DATA_SOURCES);
+
+    // Delete the file containing the sources' records from
+    // the file system.
+    unlink($sources[$_sourceName]['path']);
+
+    // Remove the source from the source file.
+    unset($sources[$_sourceName]);
+    self::writeFile(DATA_SOURCES, $sources);
+
+    // Remove the records of the source from the database file.
+    $records = self::getRecords();
+    foreach ($records as $key => $record) {
+      if ($record['name'] == $_sourceName) {
+        unset($records[$key]);
+      }
+    }
+
+    self::saveRecords($records);
+
+  }
+
+  /**
+   * Return active records for the given parameters.
+   */
   public static function get(array $_params) {
     $records = array();
 
@@ -80,6 +110,9 @@ class TextDB implements Connector {
     }
   }
 
+  /**
+   * Return active records.
+   */
   private static function getActive(array $_records) {
     $records = array();
 
@@ -92,6 +125,16 @@ class TextDB implements Connector {
     return $records;
   }
 
+  /**
+   * Read serialized data from the filesytem.
+   */
+  private static function readFile(string $_filename) {
+    return unserialize(file_get_contents($_filename));
+  }
+
+  /**
+   * Get both inactive and active records.
+   */
   public static function getAll(array $_params) {
     if (isset($_params['type'])) {
       return self::getRecordsByType($_params['type']);
@@ -107,14 +150,13 @@ class TextDB implements Connector {
    * Returns a record given an id.
    */
   public static function getById(int $_id) {
-    $records = unserialize(file_get_contents(DB_FILE));
+    $records = self::readFile(DB_FILE);
     return $records[$_id];
   }
 
-
   private static function getRecords() {
     if (file_exists(DB_FILE)) {
-      return unserialize(file_get_contents(DB_FILE));
+      return self::readFile(DB_FILE);
     } else {
       self::import();
       return self::getRecords();
@@ -173,12 +215,12 @@ class TextDB implements Connector {
    */
   public static function getSources() {
     if (file_exists(DATA_SOURCES)) {
-      return unserialize(file_get_contents(DATA_SOURCES));
+      return self::readFile(DATA_SOURCES);
     }
   }
 
   public static function sourceExists(string $_name) {
-    return !is_null(self::getSources()[$_name]);
+    return isset(self::getSources()[$_name]);
   }
 
 
@@ -187,7 +229,7 @@ class TextDB implements Connector {
     $count = 0;
     $records = array();
     foreach (self::getSources() as $source) {
-      $items = unserialize(file_get_contents($source['path']));
+      $items = self::readFile($source['path']);
 
       foreach ($items as $item) {
         $item['active'] = true;
@@ -204,17 +246,16 @@ class TextDB implements Connector {
 
 
   private static function saveRecords(array $_records) {
-    file_put_contents(DB_FILE, serialize($_records));
+    self::writeFile(DB_FILE, $_records);
   }
 
   /**
    * Save a source.
    */
   private static function saveSource($_source) {
-
     $sources = self::getSources();
     $sources[$_source['name']] = $_source;
-    file_put_contents(DATA_SOURCES, serialize($sources));
+    self::writeFile(DATA_SOURCES, $sources);
   }
 
   /**
@@ -246,7 +287,6 @@ class TextDB implements Connector {
     }
 
     $record = self::getById($_post['id']);
-
     foreach ($_post as $key => $value) {
       $record[$key] = $value;
     }
@@ -255,6 +295,13 @@ class TextDB implements Connector {
     $records[$record['id']] = $record;
 
     self::saveRecords($records);
+  }
+
+  /**
+   * Writes serialized data to the filesystem.
+   */
+  private static function writeFile(string $_filename, array $_data) {
+    file_put_contents($_filename, serialize($_data));
   }
 }
 ?>
