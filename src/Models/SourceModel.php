@@ -3,7 +3,7 @@ namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
 /**
- * @update 11/05/18
+ * @update 11/07/18
  * @author Michael McCulloch
  */
 
@@ -15,6 +15,10 @@ class SourceModel {
   private $url;
 
 
+  /**
+   * Determines the type of source to be created and
+   * calls the appropriate import method.
+   */
   public static function create(array $_post) {
 
     // Construct a url for the new data source.
@@ -98,6 +102,10 @@ class SourceModel {
     return $sources;
   }
 
+  /**
+   * Return instances of the source model given the type
+   * of source.
+   */
   public static function getSourcesByType(string $_type) {
     $sources = array();
     foreach (DataStore::getSourceByType($_type) as $source) {
@@ -106,16 +114,25 @@ class SourceModel {
     return $sources;
   }
 
-  public static function loadSource(array $_source) {
+  /**
+   * Create an instance of the source model.
+   */
+  public static function loadSource(array $_params) {
     $source = new self();
 
-    foreach ($_source as $key => $value) {
-      $source->$key = $value;
+    foreach ($_params as $key => $value) {
+      $setMethod = 'set'. ucfirst($key);
+      if (method_exists($source, $setMethod)) {
+        $source->$setMethod($value);
+      }
     }
 
     return $source;
   }
 
+  /**
+   * Return a source given the source name.
+   */
   public static function getByName(string $_name) {
     $source = new self();
 
@@ -128,19 +145,10 @@ class SourceModel {
 
 
   public static function importInstagram(array $_params) {
-    $source = new self();
-
-    foreach ($_params as $key => $value) {
-      $setMethod = 'set'. ucfirst($key);
-      if (method_exists($source, $setMethod)) {
-        $source->$setMethod($value);
-      }
-    }
+    $source = self::loadSource($_params);
 
     $fields = array("cid", "imgUrl", "thumbnailUrl", "title");
-
     $html = file_get_contents($_params['url'], TRUE);
-
     $document = new DOMDocument();
     $document->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 
@@ -170,16 +178,12 @@ class SourceModel {
     DataStore::add($source->toArray(), $entries);
   }
 
+  /**
+   * Import records from a wordpress site using the
+   * json v2 api.
+   */
   public static function importPosts(array $_params) {
-    $source = new self();
-
-    foreach ($_params as $key => $value) {
-      $setMethod = 'set'. ucfirst($key);
-      if (method_exists($source, $setMethod)) {
-        $source->$setMethod($value);
-      }
-    }
-
+    $source = self::loadSource($_params);
     $entries = array();
 
     $fields = array('dateTime', 'cid', 'imgUrl', 'title');
@@ -210,19 +214,12 @@ class SourceModel {
     DataStore::add($source->toArray(), $entries);
   }
 
+  /**
+   * Import youtube video data.
+   */
   public static function importYoutube(array $_params) {
-    $source = new self();
-
-    foreach ($_params as $key => $value) {
-      $setMethod = 'set'. ucfirst($key);
-      if (method_exists($source, $setMethod)) {
-        $source->$setMethod($value);
-      }
-    }
-
-
+    $source = self::loadSource($_params);
     $fields = array("cid", "title");
-
     $xml = file_get_contents($_params['url'], TRUE);
     $content = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
 
@@ -265,14 +262,23 @@ class SourceModel {
     return $model::load($_record);
   }
 
+  /**
+   * Convert an instance of this model to an array.
+   */
   private function toArray() {
     return get_object_vars($this);
   }
 
+  /**
+   * Check to see if a source exists for the given name.
+   */
   public function sourceExists(string $_name) {
     return DataStore::sourceExists($_name);
   }
 
+  /**
+   * Determines what to do with form post requests.
+   */
   public static function update(array $_post) {
     if (isset($_post['id'])) {
       self::updateRecord($_post);
@@ -281,14 +287,23 @@ class SourceModel {
     }
   }
 
+  /**
+   * Update a source.
+   */
   public function updateSource(array $_post) {
     DataStore::updateSource($_post);
   }
 
+  /**
+   * Update a record.
+   */
   public function updateRecord(array $_post) {
     DataStore::updateRecord($_post);
   }
 
+  /**
+   * Getters and setters for this model.
+   */
   public function getName() {
     return $this->name;
   }
