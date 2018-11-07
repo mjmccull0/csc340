@@ -1,11 +1,11 @@
 <!-- 
 View for Source Controller add action.
-@update 10/12/18
+@update 11/07/18
 @author Michael McCulloch
 -->
-<h2><?php echo SOURCE_ADD_HEADER ?></h2>
+<h2><?php echo SRC_ADD_HEADER ?></h2>
 
-<form action="<?php echo SOURCE_ADD_FORM_ACTION ?>" method="post">
+<form action="<?php echo $this->baseUrl . ADD ?>" method="post">
   <div>
     <div>
       name:<br>
@@ -15,23 +15,18 @@ View for Source Controller add action.
     <div id="dynamic-form-fields-container">
     </div>
   </div>
-  <select id="type-selector" name="type" onchange="getFields()">
-    <option label=" "></option>
-    <?php foreach (SOURCE_TYPE as $option => $value) { ?>
-      <?php echo "<option value='$value'>$option</option>" ?>
-    <?php } ?>
-  </select>
+  <?php include TEMPLATE_DIR . 'Form' . DS . 'typeSelector.php'; ?>
   <br>
   <input type="submit" value="Add">
 </form>
 
 <div id="dynamic-form-fields" style="display: none";>
-  <div id="YouTube">
+  <div id="Youtube">
     Channel ID:<br>
     <input type="text" name="channel_id">
     <br>
   </div>
-  <div id="Wordpress">
+  <div id="Posts">
     Site Url:<br>
     <input type="text" name="wp-site-url">
     <br>

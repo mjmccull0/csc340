@@ -75,6 +75,10 @@ textarea {
   margin: auto 0.5rem;
 }
 
+.list-view-item > .source {
+  padding-left: 0;
+}
+
 .edit-container {
   display: flex;
 }

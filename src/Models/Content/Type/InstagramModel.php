@@ -1,8 +1,9 @@
 <?php
-namespace Models;
+namespace Models\Content\Type;
+use Models\Content\BaseModel;
 /**
  * A model for Instagram content.
- * @update 9/25/18
+ * @update 11/06/18
  * @author Michael McCulloch
  */
 class InstagramModel extends BaseModel {

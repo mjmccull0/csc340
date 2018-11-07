@@ -1,22 +1,19 @@
 <?php
 namespace Controllers;
 /**
- * @update 9/17/18
+ * @update 11/04/18
  * @author Michael McCulloch
  * @author Mikael Williams
  */
-class IndexController {
+class IndexController extends BaseController {
   private $params;
 
-  public function __construct($_params = array()) {
-    if (isset($_params)) {
-      $this->params = $_params;
-    }
+  public function __construct() {
+    parent::__construct();
   }
 
   public function indexAction() {
     echo "IndexController::indexAction";
-
   }
 
   public function editAction() {

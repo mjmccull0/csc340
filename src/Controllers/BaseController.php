@@ -3,7 +3,7 @@ namespace Controllers;
 use Views\View as View;
 
 /**
- * @update 11/01/18
+ * @update 11/05/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -19,10 +19,11 @@ class BaseController {
 
     // Create a new view and give it data.
     $this->view = new View();
-
+    $this->view->sources = $this->model::getSources();
+    $this->view->baseUrl = '//' . $_SERVER['HTTP_HOST'] . '/';
   }
 
-  public function indexAction() {
+  public function index() {
   }
 
 

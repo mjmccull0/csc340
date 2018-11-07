@@ -1,8 +1,9 @@
 <?php
-namespace Models;
+namespace Models\Content\Type;
+use Models\Content\BaseModel;
 /**
  * A model for content imported using the Wordpress rest api.
- * @update 9/18/18
+ * @update 11/06/18
  * @author Michael McCulloch
  */
 class PostsModel extends BaseModel {
