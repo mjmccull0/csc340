@@ -175,7 +175,7 @@ class SourceModel {
       );
     }
 
-    DataStore::add($source->toArray(), $entries);
+    $source->save($entries);
   }
 
   /**
@@ -211,7 +211,7 @@ class SourceModel {
       }
     }
 
-    DataStore::add($source->toArray(), $entries);
+    $source->save($entries); 
   }
 
   /**
@@ -238,7 +238,7 @@ class SourceModel {
       );
     }
 
-    DataStore::add($source->toArray(), $entries);
+    $source->save($entries);
   }
 
   /**
@@ -267,6 +267,10 @@ class SourceModel {
    */
   private function toArray() {
     return get_object_vars($this);
+  }
+
+  private function save(array $_entries) {
+    DataStore::add($this->toArray(), $_entries);
   }
 
   /**
@@ -333,13 +337,9 @@ class SourceModel {
     $this->path = $_path;
   }
 
-  public function setRecords(array $_records) {
-  }
-
   public function setType(string $_type) {
     $this->type = $_type;
   }
-
 
   public function setUrl(string $_url) {
     $this->url = $_url;
