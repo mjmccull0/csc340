@@ -10,7 +10,6 @@ use DOMDocument;
 class SourceModel {
 
   private $name;
-  // Remove path from this model.
   private $path;
   private $type;
   private $url;
@@ -48,6 +47,12 @@ class SourceModel {
 
   }
 
+  /**
+   * Delete a data source.
+   */
+  public static function delete(string $_name) {
+    DataStore::delete($_name);
+  }
 
   /**
    * Get active records.
@@ -121,10 +126,6 @@ class SourceModel {
     return $source;
   }
 
-
-
-  public function delete() {
-  }
 
   public static function importInstagram(array $_params) {
     $source = new self();

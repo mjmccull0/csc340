@@ -3,7 +3,7 @@ namespace Controllers;
 use Controllers\BaseController as BaseController;
 
 /**
- * @update 11/04/18
+ * @update 11/07/18
  * @author Michael McCulloch
  */
 
@@ -44,6 +44,16 @@ class SourceController extends BaseController {
     $this->view->render();
   }
 
+  /**
+   * This action allows for deleting data source.
+   */
+  public function delete() {
+    if (!empty($_GET["name"])) {
+      $this->model::delete($_GET['name']);
+    }
+
+    $this->route::redirect($this->view->baseUrl);
+  }
 
   /**
    * This action allows for editing a data source.

@@ -2,7 +2,7 @@
 namespace Translators;
 use DB\TextDB as StorageManager;
 /**
- * @update 11/02/18
+ * @update 11/07/18
  * @author Michael McCulloch
  */
 
@@ -10,6 +10,10 @@ class DataStore {
 
   public static function add(array $_source, array $_records) {
     StorageManager::add($_source, $_records);
+  }
+
+  public static function delete(string $_name) {
+    StorageManager::delete($_name);
   }
 
   public static function get(array $_params) {

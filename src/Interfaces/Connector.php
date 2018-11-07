@@ -1,7 +1,7 @@
 <?php
 namespace Interfaces;
 /**
- * @update 11/04/18
+ * @update 11/07/18
  * @author Michael McCulloch
  */
 
@@ -12,6 +12,10 @@ Interface Connector {
    */
   public static function createSource(array $_post);
 
+  /**
+   * Delete a source
+   */
+  public static function delete(string $_sourceName);
   /**
    * Get active records given parameters.
    */
