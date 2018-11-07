@@ -1,16 +1,24 @@
 <?php
 namespace Controllers;
-use Controllers\BaseController as BaseController;
+use Views\View as View;
 
 /**
  * @update 11/07/18
  * @author Michael McCulloch
  */
 
-class SourceController extends BaseController {
+class SourceController {
+  protected $view;
+  protected $model;
 
   public function __construct() {
-    parent::__construct();
+    $this->model = '\Models\SourceModel';
+    $this->route = '\Util\Route';
+
+    // Create a new view and give it data.
+    $this->view = new View();
+    $this->view->sources = $this->model::getSources();
+    $this->view->baseUrl = '//' . $_SERVER['HTTP_HOST'] . '/';
   }
 
 
