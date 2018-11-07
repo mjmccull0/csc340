@@ -23,7 +23,7 @@ class SourceController extends BaseController {
       return $this->route::redirect($this->view->baseUrl);
     }
 
-    $this->view->setTemplate(SOURCE_ADD_TEMPLATE);
+    $this->view->setTemplate(SRC_ADD_TEMPLATE);
     $this->view->render();
 
   }
@@ -40,7 +40,7 @@ class SourceController extends BaseController {
     }
 
     $this->view->setData($data);
-    $this->view->setTemplate(SOURCE_INDEX);
+    $this->view->setTemplate(SRC_INDEX);
     $this->view->render();
   }
 
@@ -62,7 +62,7 @@ class SourceController extends BaseController {
     }
 
     $this->view->setData($data);
-    $this->view->setTemplate(SOURCE_EDIT);
+    $this->view->setTemplate(EDIT_TEMPLATE);
     $this->view->render();
 
     // No name was given, this needs to be handled.
@@ -76,7 +76,7 @@ class SourceController extends BaseController {
     }
 
     $this->view->setData($this->model::getAll($_GET));
-    $this->view->setTemplate(SOURCE_VIEW);
+    $this->view->setTemplate(SRC_VIEW);
     $this->view->render();
   }
 
@@ -86,7 +86,7 @@ class SourceController extends BaseController {
     }
 
     $this->view->setData($this->model::get($_GET));
-    $this->view->setTemplate(SOURCE_SHOW);
+    $this->view->setTemplate(SRC_SHOW);
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->render();
   }

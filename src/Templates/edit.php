@@ -1,12 +1,15 @@
 <!--
 View for Source Controller edit action.
-@11/05/2018
+@11/07/2018
 @author Michael McCulloch
 -->
 <?php 
 if ($this->isSource) {
-    include 'sourceEdit.php';
+  $template = SRC_TEMPLATE_DIR . DS . EDIT . '.php';
 } else {
-  include $this->data->getType() . ucfirst(EDIT) . '.php';
+  $template = TEMPLATE_DIR . $this->data->getType() . DS . EDIT . '.php';
 }
+
+include TEMPLATE_DIR . 'Form' . DS . 'formUpdateAction.php';
+include $template;
 ?>

@@ -1,11 +1,10 @@
 
 <!--
 View for Youtube Controller edit action.
-@11/05/18
+@11/07/18
 @author Michael McCulloch
 @author Jacob Oleosn
 -->
-<?php include 'formUpdateAction.php'; ?>
 <form action="<?php echo $formUpdateAction; ?>" method="post">
   <input type="hidden" name="id" value="<?php echo $this->data->getId(); ?>">
   Title:<br>
