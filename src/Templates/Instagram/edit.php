@@ -1,22 +1,23 @@
 <!--
-View for Source Controller edit action.
-@11/05/18
+View for Source Controller edit action for Instagram.
+@11/07/18
 @author Michael McCulloch
-@author Jacob Oleosn
+@author Jacob Oleson
 -->
-<?php include 'formUpdateAction.php'; ?>
 <div class="edit-container">
   <div class="img-container"> 
     <img src="<?php echo $this->data->getImgUrl(); ?>">
   </div>
+  
   <div class="edit-form">
     <form action="<?php echo $formUpdateAction; ?>" method="post">
       <input type="hidden" name="id" value="<?php echo $this->data->getId(); ?>">
       Title:<br>
-      <input type="text" name="title" value="<?php echo $this->data->getTitle(); ?>">
+      <textarea type="text" name="title"><?php echo $this->data->getTitle(); ?></textarea>
+      <br>
       Active
       <input type="checkbox" name="active" value="active" <?php if ($this->data->getActive()) echo 'checked' ; ?>>
-    <br>
+      <br>
       <input class="button" type="submit" value="Save">
     </form>
   </div>

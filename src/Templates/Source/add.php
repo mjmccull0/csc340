@@ -1,9 +1,9 @@
 <!-- 
 View for Source Controller add action.
-@update 11/05/18
+@update 11/07/18
 @author Michael McCulloch
 -->
-<h2><?php echo SOURCE_ADD_HEADER ?></h2>
+<h2><?php echo SRC_ADD_HEADER ?></h2>
 
 <form action="<?php echo $this->baseUrl . ADD ?>" method="post">
   <div>
@@ -15,7 +15,7 @@ View for Source Controller add action.
     <div id="dynamic-form-fields-container">
     </div>
   </div>
-  <?php include 'typeSelector.php'; ?>
+  <?php include TEMPLATE_DIR . 'Form' . DS . 'typeSelector.php'; ?>
   <br>
   <input type="submit" value="Add">
 </form>

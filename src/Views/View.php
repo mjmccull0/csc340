@@ -1,7 +1,7 @@
 <?php
 namespace Views;
 /**
- * @update 10/22/18
+ * @update 11/07/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -10,7 +10,7 @@ class View {
   private $data;
   private $headScripts = '';
   private $headStyles = '';
-  private $layout = LAYOUT;
+  private $layout = DEFAULT_LAYOUT;
   private $template;
 
   public function addHeadScript($_scriptPath) {
