@@ -4,11 +4,16 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/07/18
+ * @update 11/08/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 class TextDB implements Connector {
+
+  public static function addSource(array $_source) {
+    self::addToSourceFile($_source);  
+    self::updateDB();
+  }
 
   private static function addToSourceFile(array $_source) {
 
@@ -77,7 +82,8 @@ class TextDB implements Connector {
 
     // Delete the file containing the sources' records from
     // the file system.
-    unlink($sources[$_sourceName]['path']);
+    self::deleteFile($sources[$_sourceName]['path']);
+
 
     // Remove the source from the source file.
     unset($sources[$_sourceName]);
@@ -93,6 +99,13 @@ class TextDB implements Connector {
 
     self::saveRecords($records);
 
+  }
+
+  /**
+   * Delete the file from the file system.
+   */
+  private function deleteFile(string $_filename) {
+    unlink($_filename);
   }
 
   /**
@@ -129,7 +142,9 @@ class TextDB implements Connector {
    * Read serialized data from the filesytem.
    */
   private static function readFile(string $_filename) {
-    return unserialize(file_get_contents($_filename));
+    if (file_exists($_filename)) {
+      return unserialize(file_get_contents($_filename));
+    }
   }
 
   /**
@@ -232,7 +247,9 @@ class TextDB implements Connector {
       $items = self::readFile($source['path']);
 
       foreach ($items as $item) {
-        $item['active'] = true;
+        if (is_null($item['active'])) {
+          $item['active'] = true;
+        }
         $item['id'] = ++$count;
         $item['name'] = $source['name'];
         $item['type'] = $source['type'];
@@ -245,6 +262,17 @@ class TextDB implements Connector {
 
 
 
+  public static function saveRecord(array $_record) {
+    if (self::sourceExists($_record['sourceName'])) {
+      $source = self::getSourceByName($_record['sourceName']);
+      $records = self::readFile($source['path']);
+      $records[$_record['cid']] = $_record;
+      self::writeFile($source['path'], $records);
+    } else {
+      // This is an attempt to save a record without a source.
+    }
+  }
+
   private static function saveRecords(array $_records) {
     self::writeFile(DB_FILE, $_records);
   }
@@ -252,7 +280,7 @@ class TextDB implements Connector {
   /**
    * Save a source.
    */
-  private static function saveSource($_source) {
+  private static function saveSource(array $_source) {
     $sources = self::getSources();
     $sources[$_source['name']] = $_source;
     self::writeFile(DATA_SOURCES, $sources);
@@ -281,6 +309,13 @@ class TextDB implements Connector {
     }
   }
 
+  /**
+   * Deletes the DB file which will result in it being rebuilt.
+   */
+  public static function updateDB() {
+    self::deleteFile(DB_FILE);
+  }
+
   public static function updateRecord(array $_post) {
     if (!isset($_post['active'])) {
       $_post['active'] = false;
@@ -291,9 +326,13 @@ class TextDB implements Connector {
       $record[$key] = $value;
     }
 
+    // Updates the record in the source's data file.
+    self::saveRecord($record);
+
     $records = self::getRecords();
     $records[$record['id']] = $record;
 
+    // Updates the record in the db file
     self::saveRecords($records);
   }
 
