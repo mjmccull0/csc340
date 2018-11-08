@@ -70,6 +70,10 @@ class DataStore {
     return StorageManager::sourceExists($_name);
   }
 
+  public static function updateDB() {
+    StorageManager::updateDB();
+  }
+
   public static function updateSource(array $_post) {
     StorageManager::updateSource($_post);
   }

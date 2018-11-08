@@ -47,6 +47,7 @@ class SourceModel {
 
       $importMethod = 'import' . $_post['type'];
       self::$importMethod($_post);
+
     } else {
       // This is an attempt to create a source which already exists.
     }

@@ -14,7 +14,7 @@ View for Source Controller edit action.
       Title:<br>
       <input type="text" name="title" value="<?php echo $this->data->getTitle(); ?>">
       Active
-      <input type="checkbox" name="active" value="active" <?php if ($this->data->getActive()) echo 'checked' ; ?>>
+      <input type="checkbox" name="active" value="true" <?php if ($this->data->getActive()) echo 'checked' ; ?>>
     <br>
       <input class="button" type="submit" value="Save">
     </form>
