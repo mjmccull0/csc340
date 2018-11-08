@@ -8,7 +8,7 @@ use Models\Content\BaseModel;
  * @author Michael McCulloch
  */
 class YoutubeModel extends BaseModel {
-  private $type = YOUTUBE;
+  protected $type;
 
   public function setType($_type) {
     $this->type = $_type;

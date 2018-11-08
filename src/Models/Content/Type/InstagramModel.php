@@ -7,9 +7,9 @@ use Models\Content\BaseModel;
  * @author Michael McCulloch
  */
 class InstagramModel extends BaseModel {
-  private $imgUrl;
-  private $thumbnailUrl;
-  private $type = INSTAGRAM;
+  protected $imgUrl;
+  protected $thumbnailUrl;
+  protected $type;
 
   public function getImgUrl() {
     return $this->imgUrl;
@@ -31,7 +31,7 @@ class InstagramModel extends BaseModel {
     $this->thumbnailUrl = $_thumbnailUrl;
   }
 
-  private function setType($_type) {
+  public function setType($_type) {
     $this->type = $_type;
   }
 

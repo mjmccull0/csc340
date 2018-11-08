@@ -4,11 +4,15 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/07/18
+ * @update 11/08/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 class TextDB implements Connector {
+
+  public static function addSource(array $_source) {
+    self::addToSourceFile($_source);  
+  }
 
   private static function addToSourceFile(array $_source) {
 
@@ -129,7 +133,9 @@ class TextDB implements Connector {
    * Read serialized data from the filesytem.
    */
   private static function readFile(string $_filename) {
-    return unserialize(file_get_contents($_filename));
+    if (file_exists($_filename)) {
+      return unserialize(file_get_contents($_filename));
+    }
   }
 
   /**
@@ -245,6 +251,17 @@ class TextDB implements Connector {
 
 
 
+  public static function saveRecord(array $_record) {
+    if (self::sourceExists($_record['sourceName'])) {
+      $source = self::getSourceByName($_record['sourceName']);
+      $records = self::readFile($source['path']);
+      $records[$_record['cid']] = $_record;
+      self::writeFile($source['path'], $records);
+    } else {
+      // This is an attempt to save a record without a source.
+    }
+  }
+
   private static function saveRecords(array $_records) {
     self::writeFile(DB_FILE, $_records);
   }
@@ -252,7 +269,7 @@ class TextDB implements Connector {
   /**
    * Save a source.
    */
-  private static function saveSource($_source) {
+  private static function saveSource(array $_source) {
     $sources = self::getSources();
     $sources[$_source['name']] = $_source;
     self::writeFile(DATA_SOURCES, $sources);

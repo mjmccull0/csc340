@@ -1,5 +1,6 @@
 <?php
 namespace Models\Content;
+use Translators\DataStore as DataStore;
 /**
  * A base model for content.
  * @update 11/08/18
@@ -9,6 +10,7 @@ class BaseModel {
   private $active;
   private $cid;
   private $id;
+  private $sourceName;
   private $title;
 
   public static function load($_params = array()) {
@@ -26,6 +28,13 @@ class BaseModel {
     return $model;
   }
 
+  public function save() {
+      DataStore::saveRecord($this->toArray());
+  }
+
+  public function toArray() {
+    return get_object_vars($this); 
+  }
 
   public function getActive() {
     return $this->active;
@@ -35,9 +44,12 @@ class BaseModel {
     return $this->cid;
   }
 
-
   public function getId() {
     return $this->id;
+  }
+
+  public function getSourceName() {
+    return $this->sourceName;
   }
 
   public function getTitle() {
@@ -55,6 +67,10 @@ class BaseModel {
 
   public function setId($_id) {
     $this->id = $_id;
+  }
+
+  public function setSourceName(string $_name) {
+    $this->sourceName = $_name;
   }
 
   public function setTitle(string $_title) {

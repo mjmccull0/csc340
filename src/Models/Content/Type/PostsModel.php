@@ -7,9 +7,9 @@ use Models\Content\BaseModel;
  * @author Michael McCulloch
  */
 class PostsModel extends BaseModel {
-  private $dateTime;
-  private $imgUrl;
-  private $type = POSTS;
+  protected $dateTime;
+  protected $imgUrl;
+  protected $type;
 
 
   public function getImgUrl() {
@@ -32,7 +32,7 @@ class PostsModel extends BaseModel {
     $this->imgUrl = $_imgUrl;
   }
 
-  private function setType($_type) {
+  public function setType($_type) {
     $this->type = $_type;
   }
 
