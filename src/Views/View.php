@@ -1,9 +1,10 @@
 <?php
 namespace Views;
 /**
- * @update 11/07/18
+ * @update 11/08/18
  * @author Michael McCulloch
  * @author Jacob Oleson
+ * @author Chip Brady
  */
 
 class View {
@@ -18,7 +19,6 @@ class View {
 <script src="$_scriptPath"></script>
 EOT;
   }
-
 
   public function addHeadStyle($_stylePath) {
     $this->headStyles .= <<<EOT
@@ -54,6 +54,24 @@ EOT;
 
     // Display the layout with the template.
     echo $output;
+  }
+ 
+  //View for UNCG news
+  public function newsView()
+  {
+    render();
+  }
+  
+  //View for UNCG Youtube
+  public function youtubeView()
+  {
+    render();
+  }
+  
+  //View for UNCG Instagram
+  public function instagramView()
+  {
+    render(); 
   }
 
   public function getData() {
