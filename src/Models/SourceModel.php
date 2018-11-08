@@ -145,6 +145,20 @@ class SourceModel {
     return $source;
   }
 
+  public static function import() {
+    $sources = self::getSources();
+
+    foreach ($sources as $source) {
+      $_params = array(
+        'url' => $source->getUrl(),
+        'name' => $source->getName(),
+        'type' => $source->getType()
+      );
+
+      $importMethod = 'import' . $source->getType();
+      self::$importMethod($_params);
+    }
+  }
 
   public static function importInstagram(array $_params) {
     $source = self::loadSource($_params);
@@ -290,8 +304,10 @@ class SourceModel {
   public static function update(array $_post) {
     if (isset($_post['id'])) {
       self::updateRecord($_post);
-    } else {
+    } else if (isset($_post['name'])) {
       self::updateSource($_post);
+    } else {
+      self::import();
     }
   }
 

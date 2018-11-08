@@ -5,6 +5,7 @@ View for Source Controller index action.
 -->
 <div class="header-menu">
   <a href="<?php echo $this->baseUrl . ADD; ?>"><?php echo ucfirst(ADD); ?></a>
+  <a href="<?php echo $this->baseUrl . UPDATE; ?>"><?php echo ucfirst(UPDATE); ?></a>
 </div>
 <ul class="list-view">
   <?php foreach ($this->data as $source) { ?>
