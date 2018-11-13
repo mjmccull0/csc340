@@ -4,8 +4,6 @@ view for search results
 @author Jacob Oleson
 -->
 <?php
-
-echo $this->data;
-
-
+var_dump('<pre>');
+var_dump($this->data);
 ?>

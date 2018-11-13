@@ -126,24 +126,22 @@ class SourceController {
     $this->route::redirect($redirectUrl);
   }
 
-  //Sets the view to search through entries in the website
+  /**
+  * Sets the view to either prompt user to search by a keyword
+  * or display the filtered data.
+  */
   public function search() {
-
+    if (!empty($_GET)) {
+      $this->view->setData($this->model::getAll($_GET));
+      $this->view->setTemplate(FILTER);
+      $this->view->render();
+    } else {
     $this->view->setTemplate(SRC_SEARCH_TEMPLATE);
     $this->view->render();
+    }
   }
 
 
-  /**
-  * Calls the filter class to filter through the data after a keyword has been set.
-  * Could probably have better names...
-  */
-  public function filter() {
-    $this->view->setData(Filter::filter());
-    $this->view->setTemplate(FILTER);
-    $this->view->render();
-
-  }
 
 
 }

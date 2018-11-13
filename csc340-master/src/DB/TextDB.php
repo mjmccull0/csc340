@@ -143,8 +143,12 @@ class TextDB implements Connector {
     if (isset($_params['name'])) {
       return self::getRecordsByName($_params['name']);
     }
-  }
 
+    if (isset($_params['query'])) {
+      return self::search($_params['query']);
+
+    }
+  }
 
   /**
    * Returns a record given an id.
@@ -175,7 +179,7 @@ class TextDB implements Connector {
         array_push($sourceRecords, $record);
       }
     }
-      
+
     return $sourceRecords;
   }
 
@@ -256,6 +260,20 @@ class TextDB implements Connector {
     $sources = self::getSources();
     $sources[$_source['name']] = $_source;
     self::writeFile(DATA_SOURCES, $sources);
+  }
+
+  /**
+  * Searches through data to find sources that match user's query.
+  */
+  private static function search(string $_query) {
+    $results = array();
+    $list = self::getRecords();
+    foreach ($list as $record) {
+        if (preg_match("/\b$_query\b/i", $record["title"], $match)) {
+          array_push($results, $record);
+        }
+     }
+     return $results;
   }
 
   /**
