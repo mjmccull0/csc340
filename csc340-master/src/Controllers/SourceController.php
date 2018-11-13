@@ -1,10 +1,12 @@
 <?php
 namespace Controllers;
 use Views\View as View;
+use Util\Filter as Filter;
 
 /**
- * @update 11/07/18
+ * @update 11/13/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class SourceController {
@@ -35,7 +37,6 @@ class SourceController {
     $this->view->render();
 
   }
-
 
   /**
    * This action lists the data sources.
@@ -123,8 +124,27 @@ class SourceController {
 
     // Redirect the user to the page they clicked on the edit link.
     $this->route::redirect($redirectUrl);
+  }
+
+  //Sets the view to search through entries in the website
+  public function search() {
+
+    $this->view->setTemplate(SRC_SEARCH_TEMPLATE);
+    $this->view->render();
+  }
+
+
+  /**
+  * Calls the filter class to filter through the data after a keyword has been set.
+  * Could probably have better names...
+  */
+  public function filter() {
+    $this->view->setData(Filter::filter());
+    $this->view->setTemplate(FILTER);
+    $this->view->render();
 
   }
+
 
 }
 ?>

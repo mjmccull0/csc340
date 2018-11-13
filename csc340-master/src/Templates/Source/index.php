@@ -1,10 +1,11 @@
-<!-- 
+<!--
 View for Source Controller index action.
 @update 11/05/18
 @author Michael McCulloch
 -->
 <div class="header-menu">
   <a href="<?php echo $this->baseUrl . ADD; ?>"><?php echo ucfirst(ADD); ?></a>
+  <a href="<?php echo $this->baseUrl . SEARCH; ?>"><?php echo ucfirst(SEARCH); ?></a>
 </div>
 <ul class="list-view">
   <?php foreach ($this->data as $source) { ?>

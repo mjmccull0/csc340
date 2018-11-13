@@ -1,7 +1,7 @@
 <?php
 /**
  * Global constants
- * @update 11/07/18
+ * @update 11/13/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -23,7 +23,6 @@ define('SRC_EDIT', TEMPLATE_DIR . "Source/edit.php");
 
 define('SRC_ADD_TEMPLATE', TEMPLATE_DIR . "Source/add.php");
 define('SRC_ADD_HEADER', "Add Source");
-
 
 define('SRC_EDIT_HEADER', "Edit Source: ");
 
@@ -47,6 +46,7 @@ define('SHOW', 'show');
 define('SOURCE', 'Source');
 define('SOURCES', 'Sources');
 define('UPDATE', 'update');
+define('SEARCH', 'search');
 
 define('LANG', 'en');
 define('CHARSET', 'utf-8');
@@ -59,4 +59,7 @@ define('INSTAGRAM_URL', 'https://www.instagram.com');
 define('SRC_TEMPLATE_DIR', TEMPLATE_DIR . SOURCE);
 define('SRC_VIEW', SRC_TEMPLATE_DIR . DS . "view.php");
 define('SRC_SHOW', SRC_TEMPLATE_DIR . DS . "show.php");
+
+define('SRC_SEARCH_TEMPLATE', TEMPLATE_DIR . "Source/search.php");
+define('FILTER', TEMPLATE_DIR . "Source/filter.php");
 ?>
