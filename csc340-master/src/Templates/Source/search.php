@@ -6,8 +6,8 @@ View for Source Controller search action.
 <label for="site-search">Search for specifc entries:</label>
 
 
-<form action="filter" method="POST">
-  <input type="text" name="searchterm" placeholder="Search....">
+<form action=<?php echo $this->baseUrl . SEARCH; ?> method="GET">
+  <input type="text" name="query" placeholder="Search....">
   <input type="submit" value="Search">
 
 

@@ -69,7 +69,7 @@ class Route {
   }
 
 
-  //Helper function
+  //Helper function too call request controller.
   private static function getController($_controllerPath, $_controllerAction) {
 
     $controller = new $_controllerPath;
@@ -78,10 +78,15 @@ class Route {
   }
 
 
-  //Helper function
+  //Helper function to route to error message.
   private static function error() {
 
-      echo "\nThe file you are trying to access does not exist. It be like that sometimes.";
+      echo "The file you are trying to access does not exist.";
+  }
+
+  //Helper function to load url.
+  private static function getUrl() {
+    return trim($_SERVER["REQUEST_URI"], "/");
   }
 
   /**
@@ -91,8 +96,6 @@ class Route {
     header("Location: " . $_relativeUrl);
   }
 
-  public static function getUrl() {
-    return trim($_SERVER["REQUEST_URI"], "/");
-  }
+
 }
 ?>

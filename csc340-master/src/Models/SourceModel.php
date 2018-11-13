@@ -60,9 +60,9 @@ class SourceModel {
   }
 
   /**
-   * Get active records.
+   * Get active records. Was getting warnings if this wasn't static.
    */
-  public function get(array $_params) {
+  public static function get(array $_params) {
     return self::objectify(DataStore::get($_params));
   }
 
