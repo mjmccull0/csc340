@@ -3,8 +3,9 @@ namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
 /**
- * @update 11/07/18
+ * @update 11/08/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class SourceModel {
@@ -96,7 +97,7 @@ class SourceModel {
     $sources = array();
 
     foreach(DataStore::getSources() as $source) {
-      array_push($sources, self::loadSource($source)); 
+      array_push($sources, self::loadSource($source));
     }
 
     return $sources;
@@ -211,7 +212,7 @@ class SourceModel {
       }
     }
 
-    $source->save($entries); 
+    $source->save($entries);
   }
 
   /**
@@ -273,10 +274,12 @@ class SourceModel {
     DataStore::add($this->toArray(), $_entries);
   }
 
+
   /**
    * Check to see if a source exists for the given name.
+   * Needed to make this static to stop its whining. Might be a php 7 problem?
    */
-  public function sourceExists(string $_name) {
+  public static function sourceExists(string $_name) {
     return DataStore::sourceExists($_name);
   }
 

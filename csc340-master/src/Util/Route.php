@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 11/04/18
+* Update 11/13/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -21,14 +21,21 @@ class Route {
     $params = explode("/", $url);
 
     // Try to reach a Controller for testing purposes.
-    /*
-    $controllerName = ucfirst(array_shift($params));
 
-    // Default to IndexController if a controller is not specified.
-    if (empty($controllerName)) {
-      $controllerName = "Index";
-    }
-     */
+    //Still need some way to incoprotate if new controllers needed to be added.
+    //$controllerName = ucfirst(array_shift($params));
+
+    /* Default to SourceController if a controller is not specified.
+    *  Even though we are currently routing to one controller, I think
+    *  it's in our best interest to keep the functionality of route the same
+    *  in the case where we need to add more.
+    */
+
+    /**if (empty($controllerName)) {
+    *  $controllerName = "Source";
+    *}
+    */
+
     $controllerName = "Source";
 
     $controllerPath = "\\Controllers\\" . $controllerName . "Controller";
@@ -57,7 +64,7 @@ class Route {
 
     //If controller doesn't exist, route to error message
     else {
-      Route::error();
+        Route::error();
     }
   }
 
@@ -74,7 +81,7 @@ class Route {
   //Helper function
   private static function error() {
 
-      echo "\nCOULD NOT FIND FILE >:(";
+      echo "\nThe file you are trying to access does not exist. It be like that sometimes.";
   }
 
   /**
