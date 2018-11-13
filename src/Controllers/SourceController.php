@@ -3,7 +3,7 @@ namespace Controllers;
 use Views\View as View;
 
 /**
- * @update 11/07/18
+ * @update 12/13/18
  * @author Michael McCulloch
  */
 
@@ -19,6 +19,7 @@ class SourceController {
     $this->view = new View();
     $this->view->sources = $this->model::getSources();
     $this->view->baseUrl = '//' . $_SERVER['HTTP_HOST'] . '/';
+    $this->view->setLayout(DEFAULT_LAYOUT);
   }
 
 
