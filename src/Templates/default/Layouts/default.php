@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- 
 View for Source Controller index action.
-@update 10/14/18
+@update 12/13/18
 @author Michael McCulloch
 -->
 <html lang="<?php echo LANG; ?>">
@@ -15,7 +15,7 @@ View for Source Controller index action.
 <body>
   <div class="content">
     <div class="sidebar">
-      <?php include(NAV); ?>
+      <?php include($this->getTemplatePath(NAV)); ?>
     </div>
     <div class="content-wrapper">
       <?php echo $this->content ?>
