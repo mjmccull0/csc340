@@ -4,7 +4,7 @@ use Views\View as View;
 use Util\Filter as Filter;
 
 /**
- * @update 11/13/18
+ * @update 11/15/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -38,20 +38,6 @@ class SourceController {
 
   }
 
-  /**
-   * This action lists the data sources.
-   */
-  public function index() {
-    if (isset($_GET['type'])) {
-      $data = $this->model::getSourcesByType($_GET['type']);
-    } else {
-      $data = $this->model::getSources();
-    }
-
-    $this->view->setData($data);
-    $this->view->setTemplate(SRC_INDEX);
-    $this->view->render();
-  }
 
   /**
    * This action allows for deleting data source.
@@ -63,6 +49,7 @@ class SourceController {
 
     $this->route::redirect($this->view->baseUrl);
   }
+
 
   /**
    * This action allows for editing a data source.
@@ -85,19 +72,40 @@ class SourceController {
     $this->view->render();
 
     // No name was given, this needs to be handled.
-
   }
 
-  public function view() {
-
-    if (isset($_GET['name'])) {
-      $this->view->source = $this->model::getByName($_GET['name']);
+  /**
+   * This action lists the data sources.
+   */
+  public function index() {
+    if (isset($_GET['type'])) {
+      $data = $this->model::getSourcesByType($_GET['type']);
+    } else {
+      $data = $this->model::getSources();
     }
 
-    $this->view->setData($this->model::getAll($_GET));
-    $this->view->setTemplate(SRC_VIEW);
+    $this->view->setData($data);
+    $this->view->setTemplate(SRC_INDEX);
     $this->view->render();
   }
+
+
+  /**
+  * Sets the view to either prompt user to search by a keyword
+  * or display the filtered data.
+  */
+  public function search() {
+    if (!empty($_GET)) {
+      $this->view->setData($this->model::getAll($_GET));
+      $this->view->setTemplate(FILTER);
+    } else {
+      $this->view->setTemplate(SRC_SEARCH_TEMPLATE);
+    }
+
+    $this->view->render();
+  }
+
+
 
   public function show() {
     if (isset($_GET['name'])) {
@@ -109,6 +117,7 @@ class SourceController {
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->render();
   }
+
 
   /**
    * This action handles the changes to a data source.
@@ -126,19 +135,16 @@ class SourceController {
     $this->route::redirect($redirectUrl);
   }
 
-  /**
-  * Sets the view to either prompt user to search by a keyword
-  * or display the filtered data.
-  */
-  public function search() {
-    if (!empty($_GET)) {
-      $this->view->setData($this->model::getAll($_GET));
-      $this->view->setTemplate(FILTER);
-      $this->view->render();
-    } else {
-    $this->view->setTemplate(SRC_SEARCH_TEMPLATE);
-    $this->view->render();
+
+  public function view() {
+
+    if (isset($_GET['name'])) {
+      $this->view->source = $this->model::getByName($_GET['name']);
     }
+
+    $this->view->setData($this->model::getAll($_GET));
+    $this->view->setTemplate(SRC_VIEW);
+    $this->view->render();
   }
 
 
