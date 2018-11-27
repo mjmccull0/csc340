@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 11/13/18
+* Update 11/27/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -73,21 +73,21 @@ class Route {
   private static function getController($_controllerPath, $_controllerAction) {
 
     $controller = new $_controllerPath;
-
     return $controller->$_controllerAction();
   }
 
 
   //Helper function to route to error message.
   private static function error() {
-
       echo "The file you are trying to access does not exist.";
   }
+
 
   //Helper function to load url.
   private static function getUrl() {
     return trim($_SERVER["REQUEST_URI"], "/");
   }
+
 
   /**
    * Send to user's browser to the provided relative url.
