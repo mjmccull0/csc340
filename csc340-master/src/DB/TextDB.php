@@ -4,7 +4,7 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/15/18
+ * @update 11/30/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -44,7 +44,7 @@ class TextDB implements Connector {
 
   public static function createSource(array $_post) {
     if (!self::sourceExists($_post['name'])) {
-      self::FileFile($_post);
+      self::addToSourceFile($_post);
     }
   }
 
