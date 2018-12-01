@@ -114,6 +114,28 @@ video {
 }
 
 
+/*
+.fullscreen img.active {
+  position: absolute;
+  width: 100%;
+  opacity: 1;
+}
+
+.slide {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+
+    -webkit-transition: opacity 2s;
+    -moz-transition: opacity 2s;
+    -o-transition: opacity 2s;
+    transition: opacity 2s;
+}
+*/
 .fullscreen .active {
   position: absolute;
   width: 100%;
@@ -144,7 +166,7 @@ video {
 
 .slide .title {
   opacity: 0;
-  font-size: 2rem;
+  font-size: 3em;
 }
 .slide.active .title {
   font-family: fantasy;

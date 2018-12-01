@@ -5,6 +5,7 @@ use DOMDocument;
 /**
  * @update 11/08/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class SourceModel {
@@ -21,36 +22,34 @@ class SourceModel {
    */
   public static function create(array $_post) {
 
-    if (!DataStore::sourceExists($_post['name'])) {
-
-      // Construct a url for the new data source.
-      if (isset($_post['channel_id'])) {
-        $_post['url'] = YOUTUBE_CHANNEL_URL . '?channel_id=' . $_post['channel_id'];
-        $_post['type'] = YOUTUBE;
-        unset($_post['channel_id']);
-      }
-
-      if (isset($_post['wp-site-url'])) {
-        $_post['url'] = $_post['wp-site-url'] . WP_JSON_URL;
-        $_post['type'] = POSTS;
-        unset($_post['wp-site-url']);
-      }
-
-      if (isset($_post['instagram-account'])) {
-        $_post['url'] = INSTAGRAM_URL . '/' . $_post['instagram-account'] . '/';
-        $_post['type'] = INSTAGRAM;
-        unset($_post['instagram-account']);
-      }
-
-      $source = self::loadSource($_post);
-      $source->save();
-
-      $importMethod = 'import' . $_post['type'];
-      self::$importMethod($_post);
-
-    } else {
-      // This is an attempt to create a source which already exists.
+    // Construct a url for the new data source.
+    if (isset($_post['channel_id'])) {
+      $_post['url'] = YOUTUBE_CHANNEL_URL . '?channel_id=' . $_post['channel_id'];
+      $_post['type'] = YOUTUBE;
+      unset($_post['channel_id']);
     }
+
+    if (isset($_post['wp-site-url'])) {
+      $_post['url'] = $_post['wp-site-url'] . WP_JSON_URL;
+      $_post['type'] = POSTS;
+      unset($_post['wp-site-url']);
+    }
+
+    if (isset($_post['instagram-account'])) {
+      $_post['url'] = INSTAGRAM_URL . '/' . $_post['instagram-account'] . '/';
+      $_post['type'] = INSTAGRAM;
+      unset($_post['instagram-account']);
+    }
+
+
+    // Fore debugging purposes.
+    if (!DataStore::sourceExists($_post['name'])) {
+      DataStore::createSource($_post);
+    }
+
+    $importMethod = 'import' . $_post['type'];
+    self::$importMethod($_post);
+
   }
 
   /**
@@ -61,9 +60,9 @@ class SourceModel {
   }
 
   /**
-   * Get active records.
+   * Get active records. Was getting warnings if this wasn't static.
    */
-  public function get(array $_params) {
+  public static function get(array $_params) {
     return self::objectify(DataStore::get($_params));
   }
 
@@ -98,7 +97,7 @@ class SourceModel {
     $sources = array();
 
     foreach(DataStore::getSources() as $source) {
-      array_push($sources, self::loadSource($source)); 
+      array_push($sources, self::loadSource($source));
     }
 
     return $sources;
@@ -145,28 +144,16 @@ class SourceModel {
     return $source;
   }
 
-  public static function import() {
-    $sources = self::getSources();
-
-    foreach ($sources as $source) {
-      $_params = array(
-        'url' => $source->getUrl(),
-        'name' => $source->getName(),
-        'type' => $source->getType()
-      );
-
-      $importMethod = 'import' . $source->getType();
-      self::$importMethod($_params);
-    }
-  }
 
   public static function importInstagram(array $_params) {
     $source = self::loadSource($_params);
 
-    $fields = array("cid", "imgUrl", "thumbnailUrl", "title", "sourceName", "type");
+    $fields = array("cid", "imgUrl", "thumbnailUrl", "title");
     $html = file_get_contents($_params['url'], TRUE);
     $document = new DOMDocument();
     $document->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+    $entries = array();
 
     // This collects the photo information on the instagram profile page.
     preg_match_all("'window._sharedData = ({.*})'", $document->textContent, $matches);
@@ -176,7 +163,7 @@ class SourceModel {
     // Iterate through all the instagram user's shared data and take
     // what we need.
     foreach($jsonObject->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $img) {
-      $model = self::load(
+      array_push($entries,
         array_combine(
           $fields,
           array(
@@ -184,14 +171,12 @@ class SourceModel {
             $img->node->display_url,
             $img->node->thumbnail_src,
             $img->node->edge_media_to_caption->edges[0]->node->text,
-            $source->getName(),
-            $source->getType()
           )
         )
       );
-
-      $model->save();
     }
+
+    $source->save($entries);
   }
 
   /**
@@ -200,8 +185,9 @@ class SourceModel {
    */
   public static function importPosts(array $_params) {
     $source = self::loadSource($_params);
+    $entries = array();
 
-    $fields = array('dateTime', 'cid', 'imgUrl', 'title', 'sourceName', 'type');
+    $fields = array('dateTime', 'cid', 'imgUrl', 'title');
     $sourceContent = file_get_contents($_params['url'], TRUE);
     $data = json_decode($sourceContent, TRUE);
 
@@ -210,7 +196,7 @@ class SourceModel {
         // For each of the entries in the source data with an image
         // create an entry with the content id, a cleaned version of the
         // title, the date-time, and set active flag.
-        $model = self::load( 
+        array_push($entries,
           array_combine(
             $fields,
             array(
@@ -219,16 +205,14 @@ class SourceModel {
               $post['_embedded']['wp:featuredmedia'][0]['source_url'],
               // This is to handle an issue with wordpress titles using &#8217;
               // instead of an apostrophe.
-              str_replace("&#8217;", "'", $post['title']['rendered']),
-              $source->getName(),
-              $source->getType()
+              str_replace("&#8217;", "'", $post['title']['rendered'])
             )
           )
         );
       }
-
-      $model->save();
     }
+
+    $source->save($entries);
   }
 
   /**
@@ -236,27 +220,26 @@ class SourceModel {
    */
   public static function importYoutube(array $_params) {
     $source = self::loadSource($_params);
-    // There may be a better way to get the fields.
-    $fields = array("cid", "title", "sourceName", "type");
+    $fields = array("cid", "title");
     $xml = file_get_contents($_params['url'], TRUE);
     $content = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
 
+    $entries = array();
+
     foreach ($content->entry as $entry) {
-      $model = self::load(
+      array_push($entries,
         array_combine(
           $fields,
           array(
-          // Remove the yt:video: from the id.
-          str_replace("yt:video:", "", $entry->id),
-          (string) $entry->title,
-          $source->getName(),
-          $source->getType()
+            // Remove the yt:video: from the id.
+            str_replace("yt:video:", "", $entry->id),
+            (string) $entry->title
           )
         )
       );
-
-      $model->save();
     }
+
+    $source->save($entries);
   }
 
   /**
@@ -287,14 +270,16 @@ class SourceModel {
     return get_object_vars($this);
   }
 
-  private function save() {
-    DataStore::addSource($this->toArray());
+  private function save(array $_entries) {
+    DataStore::add($this->toArray(), $_entries);
   }
+
 
   /**
    * Check to see if a source exists for the given name.
+   * Needed to make this static to stop its whining. Might be a php 7 problem?
    */
-  public function sourceExists(string $_name) {
+  public static function sourceExists(string $_name) {
     return DataStore::sourceExists($_name);
   }
 
@@ -304,10 +289,8 @@ class SourceModel {
   public static function update(array $_post) {
     if (isset($_post['id'])) {
       self::updateRecord($_post);
-    } else if (isset($_post['name'])) {
-      self::updateSource($_post);
     } else {
-      self::import();
+      self::updateSource($_post);
     }
   }
 

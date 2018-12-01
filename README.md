@@ -22,20 +22,6 @@ The built-in PHP web-server should now be serving the project at http://localhos
 
 ### IMPORTANT NOTES
 
-### Override View Templates
-
-To override a default template replicate the path of the template in the Templates directory.  For example, to override the template with the path 
-
-```
-src/Templates/default/Source/index.php
-```
-
-create a file with the path
-
-```
-src/Templates/Source/index.php
-```
-
 
 ### Updating Your Branch With Updated Master Code
 

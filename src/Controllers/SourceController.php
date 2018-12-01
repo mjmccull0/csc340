@@ -1,9 +1,10 @@
 <?php
 namespace Controllers;
 use Views\View as View;
+use Util\Filter as Filter;
 
 /**
- * @update 12/03/18
+ * @update 11/15/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -20,7 +21,6 @@ class SourceController {
     $this->view = new View();
     $this->view->sources = $this->model::getSources();
     $this->view->baseUrl = '//' . $_SERVER['HTTP_HOST'] . '/';
-    $this->view->setLayout(DEFAULT_LAYOUT);
   }
 
 
@@ -40,21 +40,6 @@ class SourceController {
 
 
   /**
-   * This action lists the data sources.
-   */
-  public function index() {
-    if (isset($_GET['type'])) {
-      $data = $this->model::getSourcesByType($_GET['type']);
-    } else {
-      $data = $this->model::getSources();
-    }
-
-    $this->view->setData($data);
-    $this->view->setTemplate(SRC_INDEX);
-    $this->view->render();
-  }
-
-  /**
    * This action allows for deleting data source.
    */
   public function delete() {
@@ -64,6 +49,7 @@ class SourceController {
 
     $this->route::redirect($this->view->baseUrl);
   }
+
 
   /**
    * This action allows for editing a data source.
@@ -86,8 +72,23 @@ class SourceController {
     $this->view->render();
 
     // No name was given, this needs to be handled.
-
   }
+
+  /**
+   * This action lists the data sources.
+   */
+  public function index() {
+    if (isset($_GET['type'])) {
+      $data = $this->model::getSourcesByType($_GET['type']);
+    } else {
+      $data = $this->model::getSources();
+    }
+
+    $this->view->setData($data);
+    $this->view->setTemplate(SRC_INDEX);
+    $this->view->render();
+  }
+
 
   /**
   * Sets the view to either prompt user to search by a keyword
@@ -104,16 +105,7 @@ class SourceController {
     $this->view->render();
   }
 
-  public function view() {
 
-    if (isset($_GET['name'])) {
-      $this->view->source = $this->model::getByName($_GET['name']);
-    }
-
-    $this->view->setData($this->model::getAll($_GET));
-    $this->view->setTemplate(SRC_VIEW);
-    $this->view->render();
-  }
 
   public function show() {
     if (isset($_GET['name'])) {
@@ -125,6 +117,7 @@ class SourceController {
     $this->view->setLayout(SHOW_LAYOUT);
     $this->view->render();
   }
+
 
   /**
    * This action handles the changes to a data source.
@@ -140,8 +133,22 @@ class SourceController {
 
     // Redirect the user to the page they clicked on the edit link.
     $this->route::redirect($redirectUrl);
-
   }
+
+
+  public function view() {
+
+    if (isset($_GET['name'])) {
+      $this->view->source = $this->model::getByName($_GET['name']);
+    }
+
+    $this->view->setData($this->model::getAll($_GET));
+    $this->view->setTemplate(SRC_VIEW);
+    $this->view->render();
+  }
+
+
+
 
 }
 ?>

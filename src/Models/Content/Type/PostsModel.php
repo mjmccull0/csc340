@@ -3,37 +3,42 @@ namespace Models\Content\Type;
 use Models\Content\BaseModel;
 /**
  * A model for content imported using the Wordpress rest api.
- * @update 11/08/18
+ * @update 11/06/18
  * @author Michael McCulloch
  */
 class PostsModel extends BaseModel {
-  protected $dateTime;
-  protected $imgUrl;
-  protected $type;
+  private $dateTime;
+  private $imgUrl;
+  private $title;
 
 
   public function getImgUrl() {
     return $this->imgUrl;
   }
 
+
   public function getDateTime() {
     return $this->dateTime;
   }
 
-  public function getType() {
-    return $this->type;
+
+  public function getTitle() {
+    return $this->title;
   }
+
 
   public function setDateTime($_dateTime) {
     $this->dateTime = $_dateTime;
   }
 
+
   public function setImgUrl($_imgUrl) {
     $this->imgUrl = $_imgUrl;
   }
 
-  public function setType($_type) {
-    $this->type = $_type;
+
+  public function setTitle($_title) {
+    $this->title = $_title;
   }
 
 

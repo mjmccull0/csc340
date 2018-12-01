@@ -1,7 +1,7 @@
 <?php
 namespace Views;
 /**
- * @update 12/13/18
+ * @update 11/07/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -10,7 +10,7 @@ class View {
   private $data;
   private $headScripts = '';
   private $headStyles = '';
-  private $layout;
+  private $layout = DEFAULT_LAYOUT;
   private $template;
 
   public function addHeadScript($_scriptPath) {
@@ -65,23 +65,11 @@ EOT;
   }
 
   public function setLayout($_layoutPath) {
-    $this->layout = $this->getTemplatePath($_layoutPath);
+    $this->layout = $_layoutPath;
   }
 
-  public function setTemplate($_relativeTemplatePath) {
-    $this->template = $this->getTemplatePath($_relativeTemplatePath);
-  }
-
-  public function getTemplatePath($_relativeTemplatePath) {
-    if (true === ALLOW_TEMPLATE_OVERRIDE && file_exists(TEMPLATE_DIR . $_relativeTemplatePath)) {
-      return TEMPLATE_DIR . $_relativeTemplatePath;
-    } else if (file_exists(DEFAULT_TEMPLATE_DIR . $_relativeTemplatePath)) {
-      return DEFAULT_TEMPLATE_DIR . $_relativeTemplatePath;
-    } else {
-      // A template wasn't found.
-      echo "A template was not found at: " . TEMPLATE_DIR . $_relativeTemplatePath .
-        " or " . DEFAULT_TEMPLATE_DIR . $_relativeTemplatePath;
-    }
+  public function setTemplate($_templatePath) {
+    $this->template = $_templatePath;
   }
 
 }

@@ -4,35 +4,11 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 12/03/18
+ * @update 11/30/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 class TextDB implements Connector {
-
-  public static function addSource(array $_source) {
-    self::addToSourceFile($_source);
-    self::updateDB();
-  }
-
-  private static function addToSourceFile(array $_source) {
-
-    $sources = array();
-    // Get the current known sources.
-    if (file_exists(DATA_SOURCES)) {
-      $sources = self::readFile(DATA_SOURCES);
-    }
-
-    if (array_key_exists($_source['name'], $sources)) {
-      // Handle the name collision.
-    } else {
-      $_source['path'] = DATA_DIR . $_source['name'];
-      $sources[$_source['name']] =  $_source;
-    }
-
-    self::writeFile(DATA_SOURCES, $sources);
-
-  }
 
   public static function add(array $_source, array $_records) {
     if (file_exists($_source['path'])) {
@@ -47,7 +23,6 @@ class TextDB implements Connector {
           $records[$record['cid']] = $record;
         }
       }
-
     } else {
       $_source['path'] = DATA_DIR . $_source['name'];
 
@@ -59,20 +34,20 @@ class TextDB implements Connector {
       }
 
       $records = array_combine($cids, $_records);
-
     }
-
     // Save the records for this source.
     self::writeFile($_source['path'], $records);
 
     self::import();
   }
 
+
   public static function createSource(array $_post) {
     if (!self::sourceExists($_post['name'])) {
       self::addToSourceFile($_post);
     }
   }
+
 
   /**
    * Delete a data source and remove its records.
@@ -82,8 +57,7 @@ class TextDB implements Connector {
 
     // Delete the file containing the sources' records from
     // the file system.
-    self::deleteFile($sources[$_sourceName]['path']);
-
+    unlink($sources[$_sourceName]['path']);
 
     // Remove the source from the source file.
     unset($sources[$_sourceName]);
@@ -96,17 +70,9 @@ class TextDB implements Connector {
         unset($records[$key]);
       }
     }
-
     self::saveRecords($records);
-
   }
 
-  /**
-   * Delete the file from the file system.
-   */
-  private function deleteFile(string $_filename) {
-    unlink($_filename);
-  }
 
   /**
    * Return active records for the given parameters.
@@ -123,29 +89,6 @@ class TextDB implements Connector {
     }
   }
 
-  /**
-   * Return active records.
-   */
-  private static function getActive(array $_records) {
-    $records = array();
-
-    foreach ($_records as $record) {
-      if ($record['active']) {
-        array_push($records, $record);
-      }
-    }
-
-    return $records;
-  }
-
-  /**
-   * Read serialized data from the filesytem.
-   */
-  private static function readFile(string $_filename) {
-    if (file_exists($_filename)) {
-      return unserialize(file_get_contents($_filename));
-    }
-  }
 
   /**
    * Get both inactive and active records.
@@ -174,15 +117,6 @@ class TextDB implements Connector {
     return $records[$_id];
   }
 
-  private static function getRecords() {
-    if (file_exists(DB_FILE)) {
-      return self::readFile(DB_FILE);
-    } else {
-      self::import();
-      return self::getRecords();
-    }
-  }
-
 
   public static function getRecordsByName(string $_name) {
     $source = self::getSources()[$_name];
@@ -195,9 +129,9 @@ class TextDB implements Connector {
         array_push($sourceRecords, $record);
       }
     }
-
     return $sourceRecords;
   }
+
 
   public static function getRecordsByType(string $_type) {
 
@@ -209,13 +143,14 @@ class TextDB implements Connector {
         array_push($records, $record);
       }
     }
-
     return $records;
   }
+
 
   public static function getSourceByName(string $_name) {
     return self::getSources()[$_name];
   }
+
 
   public static function getSourceByType(string $_type) {
     $sources = array();
@@ -225,7 +160,6 @@ class TextDB implements Connector {
         array_push($sources, $source);
       }
     }
-
     return $sources;
   }
 
@@ -239,11 +173,6 @@ class TextDB implements Connector {
     }
   }
 
-  public static function sourceExists(string $_name) {
-    return isset(self::getSources()[$_name]);
-  }
-
-
 
   public static function import() {
     $count = 0;
@@ -252,58 +181,38 @@ class TextDB implements Connector {
       $items = self::readFile($source['path']);
 
       foreach ($items as $item) {
-        if (is_null($item['active'])) {
-          $item['active'] = true;
-        }
+        $item['active'] = true;
         $item['id'] = ++$count;
         $item['name'] = $source['name'];
         $item['type'] = $source['type'];
         $records[$count] = $item;
       }
     }
-
     self::saveRecords($records);
   }
 
 
+  public static function sourceExists(string $_name) {
+    return isset(self::getSources()[$_name]);
+  }
 
-  public static function saveRecord(array $_record) {
-    if (self::sourceExists($_record['sourceName'])) {
-      $source = self::getSourceByName($_record['sourceName']);
-      $records = self::readFile($source['path']);
-      $records[$_record['cid']] = $_record;
-      self::writeFile($source['path'], $records);
-    } else {
-      // This is an attempt to save a record without a source.
+
+  public static function updateRecord(array $_post) {
+    if (!isset($_post['active'])) {
+      $_post['active'] = false;
     }
+
+    $record = self::getById($_post['id']);
+    foreach ($_post as $key => $value) {
+      $record[$key] = $value;
+    }
+
+    $records = self::getRecords();
+    $records[$record['id']] = $record;
+
+    self::saveRecords($records);
   }
 
-  private static function saveRecords(array $_records) {
-    self::writeFile(DB_FILE, $_records);
-  }
-
-  /**
-   * Save a source.
-   */
-  private static function saveSource(array $_source) {
-    $sources = self::getSources();
-    $sources[$_source['name']] = $_source;
-    self::writeFile(DATA_SOURCES, $sources);
-  }
-
-  /**
-   * Searches through data to find sources that match user's query.
-   */
-  private static function search(string $_query) {
-    $results = array();
-    $list = self::getRecords();
-    foreach ($list as $record) {
-        if (preg_match("/\b$_query\b/i", $record["title"], $match)) {
-          array_push($results, $record);
-        }
-     }
-     return $results;
-  }
 
   /**
    * Process the form submission and update the source.
@@ -323,37 +232,92 @@ class TextDB implements Connector {
           $source[$key] = $value;
         }
       }
-
       self::saveSource($source);
     }
   }
 
+
   /**
-   * Deletes the DB file which will result in it being rebuilt.
+   * Save a source.
    */
-  public static function updateDB() {
-    self::deleteFile(DB_FILE);
+  private static function saveSource($_source) {
+    $sources = self::getSources();
+    $sources[$_source['name']] = $_source;
+    self::writeFile(DATA_SOURCES, $sources);
   }
 
-  public static function updateRecord(array $_post) {
-    if (!isset($_post['active'])) {
-      $_post['active'] = false;
+
+  private static function addToSourceFile(array $_source) {
+
+    $sources = array();
+    // Get the current known sources.
+    if (file_exists(DATA_SOURCES)) {
+      $sources = self::readFile(DATA_SOURCES);
     }
 
-    $record = self::getById($_post['id']);
-    foreach ($_post as $key => $value) {
-      $record[$key] = $value;
+    if (array_key_exists($_source['name'], $sources)) {
+      // Handle the name collision.
+    } else {
+      $_source['path'] = DATA_DIR . $_source['name'];
+      $sources[$_source['name']] =  $_source;
     }
 
-    // Updates the record in the source's data file.
-    self::saveRecord($record);
-
-    $records = self::getRecords();
-    $records[$record['id']] = $record;
-
-    // Updates the record in the db file
-    self::saveRecords($records);
+    self::writeFile(DATA_SOURCES, $sources);
   }
+
+
+  /**
+   * Return active records.
+   */
+  private static function getActive(array $_records) {
+    $records = array();
+
+    foreach ($_records as $record) {
+      if ($record['active']) {
+        array_push($records, $record);
+      }
+    }
+    return $records;
+  }
+
+
+  private static function getRecords() {
+    if (file_exists(DB_FILE)) {
+      return self::readFile(DB_FILE);
+    } else {
+      self::import();
+      return self::getRecords();
+    }
+  }
+
+
+  /**
+   * Read serialized data from the filesytem.
+   */
+  private static function readFile(string $_filename) {
+    return unserialize(file_get_contents($_filename));
+  }
+
+
+  private static function saveRecords(array $_records) {
+    self::writeFile(DB_FILE, $_records);
+  }
+
+
+  /**
+   * Searches through data to find sources that match user's query.
+   */
+  private static function search(string $_query) {
+    $results = array();
+    $list = self::getRecords();
+    foreach ($list as $record) {
+        if (preg_match("/\b$_query\b/i", $record["title"], $match)) {
+          array_push($results, $record);
+        }
+     }
+     return $results;
+  }
+
 
   /**
    * Writes serialized data to the filesystem.
