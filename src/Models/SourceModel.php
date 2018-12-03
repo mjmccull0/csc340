@@ -19,6 +19,11 @@ class SourceModel {
   /**
    * Determines the type of source to be created and
    * calls the appropriate import method.
+   *
+   * Called from Souce Controller when adding in a new source.
+   *
+   * @param array $_post is the post form with information on how to create
+   * a new source for the database
    */
   public static function create(array $_post) {
 
@@ -55,6 +60,11 @@ class SourceModel {
 
   /**
    * Delete a data source.
+   *
+   * Called from Source Controller when deleting a data source and its
+   * associated records.
+   *
+   * @param string $_name is the name of the source to be deleted.
    */
   public static function delete(string $_name) {
     DataStore::delete($_name);
@@ -63,6 +73,12 @@ class SourceModel {
 
   /**
    * Get active records. Was getting warnings if this wasn't static.
+   *
+   *
+   *
+   * @param array $_params is the array requesting what records we want.
+   * Could be by name, or by type.
+   * @return returns an array of the retrieved records.
    */
   public static function get(array $_params) {
     return self::objectify(DataStore::get($_params));
@@ -71,6 +87,13 @@ class SourceModel {
 
   /**
    * Get both active and inactive records.
+   *
+   * Called from SourceController and retrieves all records currently in
+   * the database.
+   *
+   * @param array $_params contains how we want to get the records. Could be
+   * by type, or by name.
+   * @return returns an array of all recrods.
    */
   public static function getAll(array $_params) {
     return self::objectify(DataStore::getAll($_params));
@@ -79,6 +102,12 @@ class SourceModel {
 
   /**
    * Get a record by id.
+   *
+   * Called from Source Controller to retrieve a specific record. Used in
+   * editing.
+   *
+   * @param string $_id is the id used in the database to identify records.
+   * @return returns the requested recrod.
    */
   public static function getById(string $_id) {
     return self::load(DataStore::getById($_id));
@@ -87,6 +116,10 @@ class SourceModel {
 
   /**
    * Gets the content ids from an array of data objects.
+   *
+   * Used in obtaining multiple cids.
+   *
+   * @param array $_records contains the data objects to get the cids from.
    */
   public function getCids(array $_records) {
     $cids = array();
@@ -99,7 +132,12 @@ class SourceModel {
   }
 
   /**
-   * Retunrs instances of the source model.
+   * Returns instances of the source model.
+   *
+   * Called from source controller when initializing  and as its default action.
+   *
+   *
+   * @return returns an array of sources from the database.
    */
   public static function getSources() {
     $sources = array();
@@ -115,6 +153,10 @@ class SourceModel {
   /**
    * Return instances of the source model given the type
    * of source.
+   *
+   * @param string $_type specifies the type of source requested. Right now
+   * we have Instagram, Posts, and YouTube.
+   * @return returns all found soures of the specified type.
    */
   public static function getSourcesByType(string $_type) {
     $sources = array();
@@ -127,6 +169,11 @@ class SourceModel {
 
   /**
    * Create an instance of the source model.
+   *
+   * Used in importing and getting the sources in our database.
+   *
+   * @param array $_params
+   * @return returns an array of all found sources held in the database
    */
   public static function loadSource(array $_params) {
     $source = new self();
@@ -144,6 +191,11 @@ class SourceModel {
 
   /**
    * Return a source given the source name.
+   *
+   * Called from Source Controller and used in editing and viewing the content.
+   *
+   * @param string $_name specifies the name of item requested.
+   * @return returns the matched source from the database.
    */
   public static function getByName(string $_name) {
     $source = new self();
@@ -157,7 +209,7 @@ class SourceModel {
 
 
   /**
-   *
+   * Imports the Instagram Records.
    */
   public static function importInstagram(array $_params) {
     $source = self::loadSource($_params);
@@ -261,6 +313,11 @@ class SourceModel {
 
   /**
    *  Create an array of record objects.
+   *
+   * Called from the Source Model to make an array of records to be
+   * given back to the controller and used as data for the view.
+   *
+   * @param array $_records contains the records to be loaded and objectified.
    */
   private static function objectify(array $_records) {
     $records = array();
@@ -276,6 +333,12 @@ class SourceModel {
   /**
    * Check to see if a source exists for the given name.
    * Needed to make this static to stop its whining. Might be a php 7 problem?
+   *
+   *
+   *
+   * @param string $_name is the name of the source to check.
+   * @return calls the database to see if that source exists and will return a
+   * boolean value.
    */
   public static function sourceExists(string $_name) {
     return DataStore::sourceExists($_name);
@@ -284,6 +347,11 @@ class SourceModel {
 
   /**
    * Determines what to do with form post requests.
+   *
+   *
+   *
+   * @param array $_post contains the post id to be updated as well as inforamation
+   * from form to update the record with.
    */
   public static function update(array $_post) {
     if (isset($_post['id'])) {
@@ -296,6 +364,11 @@ class SourceModel {
 
   /**
    * Update a record.
+   *
+   *
+   *
+   * @param array $_post contains the information associated with the record
+   * to be updated as well as the information to update it with.
    */
   public function updateRecord(array $_post) {
     DataStore::updateRecord($_post);
@@ -304,6 +377,11 @@ class SourceModel {
 
   /**
    * Update a source.
+   *
+   *
+   *
+   * @param array $_post contains the information associated with the source
+   * to be updated as well as the information to update it with.
    */
   public function updateSource(array $_post) {
     DataStore::updateSource($_post);
@@ -312,6 +390,10 @@ class SourceModel {
 
   /**
    * Load an instance of one of the record types.
+   *
+   *
+   *
+   * @param array $_record contains the type of record to be loaded.
    */
   private static function load(array $_record) {
     $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
@@ -321,6 +403,10 @@ class SourceModel {
 
   /**
    * Convert an instance of this model to an array.
+   *
+   * Called from inside the model.
+   *
+   *
    */
   private function toArray() {
     return get_object_vars($this);
@@ -329,6 +415,10 @@ class SourceModel {
 
   /**
    * Saves any changes to an entrie.
+   *
+   *
+   *
+   * @param array $_entries contains the entries to be saved to the database.
    */
   private function save(array $_entries) {
     DataStore::add($this->toArray(), $_entries);
