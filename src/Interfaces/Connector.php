@@ -1,7 +1,7 @@
 <?php
 namespace Interfaces;
 /**
- * @update 11/15/18
+ * @update 12/02/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -9,7 +9,7 @@ namespace Interfaces;
 Interface Connector {
 
   /**
-   *
+   * Add an entry of an existing type of data.
    */
   public static function add(array $_source, array $_records);
 
@@ -44,15 +44,27 @@ Interface Connector {
   public static function getById(int $_id);
 
 
+  /**
+   * Get a record or records by their name/
+   */
   public static function getRecordsByName(string $_name);
 
 
+  /**
+   * Get a record or records by their type.
+   */
   public static function getRecordsByType(string $_type);
 
 
+  /**
+   * Get asource by its name.
+   */
   public static function getSourceByName(string $_name);
 
 
+  /**
+   * Get a source by its type.
+   */
   public static function getSourceByType(string $_type);
 
 
@@ -70,12 +82,21 @@ Interface Connector {
   public static function import();
 
 
+  /**
+   * Checks if a given source is currenlty in the database.
+   */
   public static function sourceExists(string $_name);
 
 
+  /**
+   * Makes requested changes to a record to be saved.
+   */
   public static function updateRecord(array $_post);
 
 
+  /**
+   * Makes requested changes to a source to be saved.
+   */
   public static function updateSource(array $_post);
 }
 ?>

@@ -3,7 +3,7 @@ namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
 /**
- * @update 11/08/18
+ * @update 12/02/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -52,12 +52,14 @@ class SourceModel {
 
   }
 
+
   /**
    * Delete a data source.
    */
   public static function delete(string $_name) {
     DataStore::delete($_name);
   }
+
 
   /**
    * Get active records. Was getting warnings if this wasn't static.
@@ -66,12 +68,14 @@ class SourceModel {
     return self::objectify(DataStore::get($_params));
   }
 
+
   /**
    * Get both active and inactive records.
    */
   public static function getAll(array $_params) {
     return self::objectify(DataStore::getAll($_params));
   }
+
 
   /**
    * Get a record by id.
@@ -80,8 +84,9 @@ class SourceModel {
     return self::load(DataStore::getById($_id));
   }
 
+
   /**
-   * Get the content ids from an array of data objects.
+   * Gets the content ids from an array of data objects.
    */
   public function getCids(array $_records) {
     $cids = array();
@@ -93,6 +98,9 @@ class SourceModel {
     return $cids;
   }
 
+  /**
+   * Retunrs instances of the source model.
+   */
   public static function getSources() {
     $sources = array();
 
@@ -102,6 +110,7 @@ class SourceModel {
 
     return $sources;
   }
+
 
   /**
    * Return instances of the source model given the type
@@ -114,6 +123,7 @@ class SourceModel {
     }
     return $sources;
   }
+
 
   /**
    * Create an instance of the source model.
@@ -131,6 +141,7 @@ class SourceModel {
     return $source;
   }
 
+
   /**
    * Return a source given the source name.
    */
@@ -145,6 +156,9 @@ class SourceModel {
   }
 
 
+  /**
+   *
+   */
   public static function importInstagram(array $_params) {
     $source = self::loadSource($_params);
 
@@ -178,6 +192,7 @@ class SourceModel {
 
     $source->save($entries);
   }
+
 
   /**
    * Import records from a wordpress site using the
@@ -215,6 +230,7 @@ class SourceModel {
     $source->save($entries);
   }
 
+
   /**
    * Import youtube video data.
    */
@@ -242,6 +258,7 @@ class SourceModel {
     $source->save($entries);
   }
 
+
   /**
    *  Create an array of record objects.
    */
@@ -255,25 +272,6 @@ class SourceModel {
     return $records;
   }
 
-  /**
-   * Load an instance of one of the record types.
-   */
-  private static function load(array $_record) {
-    $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
-    return $model::load($_record);
-  }
-
-  /**
-   * Convert an instance of this model to an array.
-   */
-  private function toArray() {
-    return get_object_vars($this);
-  }
-
-  private function save(array $_entries) {
-    DataStore::add($this->toArray(), $_entries);
-  }
-
 
   /**
    * Check to see if a source exists for the given name.
@@ -282,6 +280,7 @@ class SourceModel {
   public static function sourceExists(string $_name) {
     return DataStore::sourceExists($_name);
   }
+
 
   /**
    * Determines what to do with form post requests.
@@ -294,6 +293,15 @@ class SourceModel {
     }
   }
 
+
+  /**
+   * Update a record.
+   */
+  public function updateRecord(array $_post) {
+    DataStore::updateRecord($_post);
+  }
+
+
   /**
    * Update a source.
    */
@@ -301,11 +309,29 @@ class SourceModel {
     DataStore::updateSource($_post);
   }
 
+
   /**
-   * Update a record.
+   * Load an instance of one of the record types.
    */
-  public function updateRecord(array $_post) {
-    DataStore::updateRecord($_post);
+  private static function load(array $_record) {
+    $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
+    return $model::load($_record);
+  }
+
+
+  /**
+   * Convert an instance of this model to an array.
+   */
+  private function toArray() {
+    return get_object_vars($this);
+  }
+
+
+  /**
+   * Saves any changes to an entrie.
+   */
+  private function save(array $_entries) {
+    DataStore::add($this->toArray(), $_entries);
   }
 
   /**
