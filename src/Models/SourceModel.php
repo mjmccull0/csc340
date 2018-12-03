@@ -3,8 +3,10 @@ namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
 /**
- * @update 11/08/18
+ * @update 12/03/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
+ * @author Mikael Williams
  */
 
 class SourceModel {
@@ -41,6 +43,11 @@ class SourceModel {
         $_post['type'] = INSTAGRAM;
         unset($_post['instagram-account']);
       }
+
+	  if (isset($_post['twitter-account'])) {
+		$_post['url'] = TWITTER_URL . '/' . $_post['twitter-account'] . '/'; 
+		$_post['type'] = Twitter;
+	  }
 
       $source = self::loadSource($_post);
       $source->save();
@@ -229,6 +236,15 @@ class SourceModel {
 
       $model->save();
     }
+  }
+
+
+  /**
+  * This will import the twitter data for a given twitter account.
+  * @params array of fields that are used by the database that define the source.
+  */
+  public static function importTwitter(array $_params) {
+      throw new Exception("Not yet implemented");
   }
 
   /**

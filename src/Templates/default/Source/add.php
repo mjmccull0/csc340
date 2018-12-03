@@ -1,6 +1,6 @@
 <!-- 
 View for Source Controller add action.
-@update 12/13/18
+@update 12/03/18
 @author Michael McCulloch
 -->
 <h2><?php echo SRC_ADD_HEADER ?></h2>
