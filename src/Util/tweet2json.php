@@ -359,11 +359,17 @@ function scrape_spit ($user_target, $search, $find_cards, $itr, $realtime = FALS
 	$target = urlencode($dirty_target);
 //initial scrape
 	$onebox_source = file_get_contents("http://twitter.com/".$search.$target);
-	file_put_contents("scrapedata.html", $onebox_source);
 	//Needed to include this so it will work with backend
+	//Option 1
+	file_put_contents("scrapedata.html", $onebox_source);
 	$needed_data = file_get_contents("scrapedata.html");
 	$source = kill_onebox($needed_data);
 	unlink("scrapedata.html");
+	
+	//Option 2
+	/**file_put_contents("scrapedata" . $target . ".html", $onebox_source);
+	$needed_data = file_get_contents("scrapedata" . $target . ".html");
+	$source = kill_onebox($needed_data);**/
 //re-organizing the data with functions
 	$avatars = tweet_avatar($source, $itr);
 	$tweets = tweet_content($source, $itr);
