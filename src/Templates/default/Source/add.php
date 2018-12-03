@@ -28,17 +28,17 @@ View for Source Controller add action.
   </div>
   <div id="Posts">
     Site Url:<br>
-    <input type="text" name="wp-site-url">
+    <input type="text" name="wp-site-url" required = "required">
     <br>
   </div>
   <div id="Instagram">
     Instagram Account:<br>
-    <input type="text" name="instagram-account">
+    <input type="text" name="instagram-account" required = "required">
     <br>
   </div>
   <div id="Twitter">
     Twitter Account:<br>
-    <input type="text" name="twitter-account">
+    <input type="text" name="twitter-account" required = "required">
     <br>
   </div>
 </div>
