@@ -62,4 +62,8 @@ define('YOUTUBE_SHOW_URL', 'https://www.youtube.com/embed/0Cxt8DvyG2Q?autoplay=1
 define('WP_JSON_URL', '/wp-json/wp/v2/posts?_embed');
 define('INSTAGRAM_URL', 'https://www.instagram.com');
 
+define('Twitter', 'Twitter');
+define('TWITTER_URL', 'https://www.twitter.com');
+define('TWITTER_EDIT_HEADER', "Edit Twitter: ");
+
 ?>

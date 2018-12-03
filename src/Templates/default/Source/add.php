@@ -36,6 +36,11 @@ View for Source Controller add action.
     <input type="text" name="instagram-account">
     <br>
   </div>
+  <div id="Twitter">
+    Twitter Account:<br>
+    <input type="text" name="twitter-account">
+    <br>
+  </div>
 </div>
 
 <script>

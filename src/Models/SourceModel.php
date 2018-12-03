@@ -2,17 +2,23 @@
 namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
+use Util\Route as Route;
+//this should always work but is required for importTwitter
+include_once(SRC_DIR . DS . "Util/tweet2json.php");
 /**
- * @update 11/08/18
+ * @update 12/3/18
  * @author Michael McCulloch
+ * @author Mikael Williams
  */
-
+ 
 class SourceModel {
 
   private $name;
   private $path;
   private $type;
   private $url;
+  
+  private $twitterHandle;
 
 
   /**
@@ -41,6 +47,12 @@ class SourceModel {
         $_post['type'] = INSTAGRAM;
         unset($_post['instagram-account']);
       }
+	  if(isset($_post['twitter-account'])) {
+		$twitterHandle = $_post['twitter-account'];
+		$_post['url'] = TWITTER_URL . '/' . $_post['twitter-account'] . '/'; 
+		$_post['type'] = Twitter;
+		unset($_post['twitter-account']);
+	  }
 
       $source = self::loadSource($_post);
       $source->save();
@@ -50,6 +62,7 @@ class SourceModel {
 
     } else {
       // This is an attempt to create a source which already exists.
+	  exit();
     }
   }
 
@@ -230,7 +243,41 @@ class SourceModel {
       $model->save();
     }
   }
-
+  /**
+  * This imports the twitter data using an external twitter scraper
+  * @params array of fields that are used by the database that define the source
+  * @author Mikael Williams
+  * @update 12/3/2018
+  **/
+public static function importTwitter(array $_params) {
+	//gets source data
+	$source = self::loadSource($_params);
+	
+	//This calls user_tweets function located in scraper that takes in a twitter username and amount of tweets to grab.
+	$jsonObject = user_tweets($twitterHandle, 20);
+	//this decodes the json object and stores it in class object variable
+	$tData = json_decode($jsonObject);
+	//array of fields that will be used as keys for database
+	$fields = array("cid", "imgUrl", "title", "sourceName", "type");
+	//this iterates through the class object and grabs whats needed.
+	foreach($tData->tweets as $value) {
+		//this array explode cleans up the given text data from scraper.
+		$tText = explode(">", $value->text);
+		$model = self::load(
+		array_combine(
+			$fields,
+			array(
+			$value->date,
+			$value->img,
+			$tText[1],
+			$source->getName(),
+			$source->getType()
+		)
+		)
+	);
+	$model->save();
+	}
+}
   /**
    * Import youtube video data.
    */
@@ -344,6 +391,10 @@ class SourceModel {
   public function getType() {
     return $this->type;
   }
+  
+  public function getTwitterHandle() {
+	  return $this->twitterHandle;
+  }
 
   public function getUrl() {
     return $this->url;
@@ -364,5 +415,7 @@ class SourceModel {
   public function setUrl(string $_url) {
     $this->url = $_url;
   }
+
+
 
 }
