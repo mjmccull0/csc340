@@ -30,6 +30,7 @@ define('VIEW', 'view');
 define('SHOW', 'show');
 define('SOURCE', 'Source');
 define('SOURCES', 'Sources');
+define('SEARCH', 'search');
 define('UPDATE', 'update');
 define('LANG', 'en');
 define('CHARSET', 'utf-8');
@@ -44,6 +45,8 @@ define('SRC_SHOW', SOURCE . DS . "show.php");
 define('SRC_ADD_TEMPLATE', SOURCE . DS . "add.php");
 define('SRC_ADD_HEADER', "Add Source");
 
+define('SRC_SEARCH_TEMPLATE', SOURCE . DS . "search.php");
+define('FILTER', SOURCE . DS . "filter.php");
 
 define('SRC_EDIT_HEADER', "Edit Source: ");
 

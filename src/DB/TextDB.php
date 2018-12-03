@@ -4,14 +4,14 @@ namespace DB;
 use Interfaces\Connector as Connector;
 
 /**
- * @update 11/08/18
+ * @update 12/03/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
 class TextDB implements Connector {
 
   public static function addSource(array $_source) {
-    self::addToSourceFile($_source);  
+    self::addToSourceFile($_source);
     self::updateDB();
   }
 
@@ -158,6 +158,11 @@ class TextDB implements Connector {
     if (isset($_params['name'])) {
       return self::getRecordsByName($_params['name']);
     }
+
+    if (isset($_params['query'])) {
+      return self::search($_params['query']);
+
+    }
   }
 
 
@@ -190,7 +195,7 @@ class TextDB implements Connector {
         array_push($sourceRecords, $record);
       }
     }
-      
+
     return $sourceRecords;
   }
 
@@ -284,6 +289,20 @@ class TextDB implements Connector {
     $sources = self::getSources();
     $sources[$_source['name']] = $_source;
     self::writeFile(DATA_SOURCES, $sources);
+  }
+
+  /**
+   * Searches through data to find sources that match user's query.
+   */
+  private static function search(string $_query) {
+    $results = array();
+    $list = self::getRecords();
+    foreach ($list as $record) {
+        if (preg_match("/\b$_query\b/i", $record["title"], $match)) {
+          array_push($results, $record);
+        }
+     }
+     return $results;
   }
 
   /**

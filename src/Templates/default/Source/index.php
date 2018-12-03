@@ -1,10 +1,12 @@
 <!-- 
 View for Source Controller index action.
-@update 11/05/18
+@update 12/03/18
 @author Michael McCulloch
+@author Jacob Oleson
 -->
 <div class="header-menu">
   <a href="<?php echo $this->baseUrl . ADD; ?>"><?php echo ucfirst(ADD); ?></a>
+  <a href="<?php echo $this->baseUrl . SEARCH; ?>"><?php echo ucfirst(SEARCH); ?></a>
   <a href="<?php echo $this->baseUrl . UPDATE; ?>"><?php echo ucfirst(UPDATE); ?></a>
 </div>
 <ul class="list-view">
