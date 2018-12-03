@@ -33,7 +33,7 @@ View for Source Controller add action.
   </div>
   <div id="Instagram">
     Instagram Account:<br>
-    <input type="text" name="instagram-account" required = "required" >
+    <input type="text" name="instagram-account" required = "required">
     <br>
   </div>
   <div id="Twitter">
