@@ -1,7 +1,5 @@
 <?php
 
-use Models\SourceModel as SourceModel;
-
 /*
 tweet2json — the Twitter scrape API
 by Cosmo Catalano - http://cosmocatalano.com
