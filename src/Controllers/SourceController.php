@@ -4,7 +4,7 @@ use Views\View as View;
 use Util\Filter as Filter;
 
 /**
- * @update 11/15/18
+ * @update 12/01/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -13,6 +13,10 @@ class SourceController {
   protected $view;
   protected $model;
 
+  /**
+   * Constructor method for the controller to set all relevant information.
+   *
+   */
   public function __construct() {
     $this->model = '\Models\SourceModel';
     $this->route = '\Util\Route';
@@ -35,12 +39,11 @@ class SourceController {
 
     $this->view->setTemplate(SRC_ADD_TEMPLATE);
     $this->view->render();
-
   }
 
 
   /**
-   * This action allows for deleting data source.
+   * This action allows for deleting a data source.
    */
   public function delete() {
     if (!empty($_GET["name"])) {
