@@ -3,8 +3,9 @@ namespace Controllers;
 use Views\View as View;
 
 /**
- * @update 12/13/18
+ * @update 12/03/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 class SourceController {
@@ -86,6 +87,21 @@ class SourceController {
 
     // No name was given, this needs to be handled.
 
+  }
+
+  /**
+  * Sets the view to either prompt user to search by a keyword
+  * or display the filtered data.
+  */
+  public function search() {
+    if (!empty($_GET)) {
+      $this->view->setData($this->model::getAll($_GET));
+      $this->view->setTemplate(FILTER);
+    } else {
+      $this->view->setTemplate(SRC_SEARCH_TEMPLATE);
+    }
+
+    $this->view->render();
   }
 
   public function view() {
