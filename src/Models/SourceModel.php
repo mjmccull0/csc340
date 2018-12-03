@@ -53,6 +53,7 @@ class SourceModel {
       $_post['type'] = Twitter;
     }
 
+
     $source = self::loadSource($_post);
     $source->save();
 
@@ -290,6 +291,15 @@ class SourceModel {
     }
 
     $source->save($entries);
+  }
+
+
+  /**
+  * This will import the twitter data for a given twitter account.
+  * @params array of fields that are used by the database that define the source.
+  */
+  public static function importTwitter(array $_params) {
+      throw new Exception("Not yet implemented");
   }
 
 
