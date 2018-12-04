@@ -463,7 +463,9 @@ class TextDB implements Connector {
    * @return will return the specified file we want.
    */
   private static function readFile(string $_filename) {
-    return unserialize(file_get_contents($_filename));
+    if (file_exists($_filename)) {
+      return unserialize(file_get_contents($_filename));
+    }
   }
 
 
