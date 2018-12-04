@@ -311,6 +311,15 @@ class SourceModel {
       throw new Exception("Not yet implemented");
   }
 
+
+  /**
+  * This will import the twitter data for a given twitter account.
+  * @params array of fields that are used by the database that define the source.
+  */
+  public static function importTwitter(array $_params) {
+      throw new Exception("Not yet implemented");
+  }
+
   /**
    * Import youtube video data
    *
