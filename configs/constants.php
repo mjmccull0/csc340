@@ -47,6 +47,7 @@ define('SRC_ADD_HEADER', "Add Source");
 
 define('SRC_SEARCH_TEMPLATE', SOURCE . DS . "search.php");
 define('FILTER', SOURCE . DS . "filter.php");
+define('SEARCH_RESULTS_HEADER', "Search Results:");
 
 define('SRC_EDIT_HEADER', "Edit Source: ");
 

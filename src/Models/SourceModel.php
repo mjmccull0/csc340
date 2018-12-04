@@ -320,6 +320,8 @@ class SourceModel {
   public static function update(array $_post) {
     if (isset($_post['id'])) {
       self::updateRecord($_post);
+    } else if (isset($_post['ids'])) {
+      self::updateRecords($_post);
     } else if (isset($_post['name'])) {
       self::updateSource($_post);
     } else {
@@ -338,7 +340,31 @@ class SourceModel {
    * Update a record.
    */
   public function updateRecord(array $_post) {
-    DataStore::updateRecord($_post);
+    $record = self::getById($_post['id']);
+
+    foreach ($_post as $key => $value) {
+      $setMethod = 'set'. ucfirst($key);
+      if (method_exists($record, $setMethod)) {
+        $record->$setMethod($value);
+      }
+    }
+
+    $record->update();
+  }
+
+  private function updateRecords(array $_post) {
+    foreach ($_post['ids'] as $id => $value) {
+        $record = self::getById($id);
+        if ($value == "off") {
+            $record->setActive(false);
+        }
+
+        if ($value == "on") {
+            $record->setActive(true);
+        }
+
+        $record->update();
+    }
   }
 
   /**

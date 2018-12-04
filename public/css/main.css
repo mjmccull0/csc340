@@ -160,6 +160,10 @@ video {
   -webkit-text-stroke-color: black;
 }
 
+.flex {
+    display: flex;
+}
+
 @media (max-width: 900px) {
   .edit-container {
     flex-direction: column;
