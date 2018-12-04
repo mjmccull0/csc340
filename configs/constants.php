@@ -47,6 +47,7 @@ define('SRC_ADD_HEADER', "Add Source");
 
 define('SRC_SEARCH_TEMPLATE', SOURCE . DS . "search.php");
 define('FILTER', SOURCE . DS . "filter.php");
+define('SEARCH_RESULTS_HEADER', "Search Results:");
 
 define('SRC_EDIT_HEADER', "Edit Source: ");
 
@@ -61,6 +62,10 @@ define('INSTAGRAM_EDIT_HEADER', "Edit Instagram: ");
 
 define('YOUTUBE_CHANNEL_URL', 'https://www.youtube.com/feeds/videos.xml');
 define('YOUTUBE_SHOW_URL', 'https://www.youtube.com/embed/0Cxt8DvyG2Q?autoplay=1&mute=1&autohide=0&loop=1&fs=1&rel=0&hd=0&wmode=window&enablejsapi=1&playlist=');
+
+define('Twitter', 'Twitter');
+define('TWITTER_URL', 'https://www.twitter.com');
+define('TWITTER_EDIT_HEADER', "Edit Twitter: ");
 
 define('WP_JSON_URL', '/wp-json/wp/v2/posts?_embed');
 define('INSTAGRAM_URL', 'https://www.instagram.com');

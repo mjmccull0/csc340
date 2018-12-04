@@ -32,6 +32,10 @@ class BaseModel {
       DataStore::saveRecord($this->toArray());
   }
 
+  public function update() {
+      DataStore::updateRecord($this->toArray());
+  }
+
   public function toArray() {
     return get_object_vars($this); 
   }

@@ -138,6 +138,10 @@ class SourceController {
     $this->model::update($_POST);
     $redirectUrl = $this->view->baseUrl;
 
+    if (isset($_GET['redirect'])) {
+        $redirectUrl = $_GET['redirect'];
+    }
+
     if (isset($_GET['name'])) {
       $redirectUrl = $this->view->baseUrl . '/view?name=' . $_GET['name'];
     }
