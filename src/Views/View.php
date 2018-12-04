@@ -1,7 +1,7 @@
 <?php
 namespace Views;
 /**
- * @update 12/13/18
+ * @update 12/04/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  */
@@ -26,9 +26,11 @@ EOT;
 EOT;
   }
 
+
   public function getText($_text) {
     return htmlspecialchars($_text);
   }
+
 
   public function render() {
 
@@ -56,21 +58,26 @@ EOT;
     echo $output;
   }
 
+
   public function getData() {
     return $this->data;
   }
+
 
   public function setData($_data) {
     $this->data = $_data;
   }
 
+
   public function setLayout($_layoutPath) {
     $this->layout = $this->getTemplatePath($_layoutPath);
   }
 
+
   public function setTemplate($_relativeTemplatePath) {
     $this->template = $this->getTemplatePath($_relativeTemplatePath);
   }
+
 
   public function getTemplatePath($_relativeTemplatePath) {
     if (true === ALLOW_TEMPLATE_OVERRIDE && file_exists(TEMPLATE_DIR . $_relativeTemplatePath)) {
