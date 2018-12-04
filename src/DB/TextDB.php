@@ -56,6 +56,7 @@ class TextDB implements Connector {
     self::updateDB();
   }
 
+
   /**
    * Delete the file from the file system.
    */
@@ -64,7 +65,6 @@ class TextDB implements Connector {
       unlink($_filename);
     }
   }
-
 
 
   /**
@@ -256,11 +256,31 @@ class TextDB implements Connector {
   }
 
 
+  public static function saveRecord(array $_record) {
+    if (self::sourceExists($_record['sourceName'])) {
+      $source = self::getSourceByName($_record['sourceName']);
+      $records = self::readFile($source['path']);
+      $records[$_record['cid']] = $_record;
+      self::writeFile($source['path'], $records);
+    } else {
+      // This is an attempt to save a record without a source.
+    }
+  }
+
+
   /**
    * Checks if a source already exists in the database.
    */
   public static function sourceExists(string $_name) {
     return isset(self::getSources()[$_name]);
+  }
+
+
+  /**
+   * Deletes the DB file which will result in it being rebuilt.
+   */
+  public static function updateDB() {
+    self::deleteFile(DB_FILE);
   }
 
 
@@ -308,7 +328,7 @@ class TextDB implements Connector {
 
 
   /**
-   * Save a source.
+   * Save a source. Helper function with updateSource.
    *
    * Used in conjunction with updateSource to put the newly updated source
    * back into the database and overwriting what used to be there.
@@ -379,18 +399,6 @@ class TextDB implements Connector {
   }
 
 
-  public static function saveRecord(array $_record) {
-    if (self::sourceExists($_record['sourceName'])) {
-      $source = self::getSourceByName($_record['sourceName']);
-      $records = self::readFile($source['path']);
-      $records[$_record['cid']] = $_record;
-      self::writeFile($source['path'], $records);
-    } else {
-      // This is an attempt to save a record without a source.
-    }
-  }
-
-
   /**
    * Saves the changes made to a record.
    *
@@ -423,13 +431,6 @@ class TextDB implements Connector {
         }
      }
      return $results;
-  }
-
-  /**
-   * Deletes the DB file which will result in it being rebuilt.
-   */
-  public static function updateDB() {
-    self::deleteFile(DB_FILE);
   }
 
 

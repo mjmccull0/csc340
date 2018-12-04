@@ -1,7 +1,7 @@
 <?php
 namespace Util;
 /**
-* Update 11/04/18
+* Update 12/04/18
 * @author Jacob Oleson
 * @author Michael McCulloch
 * Route URL to appropriate Controller and Action.
@@ -9,7 +9,9 @@ namespace Util;
 
 class Route {
 
-  // Handle URL and send it to specified Controller.
+  /**
+   * Routes the user to the approriate controller and action.
+   */
   public static function route() {
 
     $url = self::getUrl();
@@ -62,7 +64,10 @@ class Route {
   }
 
 
-  //Helper function
+  /**
+   * Makes the controller call after route has gotten all the information it
+   * needs. Helper function to route.
+   */
   private static function getController($_controllerPath, $_controllerAction) {
 
     $controller = new $_controllerPath;
@@ -71,11 +76,15 @@ class Route {
   }
 
 
-  //Helper function
+  /**
+   * Routes the user to an error message. Helper function to route..
+   */
   private static function error() {
 
-      echo "\nCOULD NOT FIND FILE >:(";
+      echo "The file you are trying to find does not exist. Go back and think
+       about what you have done.";
   }
+
 
   /**
    * Send to user's browser to the provided relative url.
@@ -84,6 +93,10 @@ class Route {
     header("Location: " . $_relativeUrl);
   }
 
+
+  /**
+   * Gets the url for loading the controller.
+   */
   public static function getUrl() {
     return trim($_SERVER["REQUEST_URI"], "/");
   }

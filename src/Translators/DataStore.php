@@ -27,6 +27,18 @@ class DataStore {
 
 
   /**
+   * Creates a new kind of source to load records from.
+   *
+   * Calls the Text DB with information to create a new source.
+   *
+   * @param $_post contains the information needed to create a new source
+   */
+  public static function createSource(array $_post) {
+    StorageManager::createSource($_post);
+  }
+
+
+  /**
    * Deletes a source and all of its entries from the database.
    *
    * Calls the database with a specific source to be deleted. The records
@@ -84,45 +96,6 @@ class DataStore {
 
 
   /**
-   * Creates a new kind of source to load records from.
-   *
-   * Calls the Text DB with information to create a new source.
-   *
-   * @param $_post contains the information needed to create a new source
-   */
-  public static function createSource(array $_post) {
-    StorageManager::createSource($_post);
-  }
-
-
-  /**
-   * Retunrs all sources specified by a name.
-   *
-   * Calls the Text DB to give all soures specified by a name.
-   *
-   * @param $_name specifies the name of the source to be laoded.
-   * @return will return an array of sources found.
-   */
-  public static function getSourceByName(string $_name) {
-    return StorageManager::getSourceByName($_name);
-  }
-
-
-  /**
-   * Returns all sources specified by a type.
-   *
-   * Calls the Text DB to give all sources of a given type it is currently
-   * using.
-   *
-   * @param $_type specifies a type to be loaded.
-   * @return will return an array of sources found.
-   */
-  public static function getSourceByType(string $_type) {
-    return StorageManager::getSourceByType($_type);
-  }
-
-
-  /**
    *  Will return every record in the database and does not require
    *  any specification by name, type, or user query.
    *
@@ -165,6 +138,33 @@ class DataStore {
 
 
   /**
+   * Retunrs all sources specified by a name.
+   *
+   * Calls the Text DB to give all soures specified by a name.
+   *
+   * @param $_name specifies the name of the source to be laoded.
+   * @return will return an array of sources found.
+   */
+  public static function getSourceByName(string $_name) {
+    return StorageManager::getSourceByName($_name);
+  }
+
+
+  /**
+   * Returns all sources specified by a type.
+   *
+   * Calls the Text DB to give all sources of a given type it is currently
+   * using.
+   *
+   * @param $_type specifies a type to be loaded.
+   * @return will return an array of sources found.
+   */
+  public static function getSourceByType(string $_type) {
+    return StorageManager::getSourceByType($_type);
+  }
+
+
+  /**
    * Fetches all sources our database draws from
    *
    * Calls the database and expects a return of an array of the types of sources
@@ -179,9 +179,15 @@ class DataStore {
   }
 
 
+  /**
+   * Attempt to save a record without a source.
+   *
+   * @param array $_record is the record to be saved.
+   */
   public static function saveRecord(array $_record) {
     StorageManager::saveRecord($_record);
   }
+
 
   /**
    * Checks the database to see if the source exists.
@@ -199,6 +205,21 @@ class DataStore {
 
 
   /**
+   * Updates a record.
+   *
+   * Calls our database to update the information associated with a given record
+   * we're holding. Will make the changes to the specified record as given in post form
+   * and then save the whole database after the update is complete.
+   *
+   * @param array $_post is an array of the updated inforamation for a given record
+   * including which record is being updated.
+   */
+  public static function updateRecord(array $_post) {
+    StorageManager::updateRecord($_post);
+  }
+
+  
+  /**
    * Updates the infomration associated with a given source we're drawing from
    *
    * Sends to the database changes to the specified source as given in the post
@@ -211,20 +232,5 @@ class DataStore {
    */
   public static function updateSource(array $_post) {
     StorageManager::updateSource($_post);
-  }
-
-
-  /**
-   * Updates a record.
-   *
-   * Calls our database to update the information associated with a given record
-   * we're holding. Will make the changes to the specified record as given in post form
-   * and then save the whole database after the update is complete.
-   *
-   * @param array $_post is an array of the updated inforamation for a given record
-   * including which record is being updated.
-   */
-  public static function updateRecord(array $_post) {
-    StorageManager::updateRecord($_post);
   }
 }

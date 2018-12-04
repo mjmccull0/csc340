@@ -79,7 +79,8 @@ class SourceModel {
   /**
    * Get active records. Was getting warnings if this wasn't static.
    *
-   *
+   * Called from Source Controller and will communicate with database. Database
+   * has methods to get by type or by name, which will be set in $_params
    *
    * @param array $_params is the array requesting what records we want.
    * Could be by name, or by type.
@@ -120,6 +121,25 @@ class SourceModel {
 
 
   /**
+   * Return a source given the source name.
+   *
+   * Called from Source Controller and used in editing and viewing the content.
+   *
+   * @param string $_name specifies the name of item requested.
+   * @return returns the matched source from the database.
+   */
+  public static function getByName(string $_name) {
+    $source = new self();
+
+    foreach (DataStore::getSourceByName($_name) as $key => $value) {
+      $source->$key = $value;
+    }
+
+    return $source;
+  }
+
+
+  /**
    * Gets the content ids from an array of data objects.
    *
    * Used in obtaining multiple cids.
@@ -139,8 +159,7 @@ class SourceModel {
   /**
    * Returns instances of the source model.
    *
-   * Called from source controller when initializing  and as its default action.
-   *
+   * Called from Source Controller when initializing  and as its default action.
    *
    * @return returns an array of sources from the database.
    */
@@ -158,6 +177,9 @@ class SourceModel {
   /**
    * Return instances of the source model given the type
    * of source.
+   *
+   * Called from Source Controller and is used to search the database given
+   * a specific type of source we have.
    *
    * @param string $_type specifies the type of source requested. Right now
    * we have Instagram, Posts, and YouTube.
@@ -195,23 +217,10 @@ class SourceModel {
 
 
   /**
-   * Return a source given the source name.
+   * Import the various sources
    *
-   * Called from Source Controller and used in editing and viewing the content.
-   *
-   * @param string $_name specifies the name of item requested.
-   * @return returns the matched source from the database.
+   * Calls the database to see what source we are using.
    */
-  public static function getByName(string $_name) {
-    $source = new self();
-
-    foreach (DataStore::getSourceByName($_name) as $key => $value) {
-      $source->$key = $value;
-    }
-
-    return $source;
-  }
-
   public static function import() {
     $sources = self::getSources();
 
@@ -350,6 +359,7 @@ class SourceModel {
     }
   }
 
+
   /**
    * Load an instance of one of the record types.
    *
@@ -358,24 +368,6 @@ class SourceModel {
   private static function load(array $_record) {
     $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
     return $model::load($_record);
-  }
-
-  /**
-   *  Create an array of record objects.
-   *
-   * Called from the Source Model to make an array of records to be
-   * given back to the controller and used as data for the view.
-   *
-   * @param array $_records contains the records to be loaded and objectified.
-   */
-  private static function objectify(array $_records) {
-    $records = array();
-
-    foreach ($_records as $record) {
-      array_push($records, self::load($record));
-    }
-
-    return $records;
   }
 
 
@@ -429,12 +421,21 @@ class SourceModel {
 
 
   /**
-   * Convert an instance of this model to an array.
+   *  Create an array of record objects.
    *
-   * Called from inside the model. Used in saving entries to the database.
+   * Called from the Source Model to make an array of records to be
+   * given back to the controller and used as data for the view.
+   *
+   * @param array $_records contains the records to be loaded and objectified.
    */
-  private function toArray() {
-    return get_object_vars($this);
+  private static function objectify(array $_records) {
+    $records = array();
+
+    foreach ($_records as $record) {
+      array_push($records, self::load($record));
+    }
+
+    return $records;
   }
 
 
@@ -454,6 +455,17 @@ class SourceModel {
   private function save() {
     DataStore::createSource($this->toArray());
   }
+
+
+  /**
+   * Convert an instance of this model to an array.
+   *
+   * Called from inside the model. Used in saving entries to the database.
+   */
+  private function toArray() {
+    return get_object_vars($this);
+  }
+
 
   /**
    * Update a record.

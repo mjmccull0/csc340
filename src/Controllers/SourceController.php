@@ -59,6 +59,7 @@ class SourceController {
     $this->view->render();
   }
 
+
   /**
    * This action allows for deleting data source.
    */
@@ -69,6 +70,7 @@ class SourceController {
 
     $this->route::redirect($this->view->baseUrl);
   }
+
 
   /**
    * This action allows for editing a data source.
@@ -91,8 +93,8 @@ class SourceController {
     $this->view->render();
 
     // No name was given, this needs to be handled.
-
   }
+
 
   /**
   * Sets the view to either prompt user to search by a keyword
@@ -109,6 +111,10 @@ class SourceController {
     $this->view->render();
   }
 
+
+  /**
+   * Sets the view to see list all records we have for s given type.
+   */
   public function view() {
 
     if (isset($_GET['name'])) {
@@ -120,6 +126,10 @@ class SourceController {
     $this->view->render();
   }
 
+  /**
+   * Sets the view to dispaly all the data from the database in a
+   * slideshow format.
+   */
   public function show() {
     if (isset($_GET['name'])) {
       $this->view->source = $this->model::getByName($_GET['name']);

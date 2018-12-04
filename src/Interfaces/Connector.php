@@ -153,6 +153,14 @@ Interface Connector {
 
 
   /**
+   * Attempt to save a record without a source.
+   *
+   * @param array $_record is the record to be saved.
+   */
+  public static function saveRecord(array $_record);
+
+
+  /**
    *Checks if a requested source is actually inside of the database.
    *
    * Called from a Translator class and from inside DB and is used when adding
