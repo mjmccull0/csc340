@@ -15,7 +15,7 @@ class SourceController {
 
   /**
    * Constructor for the Source Controller. Sets all necessary attributes
-   * to communicate with the Source Model and the View. 
+   * to communicate with the Source Model and the View.
    */
   public function __construct() {
     $this->model = '\Models\SourceModel';
@@ -136,7 +136,6 @@ class SourceController {
    */
   public function update() {
     $this->model::update($_POST);
-
     $redirectUrl = $this->view->baseUrl;
 
     if (isset($_GET['name'])) {

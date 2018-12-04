@@ -379,7 +379,7 @@ class SourceModel {
    * @param array $_post contains the information associated with the record
    * to be updated as well as the information to update it with.
    */
-  public function updateRecord(array $_post) {
+  public static function updateRecord(array $_post) {
     DataStore::updateRecord($_post);
   }
 
@@ -390,7 +390,7 @@ class SourceModel {
    * @param array $_post contains the information associated with the source
    * to be updated as well as the information to update it with.
    */
-  public function updateSource(array $_post) {
+  public static function updateSource(array $_post) {
     DataStore::updateSource($_post);
   }
 
