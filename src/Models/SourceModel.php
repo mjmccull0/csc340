@@ -49,7 +49,7 @@ class SourceModel {
 
 
     if (isset($_post['twitter-account'])) {
-      $_post['url'] = TWITTER_URL . '/' . $_post['twitter-account'] . '/'; 
+      $_post['url'] = TWITTER_URL . '/' . $_post['twitter-account'] . '/';
       $_post['type'] = Twitter;
     }
 
@@ -288,7 +288,7 @@ class SourceModel {
         // For each of the entries in the source data with an image
         // create an entry with the content id, a cleaned version of the
         // title, the date-time, and set active flag.
-        $model = self::load( 
+        $model = self::load(
           array_combine(
             $fields,
             array(
