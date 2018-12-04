@@ -331,6 +331,15 @@ class SourceModel {
     $source->save($entries);
   }
 
+  /**
+   * Load an instance of one of the record types.
+   *
+   * @param array $_record contains the type of record to be loaded.
+   */
+  private static function load(array $_record) {
+    $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
+    return $model::load($_record);
+  }
 
   /**
    *  Create an array of record objects.
@@ -379,6 +388,10 @@ class SourceModel {
   public static function update(array $_post) {
     if (isset($_post['id'])) {
       self::updateRecord($_post);
+    } else if (isset($_post['ids'])) {
+      self::updateRecords($_post);
+    } else if (isset($_post['name'])) {
+      self::updateSource($_post);
     } else {
       self::updateSource($_post);
     }
@@ -392,7 +405,37 @@ class SourceModel {
    * to be updated as well as the information to update it with.
    */
   public static function updateRecord(array $_post) {
-    DataStore::updateRecord($_post);
+    $record = self::getById($_post['id']);
+
+    foreach ($_post as $key => $value) {
+      $setMethod = 'set'. ucfirst($key);
+      if (method_exists($record, $setMethod)) {
+        $record->$setMethod($value);
+      }
+    }
+
+    $record->update();
+  }
+
+  /**
+   * Update records.
+   *
+   * @param array $_post contains an array of record ids and their active
+   * status.
+   */
+  private function updateRecords(array $_post) {
+    foreach ($_post['ids'] as $id => $value) {
+        $record = self::getById($id);
+        if ($value == "off") {
+            $record->setActive(false);
+        }
+
+        if ($value == "on") {
+            $record->setActive(true);
+        }
+
+        $record->update();
+    }
   }
 
 
@@ -404,17 +447,6 @@ class SourceModel {
    */
   public static function updateSource(array $_post) {
     DataStore::updateSource($_post);
-  }
-
-
-  /**
-   * Load an instance of one of the record types.
-   *
-   * @param array $_record contains the type of record to be loaded.
-   */
-  private static function load(array $_record) {
-    $model = 'Models\Content\Type\\' . $_record['type'] . 'Model';
-    return $model::load($_record);
   }
 
 
