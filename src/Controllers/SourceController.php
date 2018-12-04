@@ -12,6 +12,11 @@ class SourceController {
   protected $view;
   protected $model;
 
+
+  /**
+   * Constructor for the Source Controller. Sets all necessary attributes
+   * to communicate with the Source Model and the View. 
+   */
   public function __construct() {
     $this->model = '\Models\SourceModel';
     $this->route = '\Util\Route';

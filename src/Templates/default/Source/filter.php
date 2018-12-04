@@ -39,5 +39,4 @@ view for search results
     <?php } ?>
 
 </ul>
-<input class="button" type="submit" value="Save">
 </form>
