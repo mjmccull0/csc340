@@ -1,8 +1,9 @@
 <?php
 namespace Interfaces;
 /**
- * @update 11/07/18
+ * @update 12/04/18
  * @author Michael McCulloch
+ * @author Jacob Oleson
  */
 
 Interface Connector {
