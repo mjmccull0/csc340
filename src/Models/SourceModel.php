@@ -3,7 +3,7 @@ namespace Models;
 use Translators\DataStore as DataStore;
 use DOMDocument;
 /**
- * @update 12/03/18
+ * @update 12/04/18
  * @author Michael McCulloch
  * @author Jacob Oleson
  * @author Mikael Williams
@@ -212,6 +212,21 @@ class SourceModel {
     return $source;
   }
 
+  public static function import() {
+    $sources = self::getSources();
+
+    foreach ($sources as $source) {
+      $_params = array(
+        'url' => $source->getUrl(),
+        'name' => $source->getName(),
+        'type' => $source->getType()
+      );
+
+      $importMethod = 'import' . $source->getType();
+      self::$importMethod($_params);
+    }
+  }
+
 
   /**
    * Imports the Instagram Records.
@@ -222,12 +237,10 @@ class SourceModel {
   public static function importInstagram(array $_params) {
     $source = self::loadSource($_params);
 
-    $fields = array("cid", "imgUrl", "thumbnailUrl", "title");
+    $fields = array("cid", "imgUrl", "thumbnailUrl", "title", "sourceName", "type");
     $html = file_get_contents($_params['url'], TRUE);
     $document = new DOMDocument();
     $document->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
-
-    $entries = array();
 
     // This collects the photo information on the instagram profile page.
     preg_match_all("'window._sharedData = ({.*})'", $document->textContent, $matches);
@@ -237,7 +250,7 @@ class SourceModel {
     // Iterate through all the instagram user's shared data and take
     // what we need.
     foreach($jsonObject->entry_data->ProfilePage[0]->graphql->user->edge_owner_to_timeline_media->edges as $img) {
-      array_push($entries,
+      $model = self::load(
         array_combine(
           $fields,
           array(
@@ -245,12 +258,14 @@ class SourceModel {
             $img->node->display_url,
             $img->node->thumbnail_src,
             $img->node->edge_media_to_caption->edges[0]->node->text,
+            $source->getName(),
+            $source->getType()
           )
         )
       );
-    }
 
-    $source->save($entries);
+      $model->save();
+    }
   }
 
 
@@ -263,9 +278,8 @@ class SourceModel {
    */
   public static function importPosts(array $_params) {
     $source = self::loadSource($_params);
-    $entries = array();
 
-    $fields = array('dateTime', 'cid', 'imgUrl', 'title');
+    $fields = array('dateTime', 'cid', 'imgUrl', 'title', 'sourceName', 'type');
     $sourceContent = file_get_contents($_params['url'], TRUE);
     $data = json_decode($sourceContent, TRUE);
 
@@ -274,7 +288,7 @@ class SourceModel {
         // For each of the entries in the source data with an image
         // create an entry with the content id, a cleaned version of the
         // title, the date-time, and set active flag.
-        array_push($entries,
+        $model = self::load( 
           array_combine(
             $fields,
             array(
@@ -283,14 +297,16 @@ class SourceModel {
               $post['_embedded']['wp:featuredmedia'][0]['source_url'],
               // This is to handle an issue with wordpress titles using &#8217;
               // instead of an apostrophe.
-              str_replace("&#8217;", "'", $post['title']['rendered'])
+              str_replace("&#8217;", "'", $post['title']['rendered']),
+              $source->getName(),
+              $source->getType()
             )
           )
         );
       }
+
+      $model->save();
     }
-
-    $source->save($entries);
   }
 
 
@@ -302,23 +318,6 @@ class SourceModel {
       throw new Exception("Not yet implemented");
   }
 
-
-  /**
-  * This will import the twitter data for a given twitter account.
-  * @params array of fields that are used by the database that define the source.
-  */
-  public static function importTwitter(array $_params) {
-      throw new Exception("Not yet implemented");
-  }
-
-
-  /**
-  * This will import the twitter data for a given twitter account.
-  * @params array of fields that are used by the database that define the source.
-  */
-  public static function importTwitter(array $_params) {
-      throw new Exception("Not yet implemented");
-  }
 
   /**
    * Import youtube video data
@@ -328,26 +327,27 @@ class SourceModel {
    */
   public static function importYoutube(array $_params) {
     $source = self::loadSource($_params);
-    $fields = array("cid", "title");
+    // There may be a better way to get the fields.
+    $fields = array("cid", "title", "sourceName", "type");
     $xml = file_get_contents($_params['url'], TRUE);
     $content = simplexml_load_string($xml, "SimpleXMLElement", LIBXML_NOCDATA);
 
-    $entries = array();
-
     foreach ($content->entry as $entry) {
-      array_push($entries,
+      $model = self::load(
         array_combine(
           $fields,
           array(
-            // Remove the yt:video: from the id.
-            str_replace("yt:video:", "", $entry->id),
-            (string) $entry->title
+          // Remove the yt:video: from the id.
+          str_replace("yt:video:", "", $entry->id),
+          (string) $entry->title,
+          $source->getName(),
+          $source->getType()
           )
         )
       );
-    }
 
-    $source->save($entries);
+      $model->save();
+    }
   }
 
   /**
@@ -412,48 +412,7 @@ class SourceModel {
     } else if (isset($_post['name'])) {
       self::updateSource($_post);
     } else {
-      self::updateSource($_post);
-    }
-  }
-
-
-  /**
-   * Update a record.
-   *
-   * @param array $_post contains the information associated with the record
-   * to be updated as well as the information to update it with.
-   */
-  public static function updateRecord(array $_post) {
-    $record = self::getById($_post['id']);
-
-    foreach ($_post as $key => $value) {
-      $setMethod = 'set'. ucfirst($key);
-      if (method_exists($record, $setMethod)) {
-        $record->$setMethod($value);
-      }
-    }
-
-    $record->update();
-  }
-
-  /**
-   * Update records.
-   *
-   * @param array $_post contains an array of record ids and their active
-   * status.
-   */
-  private function updateRecords(array $_post) {
-    foreach ($_post['ids'] as $id => $value) {
-        $record = self::getById($id);
-        if ($value == "off") {
-            $record->setActive(false);
-        }
-
-        if ($value == "on") {
-            $record->setActive(true);
-        }
-
-        $record->update();
+      self::import($_post);
     }
   }
 
@@ -487,20 +446,27 @@ class SourceModel {
    *
    * @param array $_entries contains the entries to be saved to the database.
    */
+  /*
   private function save(array $_entries) {
     DataStore::add($this->toArray(), $_entries);
+  }
+   */
+  private function save() {
+    DataStore::createSource($this->toArray());
   }
 
   /**
    * Update a record.
    *
-   * Populate the current record and applied the changes.
-   * record with.
+   * Populate a record and apply the submitted changes.
    *
-   * @param array $_post contains changes for a record.
+   * @param array $_post contains changes to a record.
    */
   private function updateRecord(array $_post) {
     $record = self::getById($_post['id']);
+    if (!isset($_post['active'])) {
+        $_post['active'] = false;
+    }
 
     foreach ($_post as $key => $value) {
       $setMethod = 'set'. ucfirst($key);
@@ -508,9 +474,9 @@ class SourceModel {
         $record->$setMethod($value);
       }
     }
-
     $record->update();
   }
+
 
   /**
    * Update multiple records.

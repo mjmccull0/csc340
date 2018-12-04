@@ -62,6 +62,17 @@ class TextDB implements Connector {
     if (!self::sourceExists($_post['name'])) {
       self::addToSourceFile($_post);
     }
+
+    self::updateDB();
+  }
+
+  /**
+   * Delete the file from the file system.
+   */
+  private function deleteFile(string $_filename) {
+    if (file_exists($_filename)) {
+      unlink($_filename);
+    }
   }
 
 
@@ -108,7 +119,7 @@ class TextDB implements Connector {
 
     // Delete the file containing the sources' records from
     // the file system.
-    unlink($sources[$_sourceName]['path']);
+    self::deleteFile($sources[$_sourceName]['path']);
 
     // Remove the source from the source file.
     unset($sources[$_sourceName]);
@@ -351,8 +362,8 @@ class TextDB implements Connector {
     }
 
     $records = self::getRecords();
-    $records[$record['id']] = $record;
 
+    $records[$record['id']] = $record;
     self::saveRecords($records);
   }
 
@@ -456,6 +467,18 @@ class TextDB implements Connector {
   }
 
 
+  public static function saveRecord(array $_record) {
+    if (self::sourceExists($_record['sourceName'])) {
+      $source = self::getSourceByName($_record['sourceName']);
+      $records = self::readFile($source['path']);
+      $records[$_record['cid']] = $_record;
+      self::writeFile($source['path'], $records);
+    } else {
+      // This is an attempt to save a record without a source.
+    }
+  }
+
+
   /**
    * Saves the changes made to a record.
    *
@@ -488,6 +511,13 @@ class TextDB implements Connector {
         }
      }
      return $results;
+  }
+
+  /**
+   * Deletes the DB file which will result in it being rebuilt.
+   */
+  public static function updateDB() {
+    self::deleteFile(DB_FILE);
   }
 
 

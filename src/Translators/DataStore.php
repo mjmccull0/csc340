@@ -179,6 +179,10 @@ class DataStore {
   }
 
 
+  public static function saveRecord(array $_record) {
+    StorageManager::saveRecord($_record);
+  }
+
   /**
    * Checks the database to see if the source exists.
    *
