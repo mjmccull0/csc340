@@ -471,7 +471,7 @@ class SourceModel {
 
 
   /**
-   * Saves any changes to an entrie.
+   * Saves any changes to an entry.
    *
    * Sends to the database an array of information to overwrite the previous
    * record with.
@@ -480,6 +480,49 @@ class SourceModel {
    */
   private function save(array $_entries) {
     DataStore::add($this->toArray(), $_entries);
+  }
+
+  /**
+   * Update a record.
+   *
+   * Populate the current record and applied the changes.
+   * record with.
+   *
+   * @param array $_post contains changes for a record.
+   */
+  private function updateRecord(array $_post) {
+    $record = self::getById($_post['id']);
+
+    foreach ($_post as $key => $value) {
+      $setMethod = 'set'. ucfirst($key);
+      if (method_exists($record, $setMethod)) {
+        $record->$setMethod($value);
+      }
+    }
+
+    $record->update();
+  }
+
+  /**
+   * Update multiple records.
+   *
+   * Populate each record and apply the provided acitve state.
+   *
+   * @param array $_post contains record ids and record states.
+   */
+  private function updateRecords(array $_post) {
+    foreach ($_post['ids'] as $id => $value) {
+        $record = self::getById($id);
+        if ($value == "off") {
+            $record->setActive(false);
+        }
+
+        if ($value == "on") {
+            $record->setActive(true);
+        }
+
+        $record->update();
+    }
   }
 
 
