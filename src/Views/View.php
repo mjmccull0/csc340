@@ -56,6 +56,21 @@ EOT;
     echo $output;
   }
 
+  // View for the UNCG Youtube.
+  public function youtubeView(){
+    render();    
+  }
+  
+  // View for UNCG webpage.
+  public function webpageView(){
+    render();
+  }
+  
+  // View for UNCG instagram.
+  public function instagramView(){
+    render();
+  }
+  
   public function getData() {
     return $this->data;
   }
